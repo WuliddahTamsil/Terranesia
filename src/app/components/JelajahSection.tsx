@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   MapPin, Search, Filter, ArrowLeftRight, BookOpen, Eye, X, 
@@ -388,15 +388,119 @@ const cultures: CulturePoint[] = [
     philosophy: '"Kaneka" — keyakinan bahwa tanah subur lembah Baliem adalah ibu penyangga kehidupan yang wajib dijaga kebersihannya dan tidak dieksploitasi berlebih.',
     philosophyEn: '"Kaneka" — the belief that the fertile Baliem valley soil is the mother of life which must be kept clean and not over-exploited.',
   },
+  {
+    id: 'bajo',
+    name: 'Suku Sama Bajo',
+    nameEn: 'Sama Bajo Tribe',
+    location: 'Wakatobi, Sulawesi Tenggara',
+    region: 'sulawesi',
+    regionLabel: 'Sulawesi',
+    regionLabelEn: 'Sulawesi',
+    type: 'lingkungan',
+    sustainability: 93,
+    desc: 'Suku pengembara laut legendaris yang hidup di atas perairan karang, memiliki kearifan lokal konservasi terumbu karang dan daerah tangkapan ikan tradisional.',
+    descEn: 'Legendary sea nomads living on coral waters, possessing local wisdom in coral reef conservation and traditional fishery zones.',
+    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80',
+    lat: -5.3278,
+    lng: 123.5889,
+    radarData: [
+      { subject: 'Lingkungan', value: 95 }, { subject: 'Tradisi', value: 90 }, { subject: 'Sosial', value: 88 },
+      { subject: 'Spiritual', value: 85 }, { subject: 'Ekonomi', value: 65 },
+    ],
+    envPractice: 'Aturan adat Mamia Kadandio melarang pemboman ikan dan penggunaan alat tangkap merusak untuk menjaga keseimbangan ekosistem laut.',
+    envPracticeEn: 'Mamia Kadandio customary rules ban fish bombing and destructive fishing gear to preserve the marine ecosystem equilibrium.',
+    wayOfLife: 'Tinggal di rumah panggung di atas laut, memiliki paru-paru dan kemampuan menyelam bebas luar biasa tanpa alat bantu modern.',
+    wayOfLifeEn: 'Living in stilt houses over the sea, possessing exceptional lung capacity and free-diving skills without modern gear.',
+    philosophy: 'Manusia dan laut adalah saudara kembar; merusak laut sama dengan menyakiti diri sendiri dan keluarga.',
+    philosophyEn: 'Humans and the sea are twin siblings; destroying the sea is equivalent to hurting oneself and one\'s family.',
+  },
+  {
+    id: 'tengger',
+    name: 'Masyarakat Adat Tengger',
+    nameEn: 'Tengger Customary Community',
+    location: 'Gunung Bromo, Jawa Timur',
+    region: 'jawa',
+    regionLabel: 'Jawa',
+    regionLabelEn: 'Java',
+    type: 'ritual',
+    sustainability: 91,
+    desc: 'Masyarakat adat di dataran tinggi Bromo yang menjaga kelestarian kawah suci melalui upacara Yadnya Kasada dan memelihara hutan adat lereng gunung.',
+    descEn: 'Customary community in Bromo highlands preserving the sacred crater through the Yadnya Kasada ritual and maintaining customary mountain forests.',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80',
+    lat: -7.9425,
+    lng: 112.9531,
+    radarData: [
+      { subject: 'Lingkungan', value: 90 }, { subject: 'Tradisi', value: 96 }, { subject: 'Sosial', value: 92 },
+      { subject: 'Spiritual', value: 98 }, { subject: 'Ekonomi', value: 70 },
+    ],
+    envPractice: 'Zonasi hutan adat lereng Bromo melarang penebangan pohon sembarangan guna menjaga sumber air dan mencegah tanah longsor.',
+    envPracticeEn: 'Customary forest zoning on Bromo slopes prohibits illegal logging to secure water sources and prevent landslides.',
+    wayOfLife: 'Bercocok tanam sayuran tradisional di lereng curam, mengenakan sarung khas Tengger untuk menghalau dingin, dan hidup rukun berdampingan.',
+    wayOfLifeEn: 'Farming traditional vegetables on steep slopes, wearing signature Tengger sarongs for warmth, and living in communal harmony.',
+    philosophy: 'Pemujaan kepada Gunung Brahma (Bromo) sebagai pemberi kemakmuran dan penjaga keseimbangan ekologi bumi.',
+    philosophyEn: 'Worship of Mount Brahma (Bromo) as the provider of prosperity and guardian of the earth\'s ecological balance.',
+  },
+  {
+    id: 'nias',
+    name: 'Masyarakat Adat Nias',
+    nameEn: 'Nias Customary Community',
+    location: 'Nias Selatan, Sumatera Utara',
+    region: 'sumatera',
+    regionLabel: 'Sumatera',
+    regionLabelEn: 'Sumatra',
+    type: 'tradisi',
+    sustainability: 86,
+    desc: 'Masyarakat adat Kepulauan Nias yang melestarikan arsitektur rumah adat tahan gempa raksasa Omo Hada serta ritual lompat batu Fahombo.',
+    descEn: 'Nias customary community preserving the giant earthquake-resistant Omo Hada stilt houses and the Fahombo stone jumping ritual.',
+    image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80',
+    lat: 0.7812,
+    lng: 97.7478,
+    radarData: [
+      { subject: 'Lingkungan', value: 82 }, { subject: 'Tradisi', value: 95 }, { subject: 'Sosial', value: 90 },
+      { subject: 'Spiritual', value: 88 }, { subject: 'Ekonomi', value: 75 },
+    ],
+    envPractice: 'Pemanfaatan kayu keras pilihan (seperti kayu nalo) yang ditebang secara adat untuk menjamin kekokohan bangunan tanpa merusak regenerasi hutan.',
+    envPracticeEn: 'Utilization of select hardwoods (like nalo wood) logged under custom to ensure building strength without disrupting forest regeneration.',
+    wayOfLife: 'Tinggal di desa-desa adat berbukit batu, berlatih ketangkasan lompat batu sejak dini, dan memproduksi kerajinan ukir kayu megalitik.',
+    wayOfLifeEn: 'Living in stone-paved hilly customary villages, practicing stone jumping since youth, and carving megalithic wooden crafts.',
+    philosophy: 'Tano Niha (Tanah Nias) adalah tanah kehormatan leluhur; setiap bangunan dan tradisi harus mencerminkan kekuatan dan harmoni alam.',
+    philosophyEn: 'Tano Niha (Nias Land) is the land of ancestral honor; every building and tradition must reflect strength and natural harmony.',
+  },
+  {
+    id: 'dayak_iban',
+    name: 'Suku Dayak Iban Sungai Utik',
+    nameEn: 'Sungai Utik Dayak Iban Tribe',
+    location: 'Kapuas Hulu, Kalimantan Barat',
+    region: 'kalimantan',
+    regionLabel: 'Kalimantan',
+    regionLabelEn: 'Borneo',
+    type: 'lingkungan',
+    sustainability: 97,
+    desc: 'Penjaga hutan adat Sungai Utik penerima penghargaan PBB Equator Prize, memelihara kelestarian hutan hujan seluas 9.400 hektar secara murni.',
+    descEn: 'Sungai Utik customary forest guardians and UN Equator Prize recipients, purely preserving 9,400 hectares of pristine rainforest.',
+    image: 'https://images.unsplash.com/photo-1448375240586-882707db888b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80',
+    lat: 1.2856,
+    lng: 112.5122,
+    radarData: [
+      { subject: 'Lingkungan', value: 99 }, { subject: 'Tradisi', value: 94 }, { subject: 'Sosial', value: 92 },
+      { subject: 'Spiritual', value: 95 }, { subject: 'Ekonomi', value: 68 },
+    ],
+    envPractice: 'Hukum adat melarang pembabatan hutan lindung adat (Kampong) dan mengatur ketat tata cara penebangan pohon untuk bahan bangunan.',
+    envPracticeEn: 'Customary law bans logging in protected customary forests (Kampong) and strictly regulates wood harvesting for building needs.',
+    wayOfLife: 'Tinggal di Rumah Panjai (Rumah Panjang) berukuran ratusan meter bersama puluhan keluarga, bertani padi organik, dan berburu ramah lingkungan.',
+    wayOfLifeEn: 'Living in a massive Rumah Panjai (Longhouse) sharing space with dozens of families, organic farming, and sustainable hunting.',
+    philosophy: 'Tanah melambangkan ibu kita, sedangkan air melambangkan darah kita; merusaknya berarti merusak kehidupan kita sendiri.',
+    philosophyEn: 'Land represents our mother, while water represents our blood; destroying them means destroying our own existence.',
+  },
 ];
 
 const preservationData = [
-  { year: '2000', baduy: 98, toraja: 90, dayak: 85, minang: 82, bali: 93, asmat: 90, naga: 96, sasak: 84, kajang: 98, mentawai: 90, waerebo: 88, sumba: 85, dani: 89 },
-  { year: '2005', baduy: 97, toraja: 87, dayak: 80, minang: 81, bali: 92, asmat: 90, naga: 95, sasak: 83, kajang: 97, mentawai: 89, waerebo: 87, sumba: 84, dani: 88 },
-  { year: '2010', baduy: 96, toraja: 85, dayak: 82, minang: 79, bali: 91, asmat: 89, naga: 95, sasak: 82, kajang: 96, mentawai: 88, waerebo: 86, sumba: 84, dani: 88 },
-  { year: '2015', baduy: 95, toraja: 83, dayak: 84, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 88, waerebo: 85, sumba: 83, dani: 87 },
-  { year: '2020', baduy: 95, toraja: 81, dayak: 85, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 89, waerebo: 85, sumba: 83, dani: 87 },
-  { year: '2025', baduy: 95, toraja: 80, dayak: 92, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 89, waerebo: 85, sumba: 83, dani: 87 },
+  { year: '2000', baduy: 98, toraja: 90, dayak: 85, minang: 82, bali: 93, asmat: 90, naga: 96, sasak: 84, kajang: 98, mentawai: 90, waerebo: 88, sumba: 85, dani: 89, bajo: 94, tengger: 92, nias: 88, dayak_iban: 98 },
+  { year: '2005', baduy: 97, toraja: 87, dayak: 80, minang: 81, bali: 92, asmat: 90, naga: 95, sasak: 83, kajang: 97, mentawai: 89, waerebo: 87, sumba: 84, dani: 88, bajo: 93, tengger: 92, nias: 87, dayak_iban: 97 },
+  { year: '2010', baduy: 96, toraja: 85, dayak: 82, minang: 79, bali: 91, asmat: 89, naga: 95, sasak: 82, kajang: 96, mentawai: 88, waerebo: 86, sumba: 84, dani: 88, bajo: 93, tengger: 91, nias: 86, dayak_iban: 97 },
+  { year: '2015', baduy: 95, toraja: 83, dayak: 84, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 88, waerebo: 85, sumba: 83, dani: 87, bajo: 93, tengger: 91, nias: 86, dayak_iban: 97 },
+  { year: '2020', baduy: 95, toraja: 81, dayak: 85, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 89, waerebo: 85, sumba: 83, dani: 87, bajo: 93, tengger: 91, nias: 86, dayak_iban: 97 },
+  { year: '2025', baduy: 95, toraja: 80, dayak: 92, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 89, waerebo: 85, sumba: 83, dani: 87, bajo: 93, tengger: 91, nias: 86, dayak_iban: 97 },
 ];
 
 const typeColors: Record<string, string> = {
@@ -408,6 +512,8 @@ const typeColors: Record<string, string> = {
 const mapStyles = {
   light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
   dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  terrain: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
 };
 
 const t = {
@@ -447,6 +553,19 @@ const t = {
     storyStart: 'Mulai Petualangan',
     storyRestart: 'Ulangi Petualangan',
     congratulations: 'Selamat! Kamu telah menyelesaikan simulasi sehari bersama Terranesia.',
+    aiConsoleTitle: 'Pusat Komando Satelit AI',
+    aiConsolePlaceholder: 'Tulis kueri satelit (misal: Suku Bajo)...',
+    aiExecute: 'JALANKAN SCAN',
+    aiConsoleStatusIdle: 'Satelit Siaga - Siap memproses kueri spasial.',
+    aiConsoleStatusScanning: 'Memindai Citra Satelit & Sensor Telemetri...',
+    aiConsoleStatusComplete: 'Pemindaian Spasial Berhasil Selesai.',
+    ambientSonification: 'Sonifikasi Audio',
+    ecoWeather: 'Sensor Cuaca & Ekologi',
+    latitude: 'Lintang',
+    longitude: 'Bujur',
+    ndviForest: 'Kerapatan Hutan (NDVI)',
+    humidity: 'Kelembapan',
+    temperature: 'Suhu Lokal',
   },
   en: {
     title: 'Nusantara Cultural Explorer',
@@ -484,19 +603,88 @@ const t = {
     storyStart: 'Start Adventure',
     storyRestart: 'Restart Adventure',
     congratulations: 'Congratulations! You have completed the one-day simulation with Terranesia.',
+    aiConsoleTitle: 'AI Satellite Command Center',
+    aiConsolePlaceholder: 'Type query for satellite (e.g. Bajo Tribe)...',
+    aiExecute: 'RUN SCAN',
+    aiConsoleStatusIdle: 'Satellite Standby - Ready to resolve spatial query.',
+    aiConsoleStatusScanning: 'Scanning Satellite Imagery & Telemetry Sensors...',
+    aiConsoleStatusComplete: 'Spatial Scan Successfully Completed.',
+    ambientSonification: 'Audio Sonification',
+    ecoWeather: 'Weather & Ecological Sensors',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    ndviForest: 'Forest Density (NDVI)',
+    humidity: 'Humidity',
+    temperature: 'Local Temp',
   },
 };
 
+// Helper to translate radar subjects dynamically
+const translateSubject = (subject: string, lang: 'id' | 'en') => {
+  if (lang === 'en') {
+    switch (subject) {
+      case 'Lingkungan': return 'Environment';
+      case 'Tradisi': return 'Tradition';
+      case 'Sosial': return 'Social';
+      case 'Spiritual': return 'Spiritual';
+      case 'Ekonomi': return 'Economy';
+      default: return subject;
+    }
+  }
+  return subject;
+};
+
+// Web Audio Context and Synthesizer sound generator
+let audioCtx: AudioContext | null = null;
+
+const playGISBeep = (freq: number, duration: number, type: 'sine' | 'square' | 'triangle' | 'sawtooth' = 'sine') => {
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) {
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (e) {
+    console.warn('Web Audio error:', e);
+  }
+};
+
 // Map controller to handle dynamic flying
-function MapController({ center, zoom, bounds }: { center: [number, number]; zoom: number; bounds?: [number, number][] }) {
+interface MapTarget {
+  center: [number, number];
+  zoom: number;
+  bounds?: [number, number][];
+  timestamp: number;
+}
+
+function MapController({ target }: { target: MapTarget | null }) {
   const map = useMap();
   useEffect(() => {
-    if (bounds && bounds.length > 0) {
-      map.fitBounds(bounds as any, { padding: [50, 50], animate: true, duration: 1.5 });
+    if (!target) return;
+    if (target.bounds && target.bounds.length > 0) {
+      map.fitBounds(target.bounds as any, { padding: [50, 50], animate: true, duration: 1.5 });
     } else {
-      map.setView(center, zoom, { animate: true, duration: 1.5 });
+      map.setView(target.center, target.zoom, { animate: true, duration: 1.5 });
     }
-  }, [center, zoom, bounds, map]);
+  }, [target, map]);
   return null;
 }
 
@@ -744,16 +932,21 @@ export function JelajahSection({ lang, isDark }: Props) {
   const [compareRight, setCompareRight] = useState<string>('toraja');
   const [activeTrail, setActiveTrail] = useState<string | null>(null);
   
-  const leftCulture = cultures.find(c => c.id === compareLeft)!;
-  const rightCulture = cultures.find(c => c.id === compareRight)!;
+  const leftCulture = useMemo(() => cultures.find(c => c.id === compareLeft)!, [compareLeft]);
+  const rightCulture = useMemo(() => cultures.find(c => c.id === compareRight)!, [compareRight]);
 
-  const activeTrailData = expeditionTrails.find(t => t.id === activeTrail);
-  const trailPoints = activeTrailData 
-    ? activeTrailData.cultures.map(cId => {
-        const c = cultures.find(cult => cult.id === cId);
-        return c ? [c.lat, c.lng] as [number, number] : null;
-      }).filter((p): p is [number, number] => p !== null)
-    : [];
+  const activeTrailData = useMemo(() => {
+    return expeditionTrails.find(t => t.id === activeTrail);
+  }, [activeTrail]);
+
+  const trailPoints = useMemo(() => {
+    return activeTrailData 
+      ? activeTrailData.cultures.map(cId => {
+          const c = cultures.find(cult => cult.id === cId);
+          return c ? [c.lat, c.lng] as [number, number] : null;
+        }).filter((p): p is [number, number] => p !== null)
+      : [];
+  }, [activeTrailData]);
 
   // Layer toggles
   const [showLayerBudaya, setShowLayerBudaya] = useState(true);
@@ -772,6 +965,249 @@ export function JelajahSection({ lang, isDark }: Props) {
   // Map view positioning states
   const [mapCenter, setMapCenter] = useState<[number, number]>([-2.5489, 118.0149]);
   const [mapZoom, setMapZoom] = useState(5);
+
+  // Unified map target state for programmatic panning/zooming
+  const [mapTarget, setMapTarget] = useState<MapTarget | null>(null);
+
+  // Helper to trigger programmatic map movement
+  const triggerMapFly = (center: [number, number], zoom: number, bounds?: [number, number][]) => {
+    setMapCenter(center);
+    setMapZoom(zoom);
+    setMapTarget({ center, zoom, bounds, timestamp: Date.now() });
+  };
+
+  // Map Style Key state
+  const [mapStyleKey, setMapStyleKey] = useState<'light' | 'dark' | 'satellite' | 'terrain'>(isDark ? 'dark' : 'light');
+
+  // Sync map style with dark mode
+  useEffect(() => {
+    setMapStyleKey(isDark ? 'dark' : 'light');
+  }, [isDark]);
+
+  // AI Console State
+  const [aiConsoleInput, setAiConsoleInput] = useState('');
+  const [aiConsoleLogs, setAiConsoleLogs] = useState<string[]>([]);
+  const [aiConsoleStatus, setAiConsoleStatus] = useState<'idle' | 'scanning' | 'complete'>('idle');
+  const [aiConsoleResult, setAiConsoleResult] = useState<{ titleId: string; titleEn: string; descId: string; descEn: string; stats: { label: string; value: string }[] } | null>(null);
+
+  // Audio Sonification States
+  const [isPlayingSoundscape, setIsPlayingSoundscape] = useState(false);
+  const oscsRef = useRef<any[]>([]);
+  const soundscapeIntervalRef = useRef<any>(null);
+
+  const stopAmbientSoundscape = () => {
+    setIsPlayingSoundscape(false);
+    if (oscsRef.current) {
+      oscsRef.current.forEach(osc => {
+        try { osc.stop(); } catch(e) {}
+      });
+      oscsRef.current = [];
+    }
+    if (soundscapeIntervalRef.current) {
+      clearInterval(soundscapeIntervalRef.current);
+      soundscapeIntervalRef.current = null;
+    }
+  };
+
+  const startAmbientSoundscape = (type: 'tradisi' | 'ritual' | 'lingkungan') => {
+    stopAmbientSoundscape();
+    try {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      if (!audioCtx) {
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      setIsPlayingSoundscape(true);
+
+      if (type === 'lingkungan') {
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc1.type = 'triangle';
+        osc1.frequency.setValueAtTime(110, audioCtx.currentTime);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(165, audioCtx.currentTime);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, audioCtx.currentTime);
+
+        gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc1.start();
+        osc2.start();
+
+        oscsRef.current = [osc1, osc2];
+      } else if (type === 'ritual') {
+        const chimeGain = audioCtx.createGain();
+        chimeGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        chimeGain.connect(audioCtx.destination);
+
+        const playChime = () => {
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const amp = audioCtx.createGain();
+          const freqs = [523.25, 587.33, 659.25, 783.99, 880.00];
+          const randomFreq = freqs[Math.floor(Math.random() * freqs.length)];
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(randomFreq, audioCtx.currentTime);
+          
+          amp.gain.setValueAtTime(0.06, audioCtx.currentTime);
+          amp.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.0);
+
+          osc.connect(amp);
+          amp.connect(chimeGain);
+          
+          osc.start();
+          osc.stop(audioCtx.currentTime + 3.0);
+        };
+
+        playChime();
+        soundscapeIntervalRef.current = setInterval(playChime, 1500);
+      } else {
+        const clickGain = audioCtx.createGain();
+        clickGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        clickGain.connect(audioCtx.destination);
+
+        const playClick = () => {
+          if (!audioCtx) return;
+          const osc = audioCtx.createOscillator();
+          const amp = audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(400 + Math.random() * 80, audioCtx.currentTime);
+
+          amp.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          amp.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+
+          osc.connect(amp);
+          amp.connect(clickGain);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.12);
+        };
+
+        playClick();
+        soundscapeIntervalRef.current = setInterval(playClick, 400);
+      }
+    } catch (e) {
+      console.warn('Soundscape synthesizer error:', e);
+    }
+  };
+
+  useEffect(() => {
+    stopAmbientSoundscape();
+  }, [selected]);
+
+  // AI query handler using integrated Satellite Terminal Console
+  const submitAIQuery = (queryText: string) => {
+    if (!queryText.trim()) return;
+    setAiConsoleInput('');
+    setAiConsoleStatus('scanning');
+    setAiConsoleLogs(lang === 'id' 
+      ? [`[SYSTEM] Memulai pemindaian satelit untuk: "${queryText}"`] 
+      : [`[SYSTEM] Initializing satellite scanning for: "${queryText}"`]
+    );
+
+    playGISBeep(880, 0.1);
+    setTimeout(() => playGISBeep(1100, 0.15), 150);
+
+    const logTimeline = lang === 'id' ? [
+      '[GIS] Menghubungkan ke satelit Sentinel-2...',
+      '[AI] Menganalisis kerapatan vegetasi hutan (NDVI)...',
+      '[GIS] Memproses koordinat spasial kebudayaan...',
+      '[AI] Sinkronisasi data kearifan lokal selesai.'
+    ] : [
+      '[GIS] Connecting to Sentinel-2 satellite network...',
+      '[AI] Analyzing forest canopy density index (NDVI)...',
+      '[GIS] Resolving customary spatial coordinates...',
+      '[AI] Local wisdom database synchronization complete.'
+    ];
+
+    logTimeline.forEach((logText, idx) => {
+      setTimeout(() => {
+        setAiConsoleLogs(prev => [...prev, logText]);
+        playGISBeep(660 + idx * 100, 0.05);
+      }, (idx + 1) * 600);
+    });
+
+    setTimeout(() => {
+      const matched = cultures.find(c => 
+        c.name.toLowerCase().includes(queryText.toLowerCase()) ||
+        c.nameEn.toLowerCase().includes(queryText.toLowerCase()) ||
+        c.desc.toLowerCase().includes(queryText.toLowerCase()) ||
+        c.descEn.toLowerCase().includes(queryText.toLowerCase()) ||
+        c.location.toLowerCase().includes(queryText.toLowerCase())
+      );
+
+      if (matched) {
+        setSelected(matched);
+        triggerMapFly([matched.lat, matched.lng], 9);
+        setAiConsoleStatus('complete');
+        setAiConsoleResult({
+          titleId: `Pemindaian AI Berhasil: ${matched.name}`,
+          titleEn: `AI Scan Successful: ${matched.nameEn}`,
+          descId: `Satelit mendeteksi keberadaan pemukiman ${matched.name} di ${matched.location} dengan indeks kelestarian sebesar ${matched.sustainability}%.`,
+          descEn: `Satellite detected ${matched.nameEn} settlements in ${matched.location} with a sustainability index of ${matched.sustainability}%.`,
+          stats: [
+            { label: lang === 'id' ? 'Koordinat' : 'Coordinates', value: `${matched.lat.toFixed(4)}, ${matched.lng.toFixed(4)}` },
+            { label: lang === 'id' ? 'Keberlanjutan' : 'Sustainability', value: `${matched.sustainability}%` },
+            { label: lang === 'id' ? 'Kategori' : 'Category', value: matched.type.toUpperCase() }
+          ]
+        });
+      } else {
+        let titleId = 'Hasil Pemindaian Umum';
+        let titleEn = 'General Scan Result';
+        let descId = 'Kueri Anda dianalisis secara makro. Tidak ditemukan suku spesifik, namun peta diarahkan ke pusat kepulauan Nusantara untuk menampilkan data global.';
+        let descEn = 'Your query was analyzed macroscopically. No specific tribe was found, but the map flew to the center of the archipelago to show global data.';
+
+        if (queryText.toLowerCase().includes('hutan') || queryText.toLowerCase().includes('lestari') || queryText.toLowerCase().includes('forest') || queryText.toLowerCase().includes('iban')) {
+          triggerMapFly([1.6212, 114.9315], 6);
+          setActiveFilter('lingkungan');
+          setSearch('');
+          titleId = 'Konservasi Hutan Nusantara';
+          titleEn = 'Nusantara Forest Conservation';
+          descId = 'Menampilkan seluruh kelompok masyarakat adat ber-kategori Lingkungan yang melestarikan kawasan hutan dengan indeks kelestarian di atas 85%.';
+          descEn = 'Displaying all customary communities under the Environment category preserving forest zones with a sustainability index above 85%.';
+        } else if (queryText.toLowerCase().includes('laut') || queryText.toLowerCase().includes('pantai') || queryText.toLowerCase().includes('sea') || queryText.toLowerCase().includes('marine') || queryText.toLowerCase().includes('bajo')) {
+          const bajoData = cultures.find(c => c.id === 'bajo');
+          if (bajoData) {
+            setSelected(bajoData);
+            triggerMapFly([bajoData.lat, bajoData.lng], 8);
+          }
+          titleId = 'Konservasi Terumbu Karang';
+          titleEn = 'Coral Reef Conservation';
+          descId = 'Mengarah ke Suku Sama Bajo di Wakatobi yang memiliki aturan adat Mamia Kadandio untuk melestarikan biota laut.';
+          descEn = 'Flying to Sama Bajo Tribe in Wakatobi possessing Mamia Kadandio customary laws to conserve marine life.';
+        } else {
+          triggerMapFly([-2.5489, 118.0149], 5);
+        }
+
+        setAiConsoleStatus('complete');
+        setAiConsoleResult({
+          titleId,
+          titleEn,
+          descId,
+          descEn,
+          stats: [
+            { label: lang === 'id' ? 'Hasil Filter' : 'Filter Output', value: `${cultures.filter(c => c.name.toLowerCase().includes(queryText.toLowerCase())).length} Cultures` },
+            { label: lang === 'id' ? 'Resolusi' : 'Resolution', value: 'Global Sat' }
+          ]
+        });
+      }
+    }, 3200);
+  };
 
   // Live GIS Ticker Index
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -802,34 +1238,7 @@ export function JelajahSection({ lang, isDark }: Props) {
 
   // AI query handler
   const handleAISuggestion = (queryText: string) => {
-    setSearch(queryText);
-    if (queryText.toLowerCase().includes('hutan') || queryText.toLowerCase().includes('lestari')) {
-      setActiveFilter('lingkungan');
-      setRegionFilter('all');
-      setSustainabilityMin(85);
-      setMapCenter([1.6212, 114.9315]);
-      setMapZoom(6);
-    } else if (queryText.toLowerCase().includes('matrilineal') || queryText.toLowerCase().includes('minang')) {
-      setSearch('Minangkabau');
-      setActiveFilter('all');
-      setRegionFilter('sumatera');
-      const minangData = cultures.find(c => c.id === 'minang');
-      if (minangData) {
-        setSelected(minangData);
-        setMapCenter([minangData.lat, minangData.lng]);
-        setMapZoom(8);
-      }
-    } else if (queryText.toLowerCase().includes('air') || queryText.toLowerCase().includes('baduy')) {
-      setSearch('Baduy');
-      setActiveFilter('lingkungan');
-      setRegionFilter('jawa');
-      const baduyData = cultures.find(c => c.id === 'baduy');
-      if (baduyData) {
-        setSelected(baduyData);
-        setMapCenter([baduyData.lat, baduyData.lng]);
-        setMapZoom(10);
-      }
-    }
+    submitAIQuery(queryText);
   };
 
   // Filter application
@@ -839,7 +1248,15 @@ export function JelajahSection({ lang, isDark }: Props) {
     const matchSustain = c.sustainability >= sustainabilityMin;
     const matchSearch = c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.nameEn.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase());
+      c.location.toLowerCase().includes(search.toLowerCase()) ||
+      c.desc.toLowerCase().includes(search.toLowerCase()) ||
+      c.descEn.toLowerCase().includes(search.toLowerCase()) ||
+      c.envPractice.toLowerCase().includes(search.toLowerCase()) ||
+      c.envPracticeEn.toLowerCase().includes(search.toLowerCase()) ||
+      c.wayOfLife.toLowerCase().includes(search.toLowerCase()) ||
+      c.wayOfLifeEn.toLowerCase().includes(search.toLowerCase()) ||
+      c.philosophy.toLowerCase().includes(search.toLowerCase()) ||
+      c.philosophyEn.toLowerCase().includes(search.toLowerCase());
     
     // Layer filters
     let matchLayer = false;
@@ -849,6 +1266,13 @@ export function JelajahSection({ lang, isDark }: Props) {
 
     return matchCategory && matchRegion && matchSustain && matchSearch && matchLayer;
   });
+
+  // Close details panel when selected item gets filtered out
+  useEffect(() => {
+    if (selected && !filtered.some(c => c.id === selected.id) && !storyActive && !activeTrail) {
+      setSelected(null);
+    }
+  }, [activeFilter, regionFilter, sustainabilityMin, search, showLayerBudaya, showLayerKearifan, showLayerLingkungan, storyActive, activeTrail, selected]);
 
   // Dynamic AI similarity recommendation calculations
   const getAIRecommendation = (currentId: string) => {
@@ -976,12 +1400,10 @@ export function JelajahSection({ lang, isDark }: Props) {
     setStoryStep(nextStep);
     
     if (nextStep < storyScenarios.length) {
-      setMapCenter([storyScenarios[nextStep].lat, storyScenarios[nextStep].lng]);
-      setMapZoom(storyScenarios[nextStep].zoom);
+      triggerMapFly([storyScenarios[nextStep].lat, storyScenarios[nextStep].lng], storyScenarios[nextStep].zoom);
     } else {
       // Game over/ending step
-      setMapCenter([-6.6119, 106.2625]);
-      setMapZoom(12);
+      triggerMapFly([-6.6119, 106.2625], 12);
     }
   };
 
@@ -993,8 +1415,7 @@ export function JelajahSection({ lang, isDark }: Props) {
     setSprScore(50);
     setStoryFeedback(null);
     setStoryFeedbackEn(null);
-    setMapCenter([storyScenarios[0].lat, storyScenarios[0].lng]);
-    setMapZoom(storyScenarios[0].zoom);
+    triggerMapFly([storyScenarios[0].lat, storyScenarios[0].lng], storyScenarios[0].zoom);
   };
 
   // Trigger Story Mode activation
@@ -1004,12 +1425,10 @@ export function JelajahSection({ lang, isDark }: Props) {
       setCompareMode(false);
       setSelected(null);
       // Set to first story coordinates
-      setMapCenter([storyScenarios[0].lat, storyScenarios[0].lng]);
-      setMapZoom(storyScenarios[0].zoom);
+      triggerMapFly([storyScenarios[0].lat, storyScenarios[0].lng], storyScenarios[0].zoom);
     } else {
       setStoryActive(false);
-      setMapCenter([-2.5489, 118.0149]);
-      setMapZoom(5);
+      triggerMapFly([-2.5489, 118.0149], 5);
     }
   };
 
@@ -1088,14 +1507,16 @@ export function JelajahSection({ lang, isDark }: Props) {
   };
 
   // Radar overlapping data processing
-  const combinedRadarData = leftCulture.radarData.map((leftVal, index) => {
-    const rightVal = rightCulture.radarData[index];
-    return {
-      subject: leftVal.subject,
-      leftValue: leftVal.value,
-      rightValue: rightVal.value,
-    };
-  });
+  const combinedRadarData = useMemo(() => {
+    return leftCulture.radarData.map((leftVal, index) => {
+      const rightVal = rightCulture.radarData[index];
+      return {
+        subject: translateSubject(leftVal.subject, lang),
+        leftValue: leftVal.value,
+        rightValue: rightVal.value,
+      };
+    });
+  }, [leftCulture, rightCulture, lang]);
 
   // Calculate dynamic similarity match score
   const diffs = leftCulture.radarData.map((d, idx) => Math.abs(d.value - rightCulture.radarData[idx].value));
@@ -1134,27 +1555,105 @@ export function JelajahSection({ lang, isDark }: Props) {
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">{tx.sub}</p>
         </motion.div>
 
-        {/* AI Suggestion Chips */}
-        <div className="mt-6 flex flex-col items-center gap-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            {tx.suggestionTitle}
+        {/* Advanced AI Command Center Console */}
+        <div className="mt-8 max-w-3xl mx-auto bg-card/60 backdrop-blur-md border border-border rounded-3xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+              <h3 className="text-foreground text-sm font-bold tracking-tight">{tx.aiConsoleTitle}</h3>
+            </div>
+            <span className="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded px-2 py-0.5 font-mono uppercase tracking-wider">
+              {aiConsoleStatus === 'idle' ? 'STANDBY' : aiConsoleStatus === 'scanning' ? 'SCANNING' : 'ONLINE'}
+            </span>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              value={aiConsoleInput}
+              onChange={e => setAiConsoleInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && submitAIQuery(aiConsoleInput)}
+              placeholder={tx.aiConsolePlaceholder}
+              className="flex-1 px-4 py-2.5 rounded-2xl bg-background border border-border text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 font-medium"
+            />
+            <button
+              onClick={() => submitAIQuery(aiConsoleInput)}
+              disabled={aiConsoleStatus === 'scanning'}
+              className="px-6 py-2.5 rounded-2xl bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+            >
+              <Compass className="w-4 h-4 animate-spin-slow" />
+              {tx.aiExecute}
+            </button>
+          </div>
+
+          {/* AI suggestion chips inside the console */}
+          <div className="flex flex-wrap gap-2 pt-1.5 items-center">
+            <span className="text-[10px] font-bold text-muted-foreground mr-1 uppercase tracking-wider">{tx.suggestionTitle}</span>
             {[
-              { labelId: '🌿 Budaya Kelestarian Hutan', labelEn: '🌿 Forest Conservation Cultures', query: 'Tampilkan budaya pelestari hutan' },
-              { labelId: '👩‍👧 Hubungan Matrilineal Minang', labelEn: '👩‍👧 Matrilineal Kinship Minang', query: 'Budaya matrilineal seperti Minang' },
-              { labelId: '💧 Cara Baduy Menjaga Air', labelEn: '💧 How Baduy Protects Water', query: 'Bagaimana Suku Baduy menjaga air?' }
+              { labelId: '🌿 Kelestarian Hutan', labelEn: '🌿 Forest Conservation', query: 'Tampilkan budaya pelestari hutan' },
+              { labelId: '👩‍👧 Matrilineal Minang', labelEn: '👩‍👧 Matrilineal Minang', query: 'Budaya matrilineal seperti Minang' },
+              { labelId: '💧 Penjaga Air Baduy', labelEn: '💧 Baduy Water Guardians', query: 'Bagaimana Suku Baduy menjaga air?' },
+              { labelId: '🌊 Pengembara Laut Bajo', labelEn: '🌊 Bajo Sea Nomads', query: 'Suku Sama Bajo penjaga laut' }
             ].map((chip, idx) => (
               <button
                 key={idx}
-                onClick={() => handleAISuggestion(chip.query)}
-                className="px-3.5 py-1.5 rounded-full text-xs bg-muted hover:bg-primary/10 border border-border hover:border-primary/30 text-foreground transition-all duration-300 shadow-sm active:scale-95 cursor-pointer font-medium"
+                onClick={() => submitAIQuery(chip.query)}
+                disabled={aiConsoleStatus === 'scanning'}
+                className="px-3 py-1.5 rounded-xl text-[10px] bg-muted hover:bg-primary/10 border border-border hover:border-primary/30 text-foreground transition-all duration-300 font-medium cursor-pointer"
               >
                 {lang === 'id' ? chip.labelId : chip.labelEn}
               </button>
             ))}
           </div>
+
+          {/* Terminal Console Logs Display */}
+          {(aiConsoleLogs.length > 0 || aiConsoleStatus === 'scanning' || aiConsoleResult) && (
+            <div className="bg-black/90 rounded-2xl p-4 border border-emerald-500/20 font-mono text-xs space-y-3 shadow-inner">
+              <div className="flex items-center justify-between text-[10px] text-emerald-400 border-b border-emerald-500/20 pb-2">
+                <span>SYSTEM LOGS - SENTINEL-2 LINK</span>
+                <span className="animate-pulse">● LIVE</span>
+              </div>
+              <div className="space-y-1.5 text-emerald-500/90 max-h-32 overflow-y-auto">
+                {aiConsoleLogs.map((log, idx) => (
+                  <div key={idx} className="flex items-start gap-2 leading-relaxed">
+                    <span className="text-[9px] text-emerald-600 flex-shrink-0 mt-0.5">❯</span>
+                    <span>{log}</span>
+                  </div>
+                ))}
+                {aiConsoleStatus === 'scanning' && (
+                  <div className="flex items-center gap-1.5 text-emerald-400">
+                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping" />
+                    <span>Processing data stream...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Console scan results block */}
+              {aiConsoleStatus === 'complete' && aiConsoleResult && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3.5 space-y-3 text-foreground"
+                >
+                  <div className="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    {lang === 'id' ? aiConsoleResult.titleId : aiConsoleResult.titleEn}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    {lang === 'id' ? aiConsoleResult.descId : aiConsoleResult.descEn}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 border-t border-emerald-500/10 pt-3">
+                    {aiConsoleResult.stats.map((stat, sIdx) => (
+                      <div key={sIdx} className="bg-background/40 border border-border/40 p-2 rounded-lg text-center">
+                        <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider">{stat.label}</div>
+                        <div className="text-[11px] font-bold text-foreground mt-0.5">{stat.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Filters and Controls */}
@@ -1245,6 +1744,16 @@ export function JelajahSection({ lang, isDark }: Props) {
                   setCompareMode(false);
                   setStoryActive(false);
                   setSelected(null);
+                  if (val) {
+                    const trail = expeditionTrails.find(t => t.id === val);
+                    if (trail) {
+                      const points = trail.cultures.map(cId => {
+                        const c = cultures.find(cult => cult.id === cId);
+                        return c ? [c.lat, c.lng] as [number, number] : null;
+                      }).filter((p): p is [number, number] => p !== null);
+                      triggerMapFly([-2.5489, 118.0149], 5, points);
+                    }
+                  }
                 }}
                 className="px-3 py-2 rounded-full text-xs font-semibold bg-background border border-border text-muted-foreground hover:border-primary/45 focus:outline-none cursor-pointer transition-all shadow-sm"
               >
@@ -1296,23 +1805,48 @@ export function JelajahSection({ lang, isDark }: Props) {
           
           {/* Leaflet Map with class applying our Custom CSS hue filter */}
           <MapContainer 
-            center={mapCenter} 
-            zoom={mapZoom} 
+            center={[-2.5489, 118.0149]} 
+            zoom={5} 
             zoomControl={false}
             style={{ height: '100%', width: '100%' }}
             className="z-0 custom-map-filter"
           >
             {/* Tile Layer loaded dynamically based on app theme */}
             <TileLayer
-              url={isDark ? mapStyles.dark : mapStyles.light}
+              key={mapStyleKey}
+              url={mapStyles[mapStyleKey]}
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             />
 
             {/* Custom Zoom Controls */}
             <ZoomControls />
 
+            {/* Map Style Selector Overlay */}
+            <div className="absolute top-4 right-4 z-[999] bg-card/90 backdrop-blur-md border border-border rounded-2xl p-2.5 shadow-xl flex gap-1.5">
+              {[
+                { key: 'light', labelId: 'Terang', labelEn: 'Light', icon: '☀️' },
+                { key: 'dark', labelId: 'Gelap', labelEn: 'Dark', icon: '🌙' },
+                { key: 'satellite', labelId: 'Satelit', labelEn: 'Satellite', icon: '📡' },
+                { key: 'terrain', labelId: 'Topografi', labelEn: 'Terrain', icon: '🏔️' }
+              ].map(style => (
+                <button
+                  key={style.key}
+                  onClick={() => setMapStyleKey(style.key as any)}
+                  className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer border ${
+                    mapStyleKey === style.key 
+                      ? 'bg-primary text-primary-foreground border-primary shadow-sm' 
+                      : 'bg-background hover:bg-muted text-muted-foreground border-border'
+                  }`}
+                  title={lang === 'id' ? style.labelId : style.labelEn}
+                >
+                  <span>{style.icon}</span>
+                  <span className="hidden sm:inline">{lang === 'id' ? style.labelId : style.labelEn}</span>
+                </button>
+              ))}
+            </div>
+
             {/* Dynamic Map Fly-to Controller */}
-            <MapController center={mapCenter} zoom={mapZoom} bounds={activeTrail ? trailPoints : undefined} />
+            <MapController target={mapTarget} />
 
             {/* Render Polyline for Active Expedition Trail */}
             {activeTrail && trailPoints.length > 0 && (
@@ -1339,8 +1873,7 @@ export function JelajahSection({ lang, isDark }: Props) {
                   eventHandlers={{
                     click: () => {
                       setSelected(c);
-                      setMapCenter([c.lat, c.lng]);
-                      setMapZoom(7);
+                      triggerMapFly([c.lat, c.lng], 7);
                     }
                   }}
                 />
@@ -1356,8 +1889,7 @@ export function JelajahSection({ lang, isDark }: Props) {
                 eventHandlers={{
                   click: () => {
                     setSelected(c);
-                    setMapCenter([c.lat, c.lng]);
-                    setMapZoom(7);
+                    triggerMapFly([c.lat, c.lng], 7);
                   }
                 }}
               />
@@ -1614,14 +2146,32 @@ export function JelajahSection({ lang, isDark }: Props) {
                   )}
                 </div>
 
-                {/* Reset button at the bottom */}
-                <button
-                  onClick={resetStory}
-                  className="mt-4 w-full py-2 bg-muted hover:bg-muted-foreground/10 text-foreground text-xs font-bold rounded-xl border border-border flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  {tx.storyRestart}
-                </button>
+                {/* Reset or Exit Buttons */}
+                {storyStep < storyScenarios.length ? (
+                  <button
+                    onClick={resetStory}
+                    className="mt-4 w-full py-2 bg-muted hover:bg-muted-foreground/10 text-foreground text-xs font-bold rounded-xl border border-border flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    {tx.storyRestart}
+                  </button>
+                ) : (
+                  <div className="flex gap-2.5 mt-4">
+                    <button
+                      onClick={resetStory}
+                      className="flex-1 py-2 bg-muted hover:bg-muted-foreground/10 text-foreground text-xs font-bold rounded-xl border border-border flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      {tx.storyRestart}
+                    </button>
+                    <button
+                      onClick={() => setStoryActive(false)}
+                      className="flex-1 py-2 bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
+                    >
+                      {lang === 'id' ? 'Kembali ke Peta' : 'Back to Map'}
+                    </button>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -1675,8 +2225,7 @@ export function JelajahSection({ lang, isDark }: Props) {
                             key={cId} 
                             onClick={() => {
                               setSelected(c);
-                              setMapCenter([c.lat, c.lng]);
-                              setMapZoom(8);
+                              triggerMapFly([c.lat, c.lng], 8);
                             }}
                             className={`group cursor-pointer text-left transition-all ${
                               isCurrentSelected ? 'text-primary font-bold' : 'hover:text-primary text-foreground/80'
@@ -1702,8 +2251,49 @@ export function JelajahSection({ lang, isDark }: Props) {
                     </div>
                   </div>
 
+                  {/* Expedition Logistics Checklist */}
+                  <div className="mt-4 p-3.5 rounded-2xl bg-card border border-border space-y-2.5">
+                    <div className="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-1.5">
+                      <Sliders className="w-3.5 h-3.5" />
+                      {lang === 'id' ? 'LOGISTIK & PERLENGKAPAN ADAT' : 'LOGISTICS & ECO-EQUIPMENT'}
+                    </div>
+                    <div className="space-y-1.5 text-[11px] text-muted-foreground font-medium">
+                      {activeTrail === 'conservation' ? (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <span className="text-emerald-500">✓</span>
+                            <span>{lang === 'id' ? 'Botol Air Bambu / Tumbler Ramah Lingkungan' : 'Bamboo Water Flask / Eco Tumbler'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-emerald-500">✓</span>
+                            <span>{lang === 'id' ? 'Kantong Tas Serat Daun Pandan (Kojong)' : 'Pandan Leaf fiber backpack (Kojong)'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-emerald-500">✓</span>
+                            <span>{lang === 'id' ? 'Pakaian warna hitam/gelap polos' : 'Plain black/dark attire'}</span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <span className="text-purple-500">✓</span>
+                            <span>{lang === 'id' ? 'Kain Tenun Adat Penghormatan' : 'Customary Woven Respect Scarf'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-purple-500">✓</span>
+                            <span>{lang === 'id' ? 'Buku Logbook Tradisional Kayu' : 'Traditional Wood Logbook'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-purple-500">✓</span>
+                            <span>{lang === 'id' ? 'Perekam Audio/Video Komunal ber-izin' : 'Permitted Communal Audio/Video Recorder'}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Guidelines */}
-                  <div className="mt-6 p-3.5 rounded-2xl bg-muted/60 border border-border space-y-2">
+                  <div className="mt-4 p-3.5 rounded-2xl bg-muted/60 border border-border space-y-2">
                     <div className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest flex items-center gap-1">
                       <ShieldAlert className="w-3.5 h-3.5" />
                       {lang === 'id' ? 'ATURAN & TATA TERTIB' : 'ATURAN & GUIDELINES'}
@@ -1775,6 +2365,91 @@ export function JelajahSection({ lang, isDark }: Props) {
                     <span className="text-xs font-extrabold text-primary">{selected.sustainability}%</span>
                   </div>
 
+                  {/* Audio Sonification Widget */}
+                  <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                        <Sparkles className="w-4 h-4" />
+                        {tx.ambientSonification}
+                      </div>
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase">Web Audio Synth</span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground leading-normal">
+                      {lang === 'id' 
+                        ? 'Sintesis suara ambient berbasis kearifan lokal menggunakan osilator peramban Anda.' 
+                        : 'Synthesizing local wisdom ambient sounds using your browser\'s oscillator system.'}
+                    </p>
+                    <button
+                      onClick={() => {
+                        if (isPlayingSoundscape) {
+                          stopAmbientSoundscape();
+                        } else {
+                          startAmbientSoundscape(selected.type);
+                        }
+                      }}
+                      className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer ${
+                        isPlayingSoundscape 
+                          ? 'bg-emerald-600 border-emerald-500 text-white animate-pulse' 
+                          : 'bg-background border-border text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      {isPlayingSoundscape ? (
+                        <>
+                          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                          {lang === 'id' ? 'HENTIKAN SUARA' : 'STOP SOUNDSCAPE'}
+                        </>
+                      ) : (
+                        <>
+                          <span>🎵</span>
+                          {lang === 'id' ? 'PUTAR SONIFIKASI' : 'PLAY SOUNDSCAPE'}
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Eco-Weather Telemetry Sensors Widget */}
+                  <div className="p-4 bg-card border border-border rounded-2xl space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-bold text-foreground border-b border-border pb-2">
+                      <Sliders className="w-4 h-4 text-primary" />
+                      {tx.ecoWeather}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Lat Lng */}
+                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1 relative group">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.latitude} / {tx.longitude}</div>
+                        <div className="text-[10px] font-mono font-bold text-foreground truncate">
+                          {selected.lat.toFixed(4)}, {selected.lng.toFixed(4)}
+                        </div>
+                      </div>
+
+                      {/* Forest Density NDVI */}
+                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.ndviForest}</div>
+                        <div className="text-[11px] font-bold text-foreground flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                          {selected.type === 'lingkungan' ? '0.85 - 0.98' : selected.type === 'tradisi' ? '0.70 - 0.82' : '0.78 - 0.88'}
+                        </div>
+                      </div>
+
+                      {/* Temperature */}
+                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.temperature}</div>
+                        <div className="text-[11px] font-bold text-foreground">
+                          {selected.region === 'papua' || selected.region === 'nusatenggara' ? '22°C - 27°C' : '26°C - 31°C'}
+                        </div>
+                      </div>
+
+                      {/* Humidity */}
+                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.humidity}</div>
+                        <div className="text-[11px] font-bold text-foreground">
+                          {selected.region === 'nusatenggara' ? '65% - 75%' : '80% - 92%'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Cultural Description */}
                   <div>
                     <h4 className="text-xs uppercase font-extrabold text-muted-foreground tracking-wider mb-2">Deskripsi</h4>
@@ -1786,7 +2461,7 @@ export function JelajahSection({ lang, isDark }: Props) {
                   {/* Quantitative Radar Analysis */}
                   <div className="h-44 bg-muted/30 border border-border/50 rounded-3xl p-2 flex flex-col justify-center">
                     <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart data={selected.radarData}>
+                      <RadarChart data={selected.radarData.map(d => ({ ...d, subject: translateSubject(d.subject, lang) }))}>
                         <PolarGrid stroke="var(--border)" />
                         <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontWeight: '600' }} />
                         <Radar dataKey="value" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} />
