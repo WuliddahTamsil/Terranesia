@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Leaf, Mail, Instagram, Twitter, Youtube, Github, CheckCircle, MapPin, Phone } from 'lucide-react';
+import { Logo } from './Logo';
+import { Mail, Instagram, Twitter, Youtube, Github, CheckCircle, MapPin, Phone } from 'lucide-react';
 
 interface Props { lang: 'id' | 'en' }
 
@@ -23,8 +24,8 @@ const t = {
     address: 'Jl. Pendidikan No. 1, Jakarta Selatan, DKI Jakarta',
     email: 'hello@terranesia.id',
     phone: '+62 21 1234 5678',
-    rights: '� 2026 Terranesia. Hak Cipta Dilindungi.',
-    madeWith: 'Dibuat dengan ❤️ untuk Kompetisi OLIVIA 2026',
+    rights: '� 2026 Terranesia. Hak Cipta Dilindungi.',
+    madeWith: 'Dibuat dengan ❤️ untuk Pelestarian Budaya Nusantara',
   },
   en: {
     tagline: 'Preserving Nusantara local wisdom through modern technology for a nature-loving generation.',
@@ -44,8 +45,8 @@ const t = {
     address: 'Jl. Pendidikan No. 1, South Jakarta, DKI Jakarta',
     email: 'hello@terranesia.id',
     phone: '+62 21 1234 5678',
-    rights: '� 2026 Terranesia. All Rights Reserved.',
-    madeWith: 'Made with ❤️ for OLIVIA Competition 2026',
+    rights: '� 2026 Terranesia. All Rights Reserved.',
+    madeWith: 'Made with ❤️ for Nusantara Cultural Preservation',
   },
 };
 
@@ -108,16 +109,13 @@ export function Footer({ lang }: Props) {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <div>
-                <div style={{ fontFamily: 'Playfair Display, serif', fontWeight: 700 }} className="text-background text-base">
-                  Terranesia
-                </div>
-                <div className="text-background/40 text-[10px] tracking-widest uppercase">OLIVIA 2026</div>
-              </div>
+            <div className="flex items-center gap-2 mb-4">
+              <Logo 
+                variant="alternative-white" 
+                size="md" 
+                showTypeface={true}
+                className="h-10"
+              />
             </div>
             <p className="text-background/60 text-sm leading-relaxed mb-5 max-w-xs">{tx.tagline}</p>
             {/* Social */}
