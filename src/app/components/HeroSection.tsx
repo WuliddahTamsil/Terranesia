@@ -9,7 +9,7 @@ interface Props { lang: 'id' | 'en' }
 
 const t = {
   id: {
-    badge: 'Kompetisi OLIVIA 2026',
+    badge: '',
     title1: 'Jelajahi Warisan',
     title2: 'Indonesia',
     sub: 'Jelajahi kekayaan budaya Nusantara melalui teknologi Web GIS, Kecerdasan Buatan, dan pengalaman AR/VR yang imersif untuk generasi yang mencintai alam.',
@@ -24,7 +24,7 @@ const t = {
     feat3: 'AR / VR Experience',
   },
   en: {
-    badge: 'OLIVIA Competition 2026',
+    badge: '',
     title1: 'Discover',
     title2: 'Indonesian Heritage',
     sub: 'Explore Nusantara cultural heritage through immersive Web GIS, Artificial Intelligence, and AR/VR technology for a generation that loves nature.',
@@ -93,6 +93,7 @@ export function HeroSection({ lang }: Props) {
           {/* Left — Text */}
           <div className="text-white">
             {/* Badge */}
+            {tx.badge && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -102,12 +103,14 @@ export function HeroSection({ lang }: Props) {
               <Sparkles className="w-4 h-4 text-accent" />
               <span className="text-white/90">{tx.badge}</span>
             </motion.div>
+            )}
 
             {/* Title */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-8"
             >
               <h1
                 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2.5rem, 6vw, 5rem)', lineHeight: 1.1 }}

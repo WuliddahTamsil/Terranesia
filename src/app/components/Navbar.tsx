@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Moon, Sun, Globe, Leaf, Bell } from 'lucide-react';
+import { Menu, X, Moon, Sun, Globe, Bell } from 'lucide-react';
+import { Logo } from './Logo';
 import { SubscribeModal } from './SubscribeModal';
 
 interface NavbarProps {
@@ -50,16 +51,13 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#beranda" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform">
-              <Leaf className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span style={{ fontFamily: 'Playfair Display, serif', fontWeight: 700 }} className="text-foreground text-base">
-                Terranesia
-              </span>
-              <span className="text-[10px] text-muted-foreground tracking-widest uppercase">OLIVIA 2026</span>
-            </div>
+          <a href="#beranda" className="flex items-center gap-1.5 group">
+            <Logo 
+              variant={isDark ? 'alternative-white' : 'main'} 
+              size="sm" 
+              showTypeface={true}
+              className="group-hover:scale-105 transition-transform h-8"
+            />
           </a>
 
           {/* Desktop Links */}
