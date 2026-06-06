@@ -8,7 +8,6 @@ import { LabPage } from './components/LabPage';
 import { EdukasiSection } from './components/EdukasiSection';
 import { DonasiSection } from './components/DonasiSection';
 import { Footer } from './components/Footer';
-import { AdminCMS } from './components/AdminCMS';
 
 function HomePage({ lang, isDark }: { lang: 'id' | 'en'; isDark: boolean }) {
   return (
@@ -35,10 +34,6 @@ function HomePage({ lang, isDark }: { lang: 'id' | 'en'; isDark: boolean }) {
 export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<'id' | 'en'>('id');
-
-  if (window.location.pathname.startsWith('/admin')) {
-    return <AdminCMS />;
-  }
 
   return (
     <Router>

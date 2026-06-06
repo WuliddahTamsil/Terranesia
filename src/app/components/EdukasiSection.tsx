@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -6,18 +5,12 @@ import {
   Target, Flame, Leaf, Droplets, Wind, Sun, Heart, RefreshCw, X, Sparkles, Info, ClipboardCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-=======
-import { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Trophy, Star, CheckCircle, XCircle, ChevronRight, Award, Target, Flame, Leaf, Droplets, Wind, Sun } from 'lucide-react';
-import { useTerranesiaCMSContent } from '../contentBridge';
->>>>>>> Stashed changes
 
 interface Props { lang: 'id' | 'en' }
 
 const WEAVING = 'https://images.unsplash.com/photo-1661144050353-1d2566cbdf03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&q=80';
 
-const philosophiesBase = [
+const philosophies = [
   {
     icon: Leaf, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/30',
     title: 'Hidup Sederhana', titleEn: 'Simple Living',
@@ -309,7 +302,6 @@ const t = {
 };
 
 export function EdukasiSection({ lang }: Props) {
-<<<<<<< Updated upstream
   // --- Persistent States from LocalStorage ---
   const [quizHighScoreTradition, setQuizHighScoreTradition] = useState<number>(() => {
     try {
@@ -350,10 +342,6 @@ export function EdukasiSection({ lang }: Props) {
   // --- Quiz Engine States ---
   const [quizState, setQuizState] = useState<'idle' | 'active' | 'done' | 'failed'>('idle');
   const [quizCategory, setQuizCategory] = useState<'tradition' | 'ecology'>('tradition');
-=======
-  const cmsContent = useTerranesiaCMSContent();
-  const [quizState, setQuizState] = useState<'idle' | 'active' | 'done'>('idle');
->>>>>>> Stashed changes
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -372,23 +360,6 @@ export function EdukasiSection({ lang }: Props) {
   const [expandedDay, setExpandedDay] = useState<number | null>(null);
 
   const tx = t[lang];
-  const philosophies = useMemo(() => {
-    const published = cmsContent.education
-      .filter((article) => article.status === 'Published')
-      .map((article, index) => ({
-        icon: [Leaf, Droplets, Wind, Sun][index % 4],
-        color: ['text-emerald-500', 'text-blue-500', 'text-purple-500', 'text-amber-500'][index % 4],
-        bg: ['bg-emerald-50 dark:bg-emerald-950/30', 'bg-blue-50 dark:bg-blue-950/30', 'bg-purple-50 dark:bg-purple-950/30', 'bg-amber-50 dark:bg-amber-950/30'][index % 4],
-        title: article.title,
-        titleEn: article.title,
-        desc: article.summary,
-        descEn: article.summary,
-        quote: article.quote,
-        quoteEn: article.quote,
-      }));
-
-    return published.length > 0 ? published : philosophiesBase;
-  }, [cmsContent]);
 
   // Sync state changes with localStorage
   useEffect(() => {

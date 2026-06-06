@@ -1,14 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-<<<<<<< Updated upstream
 import { 
   Heart, QrCode, CheckCircle, ChevronDown, ChevronUp, Users, 
   TreePine, Sparkles, User, Award, Printer, Copy, Check 
 } from 'lucide-react';
-=======
-import { Heart, QrCode, CheckCircle, ChevronDown, ChevronUp, Users, TreePine, Sparkles } from 'lucide-react';
-import { formatRupiahShort, useTerranesiaCMSContent } from '../contentBridge';
->>>>>>> Stashed changes
 
 interface Props { lang: 'id' | 'en' }
 
@@ -187,7 +182,6 @@ const targetAmtRaw = 50000000; // Rp 50 Juta
 const daysLeft = 28;
 
 export function DonasiSection({ lang }: Props) {
-<<<<<<< Updated upstream
   // --- Persistent States from LocalStorage ---
   const [collectedAmount, setCollectedAmount] = useState<number>(() => {
     try {
@@ -211,9 +205,6 @@ export function DonasiSection({ lang }: Props) {
   });
 
   // --- Form & Flow States ---
-=======
-  const cmsContent = useTerranesiaCMSContent();
->>>>>>> Stashed changes
   const [selectedAmt, setSelectedAmt] = useState<number | null>(1);
   const [customAmt, setCustomAmt] = useState<string>('');
   const [showQris, setShowQris] = useState(false);
@@ -234,14 +225,6 @@ export function DonasiSection({ lang }: Props) {
   const [copied, setCopied] = useState(false);
   
   const tx = t[lang];
-  const donation = cmsContent.donation;
-  const progressPct = Math.min(100, Math.round((donation.collected / donation.target) * 100));
-  const totalCollected = formatRupiahShort(donation.collected);
-  const targetAmt = formatRupiahShort(donation.target);
-  const donorCount = donation.donors;
-  const daysLeft = donation.daysLeft;
-  const title = lang === 'id' ? donation.title : tx.title;
-  const subtitle = lang === 'id' ? donation.description : tx.sub;
 
   // Sync with LocalStorage
   useEffect(() => {
@@ -368,13 +351,8 @@ export function DonasiSection({ lang }: Props) {
             <Heart className="w-4 h-4" />
             {lang === 'id' ? 'Dukung Pelestarian' : 'Support Preservation'}
           </div>
-<<<<<<< Updated upstream
           <h2 className="text-foreground mb-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{tx.title}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm">{tx.sub}</p>
-=======
-          <h2 className="text-foreground mb-3">{title}</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">{subtitle}</p>
->>>>>>> Stashed changes
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-10 items-start">
