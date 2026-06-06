@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Moon, Sun, Globe, Bell } from 'lucide-react';
+import { Menu, X, Moon, Sun, Globe, Bell, VolumeX } from 'lucide-react';
 import { Logo } from './Logo';
 import { SubscribeModal } from './SubscribeModal';
+import { useAudio } from '../audio/AudioContext';
 
 interface NavbarProps {
   isDark: boolean;
@@ -31,6 +32,7 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
   const tx = t[lang];
   const location = useLocation();
   const navigate = useNavigate();
+  const { isPlaying, togglePlay } = useAudio();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -139,6 +141,27 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
             >
               <Bell className="w-3.5 h-3.5 animate-bounce" style={{ animationDuration: '3s' }} />
               <span className="hidden md:inline">{lang === 'id' ? 'Langganan' : 'Subscribe'}</span>
+            </button>
+
+            {/* Music Player Control */}
+            <button
+              onClick={togglePlay}
+              className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all cursor-pointer ${
+                isPlaying
+                  ? 'bg-primary/10 border-primary/30 text-primary shadow-[0_0_8px_rgba(var(--color-primary),0.25)]'
+                  : 'bg-transparent border-border text-muted-foreground hover:text-primary hover:border-primary/60 hover:bg-primary/8'
+              }`}
+              title={isPlaying ? (lang === 'id' ? 'Senyapkan Musik' : 'Mute Music') : (lang === 'id' ? 'Putar Musik' : 'Play Music')}
+            >
+              {isPlaying ? (
+                <div className="flex items-end gap-[2px] h-3 w-3.5 justify-center">
+                  <div className="w-[2px] bg-primary rounded-full animate-eq-bar-1" />
+                  <div className="w-[2px] bg-primary rounded-full animate-eq-bar-2" />
+                  <div className="w-[2px] bg-primary rounded-full animate-eq-bar-3" />
+                </div>
+              ) : (
+                <VolumeX className="w-4 h-4" />
+              )}
             </button>
 
             <button

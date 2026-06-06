@@ -9,8 +9,9 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, 
   AreaChart, Area, XAxis, YAxis, Tooltip, Legend
 } from 'recharts';
-import { MapContainer, TileLayer, Marker, useMap, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap, Polyline, useMapEvents } from 'react-leaflet';
 import * as L from 'leaflet';
+import { useAudio } from '../audio/AudioContext';
 interface Props { 
   lang: 'id' | 'en';
   isDark?: boolean;
@@ -688,6 +689,96 @@ function MapController({ target }: { target: MapTarget | null }) {
   return null;
 }
 
+// Spatial Audio Panning & Volume Mapping Controller for Leaflet Map
+function SpatialAudioController({ onMapChange }: { onMapChange: (center: [number, number], zoom: number) => void }) {
+  const map = useMapEvents({
+    move: () => {
+      const center = map.getCenter();
+      onMapChange([center.lat, center.lng], map.getZoom());
+    },
+    zoomend: () => {
+      const center = map.getCenter();
+      onMapChange([center.lat, center.lng], map.getZoom());
+    }
+  });
+  return null;
+}
+
+// Glowing neon audio spectrum canvas visualizer
+function AudioVisualizer({ analyser }: { analyser: AnalyserNode | null }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    if (!analyser || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const resizeCanvas = () => {
+      if (!canvas) return;
+      canvas.width = canvas.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.clientHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const draw = () => {
+      animId = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      const width = canvas.width / window.devicePixelRatio;
+      const height = canvas.height / window.devicePixelRatio;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Glowing green spectrum bars/wave
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.85)'; // Emerald primary
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = 'rgba(16, 185, 129, 0.85)';
+
+      ctx.beginPath();
+      const sliceWidth = width / (bufferLength / 2.5); // Focus on lower-mid frequencies for a smoother visual
+      let x = 0;
+
+      for (let i = 0; i < bufferLength / 2.5; i++) {
+        const v = dataArray[i] / 255.0; // 0.0 to 1.0
+        const y = height - (v * (height - 6)) - 3;
+
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      ctx.stroke();
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, [analyser]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute bottom-0 left-0 right-0 w-full h-[45px] pointer-events-none z-10"
+    />
+  );
+}
+
 // Custom Zoom Controls
 function ZoomControls() {
   const map = useMap();
@@ -919,13 +1010,24 @@ const storyScenarios: ScenarioStep[] = [
 ];
 
 export function JelajahSection({ lang, isDark }: Props) {
+  const { playTribeMusic, stopTribeMusic, updateSpatialAudio, analyserNode, isPlaying, togglePlay } = useAudio();
+
   // Filters & State
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [regionFilter, setRegionFilter] = useState<string>('all');
   const [sustainabilityMin, setSustainabilityMin] = useState<number>(50);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<CulturePoint | null>(null);
-  
+
+  // Trigger regional music on tribe selection
+  useEffect(() => {
+    if (selected) {
+      playTribeMusic(selected.region, [selected.lat, selected.lng]);
+    } else {
+      stopTribeMusic();
+    }
+  }, [selected, playTribeMusic, stopTribeMusic]);
+
   // Custom interactive panels state
   const [compareMode, setCompareMode] = useState(false);
   const [compareLeft, setCompareLeft] = useState<string>('baduy');
@@ -1821,6 +1923,9 @@ export function JelajahSection({ lang, isDark }: Props) {
             {/* Custom Zoom Controls */}
             <ZoomControls />
 
+            {/* Spatial audio controller linked to map coordinates/zoom */}
+            <SpatialAudioController onMapChange={updateSpatialAudio} />
+
             {/* Map Style Selector Overlay */}
             <div className="absolute top-4 right-4 z-[999] bg-card/90 backdrop-blur-md border border-border rounded-2xl p-2.5 shadow-xl flex gap-1.5">
               {[
@@ -2325,9 +2430,12 @@ export function JelajahSection({ lang, isDark }: Props) {
                 className="absolute right-0 top-0 bottom-0 z-[1000] w-full sm:w-[420px] bg-card/95 backdrop-blur-md border-l border-border shadow-2xl flex flex-col h-full"
               >
                 {/* Cover Image */}
-                <div className="relative h-48 flex-shrink-0">
-                  <img src={selected.image} alt={selected.name} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+                <div className="relative h-48 flex-shrink-0 bg-black">
+                  <img src={selected.image} alt={selected.name} className="w-full h-full object-cover opacity-85" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent animate-pulse" style={{ animationDuration: '4s' }} />
+
+                  {/* Real-time spectrum visualizer */}
+                  {analyserNode && <AudioVisualizer analyser={analyserNode} />}
                   
                   {/* Close button */}
                   <button 
@@ -2370,38 +2478,32 @@ export function JelajahSection({ lang, isDark }: Props) {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-xs font-bold text-primary">
                         <Sparkles className="w-4 h-4" />
-                        {tx.ambientSonification}
+                        {lang === 'id' ? 'Musik Tradisional Suku' : 'Tribe Traditional Music'}
                       </div>
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase">Web Audio Synth</span>
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase">Procedural Synth</span>
                     </div>
                     <p className="text-[10px] text-muted-foreground leading-normal">
                       {lang === 'id' 
-                        ? 'Sintesis suara ambient berbasis kearifan lokal menggunakan osilator peramban Anda.' 
-                        : 'Synthesizing local wisdom ambient sounds using your browser\'s oscillator system.'}
+                        ? 'Memutar instrumen dan lagu khas daerah ini secara dinamis melalui Web Audio API.' 
+                        : 'Synthesizing dynamic regional instruments and melodies via Web Audio API.'}
                     </p>
                     <button
-                      onClick={() => {
-                        if (isPlayingSoundscape) {
-                          stopAmbientSoundscape();
-                        } else {
-                          startAmbientSoundscape(selected.type);
-                        }
-                      }}
+                      onClick={togglePlay}
                       className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer ${
-                        isPlayingSoundscape 
+                        isPlaying 
                           ? 'bg-emerald-600 border-emerald-500 text-white animate-pulse' 
                           : 'bg-background border-border text-foreground hover:bg-muted'
                       }`}
                     >
-                      {isPlayingSoundscape ? (
+                      {isPlaying ? (
                         <>
                           <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                          {lang === 'id' ? 'HENTIKAN SUARA' : 'STOP SOUNDSCAPE'}
+                          {lang === 'id' ? 'SENYAPKAN MUSIK' : 'MUTE MUSIC'}
                         </>
                       ) : (
                         <>
                           <span>🎵</span>
-                          {lang === 'id' ? 'PUTAR SONIFIKASI' : 'PLAY SOUNDSCAPE'}
+                          {lang === 'id' ? 'PUTAR MUSIK DAERAH' : 'PLAY REGIONAL MUSIC'}
                         </>
                       )}
                     </button>

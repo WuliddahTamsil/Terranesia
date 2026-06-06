@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bot, Send, Upload, Headphones, Glasses, Cpu, Zap, Image, Mic, ChevronRight, X, Sparkles, AlertCircle, Volume2, VolumeX } from 'lucide-react';
+import { Bot, Send, Upload, Headphones, Glasses, Cpu, Zap, Image, Mic, ChevronRight, X, Sparkles, AlertCircle, Volume2, VolumeX, Music, Play } from 'lucide-react';
 import * as THREE from 'three';
+import { useAudio } from '../audio/AudioContext';
 
 interface Props { lang: 'id' | 'en' }
 
@@ -604,7 +605,44 @@ function VRModal({ sceneId, onClose, lang }: VRModalProps) {
   );
 }
 
+const gamelanNotes = [
+  { note: 'C4', key: '1', name: 'Ji' },
+  { note: 'D4', key: '2', name: 'Ro' },
+  { note: 'E4', key: '3', name: 'Lu' },
+  { note: 'G4', key: '5', name: 'Ma' },
+  { note: 'A4', key: '6', name: 'Nem' },
+  { note: 'C5', key: 'i', name: 'Ji (H)' },
+  { note: 'D5', key: 'ii', name: 'Ro (H)' },
+  { note: 'E5', key: 'iii', name: 'Lu (H)' }
+];
+
+const angklungNotes = [
+  { note: 'C4', name: 'Do' },
+  { note: 'D4', name: 'Re' },
+  { note: 'E4', name: 'Mi' },
+  { note: 'F4', name: 'Fa' },
+  { note: 'G4', name: 'Sol' },
+  { note: 'A4', name: 'La' },
+  { note: 'B4', name: 'Si' },
+  { note: 'C5', name: 'Do (H)' }
+];
+
+const sulingNotes = [
+  { note: 'C4', name: 'L' },
+  { note: 'D4', name: 'ML' },
+  { note: 'E4', name: 'M' },
+  { note: 'G4', name: 'MH' },
+  { note: 'A4', name: 'H' },
+  { note: 'C5', name: 'H2' },
+  { note: 'D5', name: 'P' }
+];
+
 export function TheLabSection({ lang }: Props) {
+  const { playSynthNote } = useAudio();
+  const [activeInstTab, setActiveInstTab] = useState<'gamelan' | 'angklung' | 'suling'>('gamelan');
+  const [shakingKey, setShakingKey] = useState<string | null>(null);
+  const [activeFluteHole, setActiveFluteHole] = useState<string | null>(null);
+  
   const [messages, setMessages] = useState<Message[]>([
     { role: 'bot', text: lang === 'id' ? 'Halo! Saya AI Asisten Budaya Terranesia. Silakan tanyakan apa saja tentang kearifan lokal Nusantara.' : 'Hello! I\'m the Terranesia Cultural AI Assistant. Feel free to ask anything about Nusantara local wisdom.', id: ++msgId },
   ]);
@@ -1198,6 +1236,168 @@ export function TheLabSection({ lang }: Props) {
             </div>
           </motion.div>
         </div>
+
+        {/* Nusantara Synth Pad (Virtual Playroom) */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden"
+        >
+          {/* Decorative glows */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Title and Intro */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border pb-5 mb-6 gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Music className="w-5 h-5 text-primary animate-pulse" />
+                <h3 className="text-foreground text-lg font-bold leading-tight">
+                  {lang === 'id' ? 'Nusantara Synth Pad (Alat Musik Virtual)' : 'Nusantara Synth Pad (Virtual Instruments)'}
+                </h3>
+              </div>
+              <p className="text-muted-foreground text-xs md:text-sm">
+                {lang === 'id' 
+                  ? 'Mainkan alat musik tradisional Indonesia secara interaktif. Klik atau layangkan kursor untuk memicu osilator sintesis.' 
+                  : 'Play traditional Indonesian instruments interactively. Click or hover to trigger synthesized oscillators.'}
+              </p>
+            </div>
+
+            {/* Tab controls */}
+            <div className="flex bg-muted/60 border border-border p-1 rounded-xl shrink-0 self-start md:self-auto">
+              {[
+                { key: 'gamelan', label: 'Gamelan' },
+                { key: 'angklung', label: 'Angklung' },
+                { key: 'suling', label: 'Suling' }
+              ].map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveInstTab(tab.key as any)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    activeInstTab === tab.key
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Instrument Play Panel */}
+          <div className="py-4 flex justify-center items-center min-h-[200px]">
+            {activeInstTab === 'gamelan' && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-end justify-center gap-2 md:gap-3 w-full max-w-2xl bg-amber-950/10 border border-amber-900/10 p-6 rounded-3xl"
+              >
+                {/* Gamelan Saron framework styling */}
+                {gamelanNotes.map((g, idx) => {
+                  const keyHeight = 120 + idx * 8; // Keys get larger for lower frequencies
+                  return (
+                    <motion.button
+                      key={g.note}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ y: 8, scale: 0.98 }}
+                      onClick={() => playSynthNote('gamelan', g.note)}
+                      style={{ height: `${keyHeight}px` }}
+                      className="flex-1 rounded-lg border-2 border-amber-900/30 bg-gradient-to-b from-yellow-100 to-yellow-600 dark:from-yellow-600/40 dark:to-yellow-800/90 text-amber-950 dark:text-yellow-100 font-extrabold text-xs shadow-md flex flex-col justify-between items-center py-4 cursor-pointer relative group overflow-hidden"
+                    >
+                      {/* Metal bar reflex glow */}
+                      <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {/* Key notes */}
+                      <span className="text-[10px] opacity-70 tracking-tighter">{g.note}</span>
+                      <span className="text-sm font-bold">{g.name}</span>
+                      <span className="w-5 h-5 rounded-full bg-amber-950/20 dark:bg-yellow-100/10 flex items-center justify-center text-[9px]">{idx + 1}</span>
+                    </motion.button>
+                  );
+                })}
+              </motion.div>
+            )}
+
+            {activeInstTab === 'angklung' && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-center gap-3 md:gap-5 w-full max-w-2xl bg-emerald-950/5 border border-emerald-900/10 p-6 rounded-3xl overflow-x-auto"
+              >
+                {angklungNotes.map((a) => {
+                  const isShaking = shakingKey === a.note;
+                  return (
+                    <motion.div
+                      key={a.note}
+                      animate={isShaking ? { rotate: [0, -6, 6, -6, 6, 0], x: [0, -3, 3, -3, 3, 0] } : {}}
+                      transition={{ duration: 0.25 }}
+                      onClick={() => {
+                        playSynthNote('angklung', a.note);
+                        setShakingKey(a.note);
+                        setTimeout(() => setShakingKey(null), 250);
+                      }}
+                      className="w-12 h-48 bg-gradient-to-b from-stone-200 to-stone-400 dark:from-stone-700 dark:to-stone-900 border border-stone-400 dark:border-stone-800 rounded-xl flex flex-col justify-between items-center py-4 text-stone-800 dark:text-stone-300 font-bold text-xs cursor-pointer shadow-md select-none relative group"
+                    >
+                      {/* Angklung bamboo double tubes representation */}
+                      <div className="absolute inset-y-0 left-2 w-2 bg-stone-500/20 rounded" />
+                      <div className="absolute inset-y-0 right-2 w-3 bg-stone-500/30 rounded" />
+                      
+                      <span className="text-[9px] font-mono opacity-60 rotate-90 mt-1">{a.note}</span>
+                      <span className="text-[10px] uppercase tracking-wider">{a.name}</span>
+                      <span className="text-[11px] mb-1 font-mono text-stone-500">🎋</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            )}
+
+            {activeInstTab === 'suling' && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center gap-6 w-full max-w-xl bg-muted/40 border border-border/80 p-6 rounded-3xl"
+              >
+                {/* Bamboo pipe wrapper */}
+                <div className="relative w-full h-12 bg-gradient-to-r from-amber-800 to-amber-600 dark:from-amber-900 dark:to-amber-700 rounded-full border border-amber-950 shadow-inner flex items-center justify-around px-8">
+                  {/* Flute embouchure / mouth hole */}
+                  <div className="w-5 h-5 rounded-full bg-black/90 border border-amber-950 flex-shrink-0 absolute left-4 shadow-inner" />
+
+                  {/* Playable finger holes */}
+                  {sulingNotes.map((s) => {
+                    const isActive = activeFluteHole === s.note;
+                    return (
+                      <motion.button
+                        key={s.note}
+                        whileHover={{ scale: 1.1 }}
+                        onClick={() => {
+                          playSynthNote('suling', s.note);
+                          setActiveFluteHole(s.note);
+                          setTimeout(() => setActiveFluteHole(null), 350);
+                        }}
+                        className={`w-6 h-6 rounded-full border transition-all cursor-pointer shadow-inner relative ${
+                          isActive
+                            ? 'bg-emerald-400 border-emerald-300 shadow-[0_0_12px_rgba(52,211,153,0.7)] scale-90'
+                            : 'bg-black/85 border-amber-950 hover:bg-black/60'
+                        }`}
+                        title={`Play Note ${s.note}`}
+                      >
+                        {/* Note label tooltip on hover */}
+                        <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap">
+                          {s.note}
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+
+                <div className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span>💨</span>
+                  {lang === 'id' ? 'Klik lubang tiup suling untuk memicu nada tiup bambu.' : 'Click the flute holes to trigger soft wind bamboo notes.'}
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       </div>
 
       {/* Render immersive WebGL 360° VR Modal sphere if active */}

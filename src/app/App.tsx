@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -8,6 +8,7 @@ import { LabPage } from './components/LabPage';
 import { EdukasiSection } from './components/EdukasiSection';
 import { DonasiSection } from './components/DonasiSection';
 import { Footer } from './components/Footer';
+import { AudioProvider, useAudio } from './audio/AudioContext';
 
 function HomePage({ lang, isDark }: { lang: 'id' | 'en'; isDark: boolean }) {
   return (
@@ -31,9 +32,30 @@ function HomePage({ lang, isDark }: { lang: 'id' | 'en'; isDark: boolean }) {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<'id' | 'en'>('id');
+  const { unlockAudio } = useAudio();
+
+  // Unlock audio on first user gesture (click or keypress)
+  useEffect(() => {
+    const handleGesture = () => {
+      unlockAudio();
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('keydown', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+    };
+
+    window.addEventListener('click', handleGesture);
+    window.addEventListener('keydown', handleGesture);
+    window.addEventListener('touchstart', handleGesture);
+
+    return () => {
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('keydown', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+    };
+  }, [unlockAudio]);
 
   return (
     <Router>
@@ -50,3 +72,12 @@ export default function App() {
     </Router>
   );
 }
+
+export default function App() {
+  return (
+    <AudioProvider>
+      <AppContent />
+    </AudioProvider>
+  );
+}
+
