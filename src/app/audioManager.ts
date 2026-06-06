@@ -123,6 +123,7 @@ export class AudioManager {
   private nextNoteTime: number = 0;
   private tempoBpm: number = 70;
   private noteQueue: Note[] = [];
+  private activeDroneOscillators: { osc: OscillatorNode; gain: GainNode }[] = [];
 
   constructor() {
     // Lazily initialized upon user gesture
@@ -146,7 +147,7 @@ export class AudioManager {
 
     // Master chain setup
     this.masterGain = ctx.createGain();
-    this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.45, ctx.currentTime);
+    this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.25, ctx.currentTime);
 
     this.analyser = ctx.createAnalyser();
     this.analyser.fftSize = 128; // Compact size for clean wave visuals
@@ -184,6 +185,9 @@ export class AudioManager {
     this.currentBeatIndex = 0;
     this.loadSong(this.activeSongKey);
 
+    // Trigger ambient background drone chord
+    this.triggerDrone(this.activeSongKey);
+
     // Note Scheduler Loop (running every 100ms with a 250ms lookahead window)
     this.schedulerInterval = setInterval(() => {
       this.schedulerLoop();
@@ -196,6 +200,7 @@ export class AudioManager {
       clearInterval(this.schedulerInterval);
       this.schedulerInterval = null;
     }
+    this.stopDrone();
   }
 
   private loadSong(key: string) {
@@ -243,6 +248,77 @@ export class AudioManager {
     this.synthesizeInstrument(song.instrument, freq, durationSec, time, targetGainNode);
   }
 
+  private triggerDrone(songKey: string) {
+    if (!this.audioCtx) return;
+
+    const ctx = this.audioCtx;
+    const now = ctx.currentTime;
+    const fadeTime = 2.0;
+
+    // Fade out active drones
+    this.activeDroneOscillators.forEach(d => {
+      try {
+        d.gain.gain.setValueAtTime(d.gain.gain.value, now);
+        d.gain.gain.linearRampToValueAtTime(0.0, now + fadeTime);
+        d.osc.stop(now + fadeTime + 0.1);
+      } catch (e) {}
+    });
+    this.activeDroneOscillators = [];
+
+    // Define drone chords for each song (warm, low, pleasant pad chords)
+    const DRONE_CHORDS: Record<string, number[]> = {
+      general: [130.81, 196.00, 261.63, 329.63], // C3, G3, C4, E4
+      jawa: [164.81, 246.94, 329.63, 392.00],    // E3, B3, E4, G4
+      bali: [110.00, 220.00, 261.63, 329.63],    // A2, A3, C4, E4
+      nusatenggara: [130.81, 174.61, 261.63, 349.23], // C3, F3, C4, F4
+      papua: [130.81, 196.00, 261.63, 329.63],   // C3, G3, C4, E4
+      sumatera: [130.81, 196.00, 261.63, 329.63], // C3, G3, C4, E4
+      sulawesi: [174.61, 220.00, 349.23, 440.00]  // F3, A3, F4, A4
+    };
+
+    const freqs = DRONE_CHORDS[songKey] || DRONE_CHORDS.general;
+    const isTribe = songKey !== 'general';
+    const destination = isTribe ? this.tribeGain : this.bgmGain;
+
+    if (!destination) return;
+
+    freqs.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(350, now);
+
+      const noteGain = 0.008 / (idx + 1); // Very soft volume
+      
+      gainNode.gain.setValueAtTime(0.0, now);
+      gainNode.gain.linearRampToValueAtTime(noteGain, now + fadeTime);
+
+      osc.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(destination);
+
+      osc.start(now);
+      this.activeDroneOscillators.push({ osc, gain: gainNode });
+    });
+  }
+
+  private stopDrone() {
+    const now = this.audioCtx ? this.audioCtx.currentTime : 0;
+    this.activeDroneOscillators.forEach(d => {
+      try {
+        d.gain.gain.setValueAtTime(d.gain.gain.value, now);
+        d.gain.gain.linearRampToValueAtTime(0.0, now + 0.5);
+        d.osc.stop(now + 0.6);
+      } catch (e) {}
+    });
+    this.activeDroneOscillators = [];
+  }
+
   // Procedural Instrument Synthesizer
   public synthesizeInstrument(
     inst: string,
@@ -259,218 +335,242 @@ export class AudioManager {
       // FM / Additive synthesis mimicking bronze / bamboo resonant chime bars
       const carrier = ctx.createOscillator();
       const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
       carrier.type = 'sine';
       carrier.frequency.setValueAtTime(freq, time);
 
-      // Overtones for metallic ring (inharmonic for Gamelan, harmonic for Rindik)
       const isRindik = inst === 'rindik';
-      const partials = isRindik ? [2.0, 3.0, 4.0] : [2.01, 2.76, 5.4];
-      const partialGains = isRindik ? [0.3, 0.1, 0.05] : [0.4, 0.2, 0.1];
+      const partials = isRindik ? [2.0, 3.0, 4.0] : [2.0, 3.0, 4.0];
+      const partialGains = isRindik ? [0.12, 0.06, 0.02] : [0.1, 0.05, 0.01];
 
+      // Smooth envelope to avoid clicks
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.18, time + 0.005);
+      gainNode.gain.linearRampToValueAtTime(0.045, time + 0.008);
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.5);
 
-      carrier.connect(gainNode);
+      // Lowpass filter to cut out high-end harshness/spookiness
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(isRindik ? 900 : 800, time);
+
+      carrier.connect(filter);
 
       const oscillators = [carrier];
 
       partials.forEach((ratio, i) => {
         const partial = ctx.createOscillator();
         const pGain = ctx.createGain();
-        partial.type = isRindik ? 'triangle' : 'sine';
+        partial.type = 'sine';
         partial.frequency.setValueAtTime(freq * ratio, time);
         
         pGain.gain.setValueAtTime(0, time);
-        pGain.gain.linearRampToValueAtTime(0.12 * partialGains[i], time + 0.004);
+        pGain.gain.linearRampToValueAtTime(0.02 * partialGains[i], time + 0.006);
         pGain.gain.exponentialRampToValueAtTime(0.001, time + duration * (1.2 - i * 0.2));
 
         partial.connect(pGain);
-        pGain.connect(gainNode);
+        pGain.connect(filter);
         oscillators.push(partial);
       });
 
+      filter.connect(gainNode);
       gainNode.connect(destination);
 
       oscillators.forEach(osc => {
         osc.start(time);
-        osc.stop(time + duration * 2.0);
+        osc.stop(time + duration * 2.2);
       });
 
     } else if (inst === 'suling') {
-      // Gentle woodwind: Sine + lowpass-filtered breath noise + vibrato LFO
-      const osc = ctx.createOscillator();
+      // Gentle woodwind: Sine + soft warm triangle blending (no noisy hiss) + extremely gentle vibrato
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
       const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, time);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, time);
 
-      // Vibrato (pitch modulation)
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2.0, time); // Second harmonic adds warmth
+
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0.015, time); // Very subtle blend of triangle
+
+      // Extremely gentle vibrato (pitch modulation) to sound organic, not scary
       const lfo = ctx.createOscillator();
       const lfoGain = ctx.createGain();
-      lfo.frequency.setValueAtTime(5.5, time); // 5.5 Hz vibrato
-      lfoGain.gain.setValueAtTime(freq * 0.012, time);
+      lfo.frequency.setValueAtTime(3.5, time); // Slower, calmer vibrato (3.5 Hz)
+      lfoGain.gain.setValueAtTime(freq * 0.001, time); // Extremely subtle (0.1% depth)
 
       lfo.connect(lfoGain);
-      lfoGain.connect(osc.frequency);
+      lfoGain.connect(osc1.frequency);
+      lfoGain.connect(osc2.frequency);
 
-      // Breath noise component
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.0, time);
-      noiseGain.gain.linearRampToValueAtTime(0.012, time + 0.15);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-
-      const noiseFilter = ctx.createBiquadFilter();
-      noiseFilter.type = 'bandpass';
-      noiseFilter.frequency.setValueAtTime(freq * 1.5, time);
-      noiseFilter.Q.setValueAtTime(5, time);
-
-      // White Noise buffer
-      const bufferSize = ctx.sampleRate * 2;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      const noise = ctx.createBufferSource();
-      noise.buffer = noiseBuffer;
-      noise.loop = true;
-
-      // Amplitude Envelope
+      // Amplitude Envelope (scaled to note duration to avoid overlaps)
+      const attackTime = Math.min(0.12, duration * 0.25);
+      
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.15, time + 0.12); // Soft woodwind attack
-      gainNode.gain.setValueAtTime(0.15, time + duration - 0.1);
+      gainNode.gain.linearRampToValueAtTime(0.04, time + attackTime); // Slightly lower gain for smoothness
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration + 0.1);
 
-      osc.connect(gainNode);
-      
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(gainNode);
+      // Lowpass filter to ensure sweet, warm tone
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1000, time);
 
+      osc1.connect(filter);
+      osc2.connect(gain2);
+      gain2.connect(filter);
+      
+      filter.connect(gainNode);
       gainNode.connect(destination);
 
       lfo.start(time);
-      osc.start(time);
-      noise.start(time);
+      osc1.start(time);
+      osc2.start(time);
 
       lfo.stop(time + duration + 0.2);
-      osc.stop(time + duration + 0.2);
-      noise.stop(time + duration + 0.2);
+      osc1.stop(time + duration + 0.2);
+      osc2.stop(time + duration + 0.2);
 
     } else if (inst === 'sasando') {
-      // Plucked harp string: sharp attack, rich partials, quick decay transient
-      const osc = ctx.createOscillator();
-      const pluck = ctx.createOscillator();
+      // Plucked string: crisp but warm harp tone
+      const carrier = ctx.createOscillator();
+      const overtone = ctx.createOscillator();
       const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, time);
+      carrier.type = 'triangle';
+      carrier.frequency.setValueAtTime(freq, time);
 
-      pluck.type = 'sine';
-      pluck.frequency.setValueAtTime(freq * 5.0, time); // Ringing high transient
+      overtone.type = 'sine';
+      overtone.frequency.setValueAtTime(freq * 2.0, time); // Warm octave overtone
 
-      const pluckGain = ctx.createGain();
-      pluckGain.gain.setValueAtTime(0.08, time);
-      pluckGain.gain.exponentialRampToValueAtTime(0.001, time + 0.05); // Rapid snap
+      const overtoneGain = ctx.createGain();
+      overtoneGain.gain.setValueAtTime(0.015, time);
+      overtoneGain.gain.exponentialRampToValueAtTime(0.001, time + duration * 0.8);
 
+      // Envelope with quick pluck attack and long sweet decay
+      const attackTime = 0.005;
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.2, time + 0.004);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.8);
+      gainNode.gain.linearRampToValueAtTime(0.045, time + attackTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.6);
 
-      osc.connect(gainNode);
-      pluck.connect(pluckGain);
-      pluckGain.connect(gainNode);
+      // Lowpass filter for warm, sweet nylon string pluck
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1100, time);
 
+      carrier.connect(filter);
+      overtone.connect(overtoneGain);
+      overtoneGain.connect(filter);
+
+      filter.connect(gainNode);
       gainNode.connect(destination);
 
-      osc.start(time);
-      pluck.start(time);
+      carrier.start(time);
+      overtone.start(time);
 
-      osc.stop(time + duration * 2.0);
-      pluck.stop(time + 0.1);
+      carrier.stop(time + duration * 1.8);
+      overtone.stop(time + duration * 1.8);
 
     } else if (inst === 'angklung') {
-      // Angklung: rattling bamboo frames. We simulate with 4 rapid wood rattle strikes
-      const numStrikes = 4;
-      const strikeInterval = 0.045; // 45ms rattle clicks
+      // Angklung: warm shaking bamboo tubes (octave combination with rapid organic tremolo)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      // Standard angklung tubes are tuned in octaves
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(freq, time);
+
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(freq * 2.0, time);
+
+      const osc2Gain = ctx.createGain();
+      osc2Gain.gain.setValueAtTime(0.02, time);
+
+      // Create tremolo LFO (organic bamboo shake at 12Hz)
+      const tremoloLfo = ctx.createOscillator();
+      const tremoloGain = ctx.createGain();
       
-      const masterStrikeGain = ctx.createGain();
-      masterStrikeGain.gain.setValueAtTime(1.0, time);
-      masterStrikeGain.connect(destination);
+      tremoloLfo.frequency.setValueAtTime(12.0, time); // 12Hz shake
+      tremoloGain.gain.setValueAtTime(0.35, time); 
 
-      for (let i = 0; i < numStrikes; i++) {
-        const strikeTime = time + i * strikeInterval;
-        const clickOsc = ctx.createOscillator();
-        const clickGain = ctx.createGain();
-        const clickFilter = ctx.createBiquadFilter();
+      // Connect LFO to gainNode gain to modulate volume
+      const tremoloNode = ctx.createGain();
+      tremoloNode.gain.setValueAtTime(0.6, time); // base volume
 
-        // Rattle envelope
-        clickGain.gain.setValueAtTime(0, strikeTime);
-        clickGain.gain.linearRampToValueAtTime(0.09 / (i + 1), strikeTime + 0.002);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, strikeTime + 0.035);
+      tremoloLfo.connect(tremoloGain);
+      tremoloGain.connect(tremoloNode.gain);
 
-        clickOsc.type = 'triangle';
-        clickOsc.frequency.setValueAtTime(freq * (1.0 + Math.random() * 0.05), strikeTime);
+      // Rattle shake envelope
+      gainNode.gain.setValueAtTime(0.0, time);
+      gainNode.gain.linearRampToValueAtTime(0.05, time + 0.02); // soft shake attack
+      gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.2);
 
-        clickFilter.type = 'bandpass';
-        clickFilter.frequency.setValueAtTime(freq * 2.0, strikeTime);
-        clickFilter.Q.setValueAtTime(10, strikeTime);
+      // Bandpass filter centered at 1.2 * freq to emulate bamboo chamber resonance
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(freq * 1.2, time);
+      filter.Q.setValueAtTime(4.0, time);
 
-        clickOsc.connect(clickFilter);
-        clickFilter.connect(clickGain);
-        clickGain.connect(masterStrikeGain);
+      osc1.connect(filter);
+      osc2.connect(osc2Gain);
+      osc2Gain.connect(filter);
 
-        clickOsc.start(strikeTime);
-        clickOsc.stop(strikeTime + 0.05);
-      }
+      filter.connect(tremoloNode);
+      tremoloNode.connect(gainNode);
+      gainNode.connect(destination);
+
+      tremoloLfo.start(time);
+      osc1.start(time);
+      osc2.start(time);
+
+      tremoloLfo.stop(time + duration * 1.4);
+      osc1.stop(time + duration * 1.4);
+      osc2.stop(time + duration * 1.4);
 
     } else if (inst === 'tifa') {
-      // Tifa Drum: Deep hand drum hit with rapid pitch glide downwards
+      // Pitched Tifa / Log Drum: deep organic wooden percussion that plays the melody pitches
       const osc = ctx.createOscillator();
+      const mallet = ctx.createOscillator();
       const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
+      // Deep membrane body sweep (harmonic relative to the pitch)
       osc.type = 'sine';
-      // Pitch sweep: starts higher, glides down rapidly to hit skin resonance
-      osc.frequency.setValueAtTime(freq * 1.5, time);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.5, time + 0.08);
+      const baseFreq = freq * 0.25; // 2 octaves below melody pitch for sub weight
+      osc.frequency.setValueAtTime(Math.max(50, Math.min(180, baseFreq * 1.5)), time);
+      osc.frequency.exponentialRampToValueAtTime(Math.max(40, Math.min(100, baseFreq)), time + 0.08);
 
+      // Pitched wooden mallet strike
+      mallet.type = 'triangle';
+      mallet.frequency.setValueAtTime(freq, time);
+
+      const malletGain = ctx.createGain();
+      malletGain.gain.setValueAtTime(0.04, time);
+      malletGain.gain.exponentialRampToValueAtTime(0.001, time + duration * 0.3); // rapid decay for woody feel
+
+      // Drum body gain envelope
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.25, time + 0.002);
+      gainNode.gain.linearRampToValueAtTime(0.06, time + 0.004);
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 0.8);
 
-      // Add high slap transient (filtered noise burst)
-      const slapGain = ctx.createGain();
-      slapGain.gain.setValueAtTime(0.12, time);
-      slapGain.gain.exponentialRampToValueAtTime(0.001, time + 0.015);
+      // Warm lowpass filter to remove harsh clicking
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(700, time);
 
-      const slapFilter = ctx.createBiquadFilter();
-      slapFilter.type = 'highpass';
-      slapFilter.frequency.setValueAtTime(1000, time);
-
-      // Noise source
-      const bufferSize = ctx.sampleRate * 0.05; // 50ms buffer
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      const slapNoise = ctx.createBufferSource();
-      slapNoise.buffer = noiseBuffer;
-
-      slapNoise.connect(slapFilter);
-      slapFilter.connect(slapGain);
-      slapGain.connect(gainNode);
-
-      osc.connect(gainNode);
+      osc.connect(filter);
+      mallet.connect(malletGain);
+      malletGain.connect(filter);
+      
+      filter.connect(gainNode);
       gainNode.connect(destination);
 
       osc.start(time);
-      slapNoise.start(time);
+      mallet.start(time);
 
       osc.stop(time + duration);
-      slapNoise.stop(time + 0.06);
+      mallet.stop(time + duration);
     }
   }
 
@@ -503,6 +603,7 @@ export class AudioManager {
     // Load new notes and restart beat scheduler immediately
     this.currentBeatIndex = 0;
     this.loadSong(songKey);
+    this.triggerDrone(songKey);
     this.nextNoteTime = this.audioCtx.currentTime + 0.1;
   }
 
@@ -516,7 +617,7 @@ export class AudioManager {
     if (!coords) {
       // Reset panning and volume to full
       this.pannerNode.pan.setTargetAtTime(0.0, now, 0.1);
-      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.45, now, 0.1);
+      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.25, now, 0.1);
       return;
     }
 
@@ -531,7 +632,7 @@ export class AudioManager {
     // 2. Calculate Zoom Volume Scaling
     // Faint at zoom 5 (15% volume), Full at zoom 12+ (100% volume)
     const zoomPct = Math.max(0.15, Math.min(1.0, (zoom - 4) / 8.0));
-    const targetMasterVolume = this.isMuted ? 0.0 : 0.45 * zoomPct;
+    const targetMasterVolume = this.isMuted ? 0.0 : 0.25 * zoomPct;
 
     this.masterGain.gain.setTargetAtTime(targetMasterVolume, now, 0.1);
   }
@@ -541,7 +642,7 @@ export class AudioManager {
     const now = this.audioCtx ? this.audioCtx.currentTime : 0;
     
     if (this.masterGain && this.audioCtx) {
-      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.45, now, 0.1);
+      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.25, now, 0.1);
     }
 
     if (typeof window !== 'undefined') {
