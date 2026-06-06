@@ -147,7 +147,7 @@ export class AudioManager {
 
     // Master chain setup
     this.masterGain = ctx.createGain();
-    this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.25, ctx.currentTime);
+    this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.8, ctx.currentTime);
 
     this.analyser = ctx.createAnalyser();
     this.analyser.fftSize = 128; // Compact size for clean wave visuals
@@ -293,7 +293,7 @@ export class AudioManager {
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(350, now);
 
-      const noteGain = 0.008 / (idx + 1); // Very soft volume
+      const noteGain = 0.035 / (idx + 1); // Very soft volume
       
       gainNode.gain.setValueAtTime(0.0, now);
       gainNode.gain.linearRampToValueAtTime(noteGain, now + fadeTime);
@@ -346,7 +346,7 @@ export class AudioManager {
 
       // Smooth envelope to avoid clicks
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.045, time + 0.008);
+      gainNode.gain.linearRampToValueAtTime(0.22, time + 0.008);
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.5);
 
       // Lowpass filter to cut out high-end harshness/spookiness
@@ -364,7 +364,7 @@ export class AudioManager {
         partial.frequency.setValueAtTime(freq * ratio, time);
         
         pGain.gain.setValueAtTime(0, time);
-        pGain.gain.linearRampToValueAtTime(0.02 * partialGains[i], time + 0.006);
+        pGain.gain.linearRampToValueAtTime(0.1 * partialGains[i], time + 0.006);
         pGain.gain.exponentialRampToValueAtTime(0.001, time + duration * (1.2 - i * 0.2));
 
         partial.connect(pGain);
@@ -410,7 +410,7 @@ export class AudioManager {
       const attackTime = Math.min(0.12, duration * 0.25);
       
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.04, time + attackTime); // Slightly lower gain for smoothness
+      gainNode.gain.linearRampToValueAtTime(0.20, time + attackTime); // Slightly lower gain for smoothness
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration + 0.1);
 
       // Lowpass filter to ensure sweet, warm tone
@@ -452,7 +452,7 @@ export class AudioManager {
       // Envelope with quick pluck attack and long sweet decay
       const attackTime = 0.005;
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.045, time + attackTime);
+      gainNode.gain.linearRampToValueAtTime(0.22, time + attackTime);
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.6);
 
       // Lowpass filter for warm, sweet nylon string pluck
@@ -505,7 +505,7 @@ export class AudioManager {
 
       // Rattle shake envelope
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.05, time + 0.02); // soft shake attack
+      gainNode.gain.linearRampToValueAtTime(0.22, time + 0.02); // soft shake attack
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 1.2);
 
       // Bandpass filter centered at 1.2 * freq to emulate bamboo chamber resonance
@@ -552,7 +552,7 @@ export class AudioManager {
 
       // Drum body gain envelope
       gainNode.gain.setValueAtTime(0.0, time);
-      gainNode.gain.linearRampToValueAtTime(0.06, time + 0.004);
+      gainNode.gain.linearRampToValueAtTime(0.25, time + 0.004);
       gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration * 0.8);
 
       // Warm lowpass filter to remove harsh clicking
@@ -617,7 +617,7 @@ export class AudioManager {
     if (!coords) {
       // Reset panning and volume to full
       this.pannerNode.pan.setTargetAtTime(0.0, now, 0.1);
-      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.25, now, 0.1);
+      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.8, now, 0.1);
       return;
     }
 
@@ -632,7 +632,7 @@ export class AudioManager {
     // 2. Calculate Zoom Volume Scaling
     // Faint at zoom 5 (15% volume), Full at zoom 12+ (100% volume)
     const zoomPct = Math.max(0.15, Math.min(1.0, (zoom - 4) / 8.0));
-    const targetMasterVolume = this.isMuted ? 0.0 : 0.25 * zoomPct;
+    const targetMasterVolume = this.isMuted ? 0.0 : 0.8 * zoomPct;
 
     this.masterGain.gain.setTargetAtTime(targetMasterVolume, now, 0.1);
   }
@@ -642,7 +642,7 @@ export class AudioManager {
     const now = this.audioCtx ? this.audioCtx.currentTime : 0;
     
     if (this.masterGain && this.audioCtx) {
-      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.25, now, 0.1);
+      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.8, now, 0.1);
     }
 
     if (typeof window !== 'undefined') {

@@ -847,12 +847,12 @@ export function TheLabSection({ lang }: Props) {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm mb-4 font-semibold">
-            <Cpu className="w-4 h-4" />
-            Advanced Technology
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs uppercase tracking-widest mb-4 font-bold">
+            <Cpu className="w-3.5 h-3.5" />
+            {lang === 'id' ? 'Teknologi Budaya' : 'Cultural Tech'}
           </div>
-          <h2 className="text-foreground mb-3">{tx.title}</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">{tx.sub}</p>
+          <h2 className="text-foreground text-3xl font-extrabold tracking-tight mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>{tx.title}</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">{tx.sub}</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
@@ -861,7 +861,7 @@ export function TheLabSection({ lang }: Props) {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm flex flex-col"
+            className="bg-card border-[0.5px] border-border/40 rounded-3xl overflow-hidden shadow-sm flex flex-col"
             style={{ height: 520 }}
           >
             {/* Chat header */}
@@ -885,10 +885,10 @@ export function TheLabSection({ lang }: Props) {
                       window.speechSynthesis.cancel();
                     }
                   }}
-                  className={`p-2 rounded-xl transition-all border cursor-pointer ${
+                  className={`p-2 rounded-xl transition-all border-[0.5px] cursor-pointer ${
                     voiceOutputEnabled 
                       ? 'bg-primary/20 border-primary/30 text-primary' 
-                      : 'bg-muted border-border text-muted-foreground hover:text-foreground'
+                      : 'bg-muted border-border/60 text-muted-foreground hover:text-foreground'
                   }`}
                   title={voiceOutputEnabled ? (lang === 'id' ? 'Matikan Suara Asisten' : 'Mute Assistant Voice') : (lang === 'id' ? 'Bunyikan Suara Asisten' : 'Unmute Assistant Voice')}
                 >
@@ -958,10 +958,10 @@ export function TheLabSection({ lang }: Props) {
                 />
                 <button
                   onClick={toggleListening}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer border ${
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer border-[0.5px] ${
                     isListening
                       ? 'bg-rose-500 text-white animate-pulse border-rose-600 shadow-[0_0_8px_rgba(239,68,68,0.5)]'
-                      : 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground border-border'
+                      : 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground border-border/60'
                   }`}
                   title={isListening ? (lang === 'id' ? 'Selesai Mendengarkan' : 'Stop Listening') : (lang === 'id' ? 'Mulai Mendengarkan' : 'Start Speech Input')}
                 >
@@ -985,7 +985,7 @@ export function TheLabSection({ lang }: Props) {
             viewport={{ once: true }}
             className="flex flex-col gap-4 animate-fade-in"
           >
-            <div className="bg-card border border-border rounded-3xl p-6 shadow-sm flex-1 flex flex-col justify-between min-h-[460px]">
+            <div className="bg-card border-[0.5px] border-border/40 rounded-3xl p-6 shadow-sm flex-1 flex flex-col justify-between min-h-[460px]">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Headphones className="w-5 h-5 text-primary" />
@@ -1022,8 +1022,8 @@ export function TheLabSection({ lang }: Props) {
                       <motion.div
                         key={scene.id}
                         whileHover={{ scale: 1.01 }}
-                        className={`relative overflow-hidden rounded-2xl p-4 text-left transition-all border ${
-                          isActive ? 'border-primary ring-2 ring-primary/20 bg-primary/5' : 'border-border bg-card'
+                        className={`relative overflow-hidden rounded-2xl p-4 text-left transition-all border-[0.5px] ${
+                          isActive ? 'border-primary ring-2 ring-primary/10 bg-primary/5' : 'border-border/60 bg-card'
                         }`}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-r ${scene.color} opacity-[0.03]`} />
@@ -1035,7 +1035,7 @@ export function TheLabSection({ lang }: Props) {
                           </div>
                           <button
                             onClick={() => setActiveVr(isActive ? null : scene.id)}
-                            className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground flex items-center justify-center transition-all cursor-pointer border border-primary/20"
+                            className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground flex items-center justify-center transition-all cursor-pointer border-[0.5px] border-primary/20"
                           >
                             <ChevronRight className="w-4 h-4" />
                           </button>
@@ -1178,7 +1178,7 @@ export function TheLabSection({ lang }: Props) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="bg-card border border-border rounded-3xl p-6 shadow-sm"
+            className="bg-card border-[0.5px] border-border/40 rounded-3xl p-6 shadow-sm"
           >
             <div className="flex items-center gap-2 mb-1">
               <Image className="w-5 h-5 text-amber-500" />
@@ -1242,7 +1242,7 @@ export function TheLabSection({ lang }: Props) {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden"
+          className="mt-12 bg-card border-[0.5px] border-border/40 rounded-3xl p-6 md:p-8 shadow-sm relative overflow-hidden"
         >
           {/* Decorative glows */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
@@ -1265,7 +1265,7 @@ export function TheLabSection({ lang }: Props) {
             </div>
 
             {/* Tab controls */}
-            <div className="flex bg-muted/60 border border-border p-1 rounded-xl shrink-0 self-start md:self-auto">
+            <div className="flex bg-muted/40 border-[0.5px] border-border/50 p-1 rounded-xl shrink-0 self-start md:self-auto">
               {[
                 { key: 'gamelan', label: 'Gamelan' },
                 { key: 'angklung', label: 'Angklung' },

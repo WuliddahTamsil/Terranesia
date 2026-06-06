@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { ChevronRight } from 'lucide-react';
+import { TheLabSection } from './TheLabSection';
 
 interface LabProps {
   lang: 'id' | 'en';
@@ -119,21 +120,29 @@ export function LabPage({ lang, isDark }: LabProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-7xl mx-auto flex flex-wrap justify-center gap-3"
+            className="max-w-7xl mx-auto flex flex-wrap justify-center gap-6 border-b border-border/30 pb-4"
           >
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/40'
-                    : 'bg-secondary border border-border text-muted-foreground hover:border-primary/50 hover:text-primary'
-                }`}
-              >
-                {categoryTx[category as keyof typeof categoryTx]}
-              </button>
-            ))}
+            {categories.map((category) => {
+              const isActive = selectedCategory === category;
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`relative px-2 py-2.5 font-bold text-xs uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${
+                    isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {categoryTx[category as keyof typeof categoryTx]}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeCategoryUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </motion.div>
         </section>
 
@@ -145,46 +154,57 @@ export function LabPage({ lang, isDark }: LabProps) {
                 layout
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                {filteredExperiments.map((experiment, index) => (
-                  <motion.div
-                    key={experiment.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="group cursor-pointer"
-                  >
-                    <div className="relative overflow-hidden rounded-2xl bg-secondary border border-border/50 hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-primary/10">
-                      {/* Image Container */}
-                      <div className="relative h-64 overflow-hidden">
-                        <img
-                          src={experiment.image}
-                          alt={getTitle(experiment)}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
+                {filteredExperiments.map((experiment, index) => {
+                  const displayIndex = (index + 1).toString().padStart(2, '0');
+                  return (
+                    <motion.div
+                      key={experiment.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="group cursor-pointer"
+                    >
+                      <div className="relative overflow-hidden rounded-2xl bg-card border-[0.5px] border-border/40 hover:border-primary/50 hover:bg-card/90 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col h-full">
+                        {/* Image Container with Editorial Frame */}
+                        <div className="relative h-56 overflow-hidden m-3 rounded-xl border-[0.5px] border-border/30">
+                          <img
+                            src={experiment.image}
+                            alt={getTitle(experiment)}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-750"
+                          />
+                          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                        </div>
 
-                      {/* Content */}
-                      <div className="p-6">
-                        <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
-                          {getTitle(experiment)}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                          {getDescription(experiment)}
-                        </p>
+                        {/* Content */}
+                        <div className="px-6 pb-6 pt-3 flex-1 flex flex-col justify-between">
+                          <div>
+                            <span className="text-[9px] tracking-[0.2em] font-mono text-primary/80 uppercase font-bold mb-2.5 block">
+                              EXHIBIT {displayIndex} // {categoryTx[experiment.category as keyof typeof categoryTx]}
+                            </span>
+                            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300" style={{ fontFamily: 'Playfair Display, serif' }}>
+                              {getTitle(experiment)}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
+                              {getDescription(experiment)}
+                            </p>
+                          </div>
 
-                        {/* Category Badge & Link */}
-                        <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                          <span className={`text-xs font-semibold px-3 py-1 rounded-full bg-gradient-to-r ${experiment.color} text-white`}>
-                            {categoryTx[experiment.category as keyof typeof categoryTx]}
-                          </span>
-                          <ChevronRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
+                          {/* Category Badge & Link */}
+                          <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                            <span className={`text-[10px] font-bold tracking-wider px-3 py-1 rounded-full uppercase bg-primary/10 text-primary border border-primary/20`}>
+                              {categoryTx[experiment.category as keyof typeof categoryTx]}
+                            </span>
+                            <div className="flex items-center gap-1 text-primary text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <span>{lang === 'id' ? 'Masuk' : 'Enter'}</span>
+                              <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-all" />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </motion.div>
             ) : (
               <motion.div
@@ -201,6 +221,9 @@ export function LabPage({ lang, isDark }: LabProps) {
             )}
           </div>
         </section>
+
+        {/* Interactive Lab Section containing chatbot, VR, AR, and Synth Playroom */}
+        <TheLabSection lang={lang} />
 
         {/* Coming Soon Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-border/30">
