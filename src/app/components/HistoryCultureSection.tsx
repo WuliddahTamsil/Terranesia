@@ -113,7 +113,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Islam kuat dan Tari Saman',
     funFact: 'Tari Saman bisa terlihat seperti gelombang karena penarinya bergerak sangat kompak.',
-    image: imageByRegion.Sumatera,
+    image: "Professional documentary photograph of a dynamic Saman dance performance in Aceh, Indonesia. A tight row of young Acehnese men sitting closely together, wearing traditional black and gold intricate outfits with Gayo patterns. They are performing rapid synchronized hand and body movements, creating a wave-like effect. Strong rhythmic expression, focus on togetherness. Background of an old traditional wooden building. Cinematic lighting, high resolution, National Geographic style.",
     history: 'Aceh lama dikenal sebagai gerbang perdagangan dan penyebaran Islam di Nusantara. Dari pelabuhan, ulama, pedagang, dan masyarakat bertemu lalu membentuk budaya yang tegas sekaligus hangat.',
     tradition: 'Tari Saman, adat meugang, dan tradisi musyawarah membuat kebersamaan terasa kuat dalam kehidupan sehari-hari.',
     wisdom: 'Masyarakat Aceh mengajarkan disiplin, hormat pada ilmu, dan keberanian menjaga identitas.',
@@ -128,7 +128,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Kopi dunia dan seni tari',
     funFact: 'Kopi Gayo terkenal sampai luar negeri karena aroma dan cita rasanya khas dataran tinggi.',
-    image: imageByRegion.Sumatera,
+    image: "A detailed documentary photograph taken in the Takengon highlands, Gayo, Aceh. A local farmer with a cheerful expression wearing traditional textile headwear and clothing is harvesting ripe red coffee cherries in a lush plantation. Blurred background of other farmers. Rolling mist covering mountains in the distance, cool palette, natural daylight, 8k.",
     history: 'Orang Gayo tumbuh di wilayah pegunungan yang sejuk. Alam, kebun kopi, dan seni lisan menjadi bagian penting dari cerita hidup mereka.',
     tradition: 'Didong, tari tradisional, dan budaya bertani kopi menjadi wajah budaya Gayo yang mudah dikenali.',
     wisdom: 'Kerja tekun dan menjaga tanah subur adalah pelajaran besar dari masyarakat Gayo.',
@@ -142,7 +142,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Adat kuat dan agraris',
     funFact: 'Kehidupan agraris membuat kalender adat Alas dekat dengan musim tanam dan panen.',
-    image: imageByRegion.Sumatera,
+    image: "A vibrant landscape photo of the Alas Valley in Southeast Aceh, Indonesia, during the rice harvesting season. Local Alas people, dressed in modest traditional agrarian clothes, are working together ('gotong royong') in the paddies. In the background is a traditional Alas wooden house with its unique architecture, surrounded by lush green hills. Golden hour lighting, peaceful atmosphere, cinematic composition.",
     history: 'Suku Alas hidup di lembah subur dan membangun tradisi yang dekat dengan pertanian. Adat menjadi cara menjaga hubungan antarwarga.',
     tradition: 'Upacara adat, bahasa Alas, dan gotong royong sawah sering menjadi pusat kegiatan sosial.',
     wisdom: 'Mereka mengajarkan bahwa pangan, keluarga, dan kerja bersama adalah fondasi komunitas.',
@@ -156,7 +156,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Danau Toba dan ulos',
     funFact: 'Ulos bukan sekadar kain, tetapi simbol doa, kasih, dan ikatan keluarga.',
-    image: 'https://images.unsplash.com/photo-1510251189075-9a0f4a53f1ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
+    image: "Portrait quality photo of a Batak Toba family dressed in fine, handwoven traditional Ulos textiles, standing proudly with the serene Lake Toba and the iconic Samosir Island in the background. The father wears an Ulos Ragidup, the mother an Ulos Sadum. Behind them is a traditional Bolon house with intricate carvings. Soft sunlight, deep focus on textile textures, realistic, candid moment, highly detailed.",
     history: 'Budaya Batak Toba berkembang di sekitar Danau Toba. Marga, lagu, dan adat membuat hubungan keluarga terasa sangat penting.',
     tradition: 'Ulos, gondang, tortor, dan upacara adat keluarga menjadi bagian besar dari identitas Batak Toba.',
     wisdom: 'Nilai hormat kepada leluhur dan saling mendukung dalam keluarga besar sangat kuat.',
@@ -171,7 +171,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Sistem marga unik',
     funFact: 'Marga dalam masyarakat Karo membantu orang memahami hubungan keluarga dan aturan adat.',
-    image: imageByRegion.Sumatera,
+    image: "An interior photograph of a traditional Karo house, Siwaluh Juhar, in the highlands of North Sumatra. A group of Batak Karo women in traditional clothing sit together, weaving or preparing for 'Kerja Tahun' (annual harvest festival). Warm light streaming through small windows, highlighting the aged timber structure and colorful textiles. Authentic, documentary style, rich textures, high detail.",
     history: 'Batak Karo hidup di dataran tinggi dengan tradisi kekerabatan yang rapi. Setiap upacara adat menunjukkan posisi keluarga dan peran sosial.',
     tradition: 'Kerja tahun, rumah adat Karo, dan musik tradisional hadir dalam banyak acara komunitas.',
     wisdom: 'Karo mengajarkan pentingnya tahu asal-usul dan menjaga sopan santun dalam keluarga besar.',
@@ -185,7 +185,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Musik gordang',
     funFact: 'Gordang sambilan dimainkan beramai-ramai dan menghasilkan suara yang megah.',
-    image: imageByRegion.Sumatera,
+    image: "A dynamic photo of nine large drums (Gordang Sambilan) being played by a group of Mandailing men in vibrant red and black traditional attire in the Mandailing Natal regency. They are performing outdoors with a backdrop of rugged mountains and palm trees at dusk. Majestic and powerful atmosphere, cinematic lighting, realistic, high resolution.",
     history: 'Mandailing memiliki tradisi adat, sastra lisan, dan musik yang kuat. Budayanya tumbuh di antara pegunungan, kampung, dan jalur perantauan.',
     tradition: 'Gordang sambilan, upacara adat, dan bahasa Mandailing menjadi ciri khas yang hidup sampai sekarang.',
     wisdom: 'Masyarakat Mandailing menekankan kehormatan, pendidikan, dan solidaritas keluarga.',
@@ -199,7 +199,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Lompat batu',
     funFact: 'Tradisi lompat batu dahulu menjadi simbol kedewasaan dan keberanian pemuda.',
-    image: imageByRegion.Sumatera,
+    image: "An action photograph capturing a young Nias warrior performing Fahombo (stone jumping). He is flying over a large pile of stacked traditional stones. He wears traditional warrior clothing and a helmet. Below him, other villagers watch from the steps of massive traditional wooden Omo Hada houses in a stone-paved village square, Nias Island, Indonesia. Clear daylight, dynamic composition, realistic, highly detailed textures.",
     history: 'Nias memiliki desa adat batu, rumah panggung besar, dan tradisi yang kuat. Pulau ini menyimpan kisah keberanian dan ketahanan masyarakat pesisir.',
     tradition: 'Fahombo atau lompat batu, tarian perang, dan arsitektur omo hada menjadi ikon Nias.',
     wisdom: 'Keberanian di Nias bukan hanya soal fisik, tetapi juga kesiapan bertanggung jawab.',
@@ -213,7 +213,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Matrilineal dan Rumah Gadang',
     funFact: 'Minangkabau dikenal sebagai salah satu komunitas matrilineal terbesar di dunia.',
-    image: 'https://images.unsplash.com/photo-1502182861870-3b8cc83c9223?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
+    image: "Majestic photograph of a magnificent Minangkabau Rumah Gadang traditional house with multiple spired roofs resembling buffalo horns, located in West Sumatra, Indonesia, at sunset. A group of women in vibrant traditional silk clothing ('baju kurung') and ornate gold headpieces ('suntiang') stand gracefully on the stairs. Golden hour lighting, architectural wonder, rich colors, National Geographic style, ultra-realistic, 8k.",
     history: 'Minangkabau tumbuh dengan adat yang memberi peran penting pada garis ibu. Rumah Gadang menjadi simbol keluarga besar dan tempat nilai adat diwariskan.',
     tradition: 'Randai, silek, kuliner, rumah gadang, dan tradisi merantau membuat budaya Minang mudah dikenal.',
     wisdom: 'Adat mengajarkan musyawarah, kecakapan berdagang, dan keberanian mencari pengalaman.',
@@ -228,7 +228,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Tato tradisional',
     funFact: 'Tato Mentawai bisa menunjukkan perjalanan hidup, status, dan hubungan dengan alam.',
-    image: imageByRegion.Sumatera,
+    image: "Intimate portrait photograph of an elderly Mentawai Sikerei (shaman) covered in intricate traditional tattoos (Titi), sitting inside his Uma (clan longhouse) in the Mentawai rainforest. He is smoking a traditional tobacco and wearing bead necklaces and headwear made of feathers and leaves. Warm, natural daylight filters through the thatched roof, highlighting his wrinkled skin and dark tattoos. Authentic, high detail, cinematic lighting, photorealistic.",
     history: 'Mentawai menjaga tradisi tua yang dekat dengan hutan, sungai, dan roh leluhur. Rumah uma menjadi pusat kehidupan bersama.',
     tradition: 'Tato titi, sikerei, tarian, dan obat alam menjadi bagian penting budaya Mentawai.',
     wisdom: 'Alam diperlakukan sebagai sahabat hidup, bukan sekadar sumber bahan.',
@@ -242,7 +242,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Budaya pesisir',
     funFact: 'Pantun Melayu sering dipakai untuk menyampaikan nasihat dengan cara halus dan indah.',
-    image: imageByRegion.Sumatera,
+    image: "An elegant photograph of a Zapin dance performance on a traditional wooden stage at the edge of a historical Malay coastal town at twilight. Male and female dancers wear detailed silk Malay attire and headgear. The background features traditional stilt houses over the water and a bustling small port. Soft evening lighting, artistic composition, realistic, high detail.",
     history: 'Melayu berkembang di wilayah sungai dan pesisir yang ramai perdagangan. Bahasa, sastra, dan adatnya memengaruhi banyak daerah Nusantara.',
     tradition: 'Pantun, zapin, adat bersendi syarak, dan budaya pelabuhan menjadi ciri Melayu.',
     wisdom: 'Budi bahasa dan sopan santun menjadi nilai utama dalam pergaulan.',
@@ -256,7 +256,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Suku tua',
     funFact: 'Aksara Rejang atau Kaganga adalah salah satu warisan tulis penting di Sumatera.',
-    image: imageByRegion.Sumatera,
+    image: "Close-up, highly detailed photograph of an aged, traditional Rejang bamboo manuscript inscribed with the ancient Kaganga script. The manuscript rests on a piece of woven textile inside a traditional wooden house. Warm, natural light spotlights the carvings and the delicate texture of the bamboo and text. Authentic, rich texture, high resolution, realistic.",
     history: 'Rejang dikenal sebagai salah satu suku tua di Bengkulu. Mereka memiliki bahasa dan aksara yang menunjukkan tradisi intelektual lokal.',
     tradition: 'Aksara Kaganga, adat desa, dan seni lisan menjadi penanda budaya Rejang.',
     wisdom: 'Menjaga bahasa berarti menjaga cara berpikir sebuah masyarakat.',
@@ -270,7 +270,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Pepadun dan Saibatin',
     funFact: 'Lampung memiliki kain tapis yang dibuat dengan sulaman benang emas.',
-    image: imageByRegion.Sumatera,
+    image: "A close-up portrait of a Lampung woman wearing a traditional Tapis cloth wrapped as a sarong and a magnificent golden Siger headpiece, adorned with jewelry. The focus is on the intricate, shimmering gold thread embroidery (Tapis) and the reflective Siger against a softly blurred traditional wooden interior. Professional fashion photography style, high detail, soft cinematic lighting, ultra-realistic, 8k.",
     history: 'Budaya Lampung tumbuh dari dua kelompok adat besar: Pepadun dan Saibatin. Keduanya memiliki tata adat dan simbol kehormatan masing-masing.',
     tradition: 'Kain tapis, siger, upacara adat, dan bahasa Lampung memperkaya identitas daerah.',
     wisdom: 'Piil pesenggiri mengajarkan harga diri, keramahan, dan tanggung jawab sosial.',
@@ -284,7 +284,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Budaya keraton',
     funFact: 'Rumah joglo punya filosofi tentang keseimbangan manusia, alam, dan Sang Pencipta.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "A peaceful photograph capturing the interior of a traditional Javanese Joglo wooden house during a Gamelan music session in Yogyakarta, Indonesia. Musicians in traditional beskap clothing and blangkon hats sit on woven mats playing aged bronze instruments. A Wayang Kulit shadow puppet is visible in the background. Soft, diffused natural light, warm ambiance, highly detailed textures of wood and cloth, National Geographic style.",
     history: 'Budaya Jawa berkembang lewat kerajaan, pesantren, desa, dan kota. Wayang, batik, dan keraton menyimpan cerita tentang etika hidup.',
     tradition: 'Wayang, gamelan, batik, sekaten, dan tata krama menjadi bagian penting budaya Jawa.',
     wisdom: 'Rukun, tepa selira, dan eling mengajarkan hidup tenang serta menghargai orang lain.',
@@ -299,7 +299,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Ramah dan angklung',
     funFact: 'Angklung mengajarkan harmoni karena satu pemain biasanya memegang nada berbeda.',
-    image: 'https://images.unsplash.com/photo-1528747008803-6a5c2e293b81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
+    image: "A joyful portrait of several Sundanese children in traditional cotton clothing playing Angklung instruments together, with smiling faces, while sitting on a bamboo structure next to lush terraced rice fields in West Java, Indonesia. Behind them, rolling blue mountains and palm trees are visible under a clear sky. Bright natural daylight, vibrant colors, authentic, photorealistic, 8k.",
     history: 'Sunda tumbuh di wilayah pegunungan, sawah, dan kota. Budayanya dikenal ramah, musikal, dan dekat dengan alam.',
     tradition: 'Angklung, jaipongan, seren taun, dan bahasa Sunda menjadi identitas yang hangat.',
     wisdom: 'Silih asah, silih asih, silih asuh mengajarkan saling mengembangkan, menyayangi, dan menjaga.',
@@ -313,7 +313,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Akulturasi',
     funFact: 'Ondel-ondel dulu dipercaya sebagai penjaga kampung, kini menjadi ikon budaya Jakarta.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "A vibrant photograph capturing a pair of towering Ondel-ondel (traditional Betawi effigies) dancing and moving through a bustling, modern street market in Jakarta, Indonesia. They are surrounded by crowds, street food stalls, and the juxtaposition of colorful traditional elements against modern city buildings in the background. Lively atmosphere, realistic street photography style, high dynamic range, 8k.",
     history: 'Betawi lahir dari pertemuan banyak bangsa dan suku di Batavia. Karena itu budayanya terasa lincah, terbuka, dan penuh campuran.',
     tradition: 'Ondel-ondel, lenong, tanjidor, kerak telor, dan palang pintu menjadi ciri Betawi.',
     wisdom: 'Perbedaan bisa menjadi identitas baru yang menyenangkan jika dirawat dengan saling hormat.',
@@ -328,7 +328,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Hidup tanpa teknologi modern',
     funFact: 'Baduy Dalam menjaga aturan adat ketat, termasuk pembatasan listrik dan kendaraan.',
-    image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
+    image: "A documentary photograph taken in a Baduy village, Lebak, Banten, Indonesia. An elderly Baduy woman in simple, handwoven dark blue clothing and a white headband sits on a wooden porch, focused on hand-weaving textile using a traditional loom. Behind her are simple wooden and bamboo stilt houses with thatched roofs amidst lush forest. No electricity or modern items visible. Soft natural daylight, tranquil atmosphere, authentic, photorealistic, high resolution.",
     history: 'Baduy mempertahankan cara hidup sederhana untuk menjaga hutan dan adat. Pilihan itu membuat mereka menjadi contoh kuat tentang konsistensi budaya.',
     tradition: 'Tenun, berjalan kaki, pikukuh adat, dan gotong royong menjadi bagian keseharian Baduy.',
     wisdom: 'Kesederhanaan dapat menjadi cara menjaga alam dan menjaga diri dari hidup berlebihan.',
@@ -342,7 +342,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Ritual Kasada',
     funFact: 'Saat Kasada, masyarakat Tengger membawa sesaji ke kawasan kawah Bromo.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "A dynamic photograph capturing a large group of Tengger people clad in warm traditional clothing and blankets carrying offerings (sesaji) along the misty edge of the Mount Bromo volcanic crater in East Java, Indonesia, during the Yadnya Kasada festival. In the background, active smoke rises from the crater and other mountains in the caldera under a dramatic, cloudy sky at dawn. Epic scale, cinematic lighting, highly detailed textures, photorealistic.",
     history: 'Tengger hidup di kawasan pegunungan Bromo. Cerita leluhur dan alam vulkanik membentuk ritual yang khas.',
     tradition: 'Yadnya Kasada, pakaian hangat khas pegunungan, dan pertanian lereng gunung menjadi ciri Tengger.',
     wisdom: 'Mereka mengajarkan rasa syukur kepada alam yang keras tetapi memberi kehidupan.',
@@ -356,7 +356,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Budaya Banyuwangi',
     funFact: 'Gandrung Banyuwangi menjadi tarian ikonik yang penuh energi dan warna.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "Dynamic photograph of a Gandrung Banyuwangi dancer performing with intense expression on a traditional stage. She wears a vibrant red costume with detailed gold embroidery and a specific Omprok headdress. She holds a fan and moves energetically. The background features other musicians with Gamelan instruments inside a traditional wooden structure. High detail, realistic texture, vibrant colors, cinematic lighting, 8k.",
     history: 'Osing adalah masyarakat asli Banyuwangi yang memiliki bahasa, musik, dan ritual khas. Budayanya terasa kuat di ujung timur Jawa.',
     tradition: 'Tari Gandrung, Seblang, bahasa Osing, dan festival budaya menjadi identitas Osing.',
     wisdom: 'Bangga pada bahasa daerah membuat budaya tetap hidup di tengah perubahan.',
@@ -370,7 +370,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Karapan sapi',
     funFact: 'Karapan sapi bukan hanya lomba cepat, tetapi juga gengsi, seni hias, dan pesta rakyat.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "Action-packed photograph of a Karapan Sapi (bull racing) event in Madura, Indonesia. Two powerful bulls are racing at high speed across a muddy field, guided by a young jockey in colorful traditional clothing standing on a wooden sled. Dust and mud fly everywhere. Spectators watch from the sidelines. Bright sunny day, dynamic composition, realistic, high dynamic range, 8k.",
     history: 'Madura dikenal dengan masyarakat yang tangguh, pekerja keras, dan dekat dengan budaya pesisir. Tradisi rakyatnya meriah dan penuh semangat.',
     tradition: 'Karapan sapi, saronen, batik Madura, dan tradisi merantau menjadi ciri khas.',
     wisdom: 'Kerja keras dan keberanian mengambil tantangan menjadi nilai penting.',
@@ -384,7 +384,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Budaya campuran',
     funFact: 'Batik mega mendung Cirebon terinspirasi bentuk awan dan memiliki makna keteduhan.',
-    image: imageByRegion['Pulau Jawa'],
+    image: "Portrait of a Cirebon artisan woman in a traditional batik workshop, meticulously applying wax with a canting to a cloth featuring the iconic blue and white Megamendung cloud patterns. She is surrounded by other batik cloths. Background shows a traditional wooden house interior. Soft daylight, focus on texture and artistry, authentic, realistic, National Geographic style.",
     history: 'Cirebon berada di jalur pesisir yang ramai. Pengaruh Jawa, Sunda, Islam, Tionghoa, dan perdagangan membuat budayanya kaya campuran.',
     tradition: 'Batik mega mendung, keraton, tari topeng, dan tradisi pesisir menjadi identitas Cirebon.',
     wisdom: 'Pertemuan budaya bisa melahirkan seni baru yang indah.',
@@ -398,7 +398,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Hutan dan rumah panjang',
     funFact: 'Rumah panjang Dayak dapat menjadi tempat tinggal banyak keluarga sekaligus.',
-    image: imageByRegion.Kalimantan,
+    image: "A wide-angle documentary photograph of a massive Dayak Betang (longhouse) situated deep within the lush rainforest of Kalimantan, Indonesia. Several Dayak elders in traditional clothing adorned with beads and feathers stand on the long wooden veranda. A slow-moving river flows nearby. Cinematic lighting with dappled sunlight through the canopy, majestic atmosphere, ultra-realistic, 8k.",
     history: 'Dayak hidup erat dengan sungai dan hutan Kalimantan. Rumah panjang menjadi simbol kebersamaan dan perlindungan komunitas.',
     tradition: 'Tari Dayak, ukiran, mandau, tato, dan upacara adat hutan menjadi bagian identitasnya.',
     wisdom: 'Hutan dipandang sebagai ruang hidup yang harus dijaga untuk generasi berikutnya.',
@@ -413,7 +413,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Tato simbolik',
     funFact: 'Motif tato Kenyah dapat menunjukkan perjalanan, kecantikan, atau status sosial.',
-    image: imageByRegion.Kalimantan,
+    image: "Intimate portrait of a Kenyah Dayak elder man covered in detailed traditional tattoos, playing the Sape, a traditional plucked string instrument. He wears a simple traditional headband and bead necklace, sitting inside a longhouse with intricate wood carvings in the background. Warm, natural light spotlights his face and the instrument. Authentic, photorealistic, highly detailed textures, National Geographic style.",
     history: 'Kenyah adalah bagian dari rumpun Dayak dengan seni ukir, musik, dan tato yang kuat. Mereka menjaga memori lewat motif dan cerita.',
     tradition: 'Sape, tato, ukiran rumah, dan tari tradisional menjadi wajah budaya Kenyah.',
     wisdom: 'Setiap motif memiliki makna, jadi seni menjadi bahasa kehidupan.',
@@ -427,7 +427,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Sejarah headhunter',
     funFact: 'Sejarah perang Iban kini lebih banyak dikenang sebagai cerita keberanian masa lalu.',
-    image: imageByRegion.Kalimantan,
+    image: "Close-up photograph of an Iban Dayak weaver hand-weaving a detailed Pua Kumbu sacred textile using a traditional backstrap loom in Sarawak, Kalimantan. The textile features complex patterns. She wears traditional Iban silver jewelry and woven clothing. Warm natural light inside a traditional longhouse. Documentary style, high dynamic range, ultra-realistic, high detail.",
     history: 'Iban memiliki sejarah panjang di wilayah sungai dan hutan. Masa lalu perang dan perantauan membentuk cerita kepahlawanan mereka.',
     tradition: 'Rumah panjang, tenun pua kumbu, dan pesta panen menjadi bagian penting budaya Iban.',
     wisdom: 'Keberanian harus berubah menjadi tanggung jawab menjaga komunitas.',
@@ -441,7 +441,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Kaharingan',
     funFact: 'Upacara Tiwah menjadi ritual penting untuk menghormati perjalanan arwah leluhur.',
-    image: imageByRegion.Kalimantan,
+    image: "A dynamic photograph capturing a scene from a Tiwah ritual (secondary funeral) in a Ngaju Dayak village, Central Kalimantan. A large Sandung (decorated ossuary) stands in the center, surrounded by villagers in traditional attire performing rituals and ceremonial dances. Offerings are placed around. Cinematic lighting, respectful atmosphere, high detail, photorealistic.",
     history: 'Ngaju hidup di sepanjang sungai Kalimantan Tengah. Kepercayaan Kaharingan dan ritual leluhur membentuk budaya yang kaya simbol.',
     tradition: 'Tiwah, rumah betang, ukiran, dan upacara sungai menjadi penanda budaya Ngaju.',
     wisdom: 'Menghormati leluhur berarti menjaga hubungan antar generasi.',
@@ -455,7 +455,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Nomaden',
     funFact: 'Sebagian komunitas Punan dikenal memiliki pengetahuan hutan yang sangat detail.',
-    image: imageByRegion.Kalimantan,
+    image: "A documentary photograph taken within a dense, untouched jungle of Central Kalimantan, Indonesia. A group of Punan people, dressed in minimal, forest-adapted traditional clothing, are walking along a forest path, carrying blowpipes and woven baskets. Dappled sunlight filters through the canopy. Peaceful atmosphere, authentic, high detail, cinematic lighting, National Geographic style.",
     history: 'Punan hidup dekat dengan hutan dan sebagian dahulu berpindah mengikuti sumber pangan. Pengetahuan alam menjadi bekal utama.',
     tradition: 'Berburu, meramu, anyaman, dan pengetahuan obat hutan menjadi bagian tradisi Punan.',
     wisdom: 'Mengambil secukupnya dari alam adalah cara menjaga keseimbangan hidup.',
@@ -469,7 +469,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Pelaut ulung',
     funFact: 'Kapal pinisi dikenal dunia sebagai bukti keahlian maritim Bugis-Makassar.',
-    image: imageByRegion.Sulawesi,
+    image: "Majestic photograph capturing a large, traditional Bugis Pinisi schooner sailing through the open turquoise ocean under a bright, sunny sky with scattered clouds in Indonesia. Its multiple sails are fully deployed. The crew in traditional sailor outfits is visible on deck. Cinematic landscape shot, realistic textures of wood and sea, National Geographic style, ultra-realistic, 8k.",
     history: 'Bugis dikenal sebagai pelaut, perantau, dan pedagang. Dari Sulawesi, mereka berlayar jauh membawa cerita dan jaringan dagang.',
     tradition: 'Pinisi, aksara lontara, adat siri, dan tradisi merantau menjadi ciri Bugis.',
     wisdom: 'Siri mengajarkan harga diri, tanggung jawab, dan keberanian menjaga janji.',
@@ -484,7 +484,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Perdagangan',
     funFact: 'Makassar pernah menjadi kota pelabuhan penting di jalur perdagangan timur Nusantara.',
-    image: imageByRegion.Sulawesi,
+    image: "A vibrant photograph of the historical Paotere port in Makassar, Indonesia, during twilight. Dozens of traditional Phinisi schooners are docked closely together. Bustling atmosphere on the wooden docks with local people, fishermen, and market stalls. Warm evening lighting from the setting sun, realistic street photography style, high detail, 8k.",
     history: 'Makassar tumbuh sebagai pusat perdagangan, pelayaran, dan pertemuan budaya. Pelabuhan membuat masyarakatnya terbuka pada dunia luar.',
     tradition: 'Perahu, kuliner pesisir, aksara lontara, dan adat siri na pacce menjadi ciri Makassar.',
     wisdom: 'Keterbukaan pada pendatang dapat berjalan bersama kebanggaan identitas sendiri.',
@@ -498,7 +498,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Ritual kematian',
     funFact: 'Rambu Solo bisa berlangsung berhari-hari dan melibatkan keluarga besar.',
-    image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
+    image: "Majestic photograph of several Tana Toraja traditional Tongkonan houses with distinctive curved saddleback roofs, adorned with buffalo horns and intricate wood carvings, located in a misty valley in Sulawesi at sunrise. Local Toraja people in traditional red clothing stand gracefully. Soft golden hour lighting, architectural wonder, National Geographic style, ultra-realistic, high detail.",
     history: 'Toraja dikenal lewat rumah tongkonan dan ritual yang menghormati leluhur. Bagi Toraja, keluarga tidak berhenti hanya karena kematian.',
     tradition: 'Tongkonan, Rambu Solo, ukiran, dan kubur tebing menjadi ikon budaya Toraja.',
     wisdom: 'Hidup, kematian, dan keluarga dipandang sebagai perjalanan panjang yang saling terhubung.',
@@ -513,7 +513,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Budaya terbuka',
     funFact: 'Budaya Minahasa dikenal mudah menyerap pengaruh luar tanpa kehilangan identitas lokal.',
-    image: imageByRegion.Sulawesi,
+    image: "A joyful documentary photograph capturing a traditional Minahasa Mapalus (mutual cooperation) event in Central Minahasa, Sulawesi Utara. A group of local farmers in casual traditional clothing works together in a field, smiling. Nearby, a bamboo music group plays traditional instruments. Dappled sunlight, vibrant colors, authentic, photorealistic, 8k.",
     history: 'Minahasa tumbuh di wilayah utara Sulawesi dengan sejarah pertemuan budaya lokal, Eropa, dan perdagangan.',
     tradition: 'Mapalus, musik bambu, kuliner, dan tradisi gereja menjadi bagian wajah Minahasa.',
     wisdom: 'Mapalus mengajarkan kerja bersama untuk kepentingan banyak orang.',
@@ -527,7 +527,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Adat Islam',
     funFact: 'Gorontalo dikenal dengan semboyan adat bersendikan syara dan syara bersendikan kitabullah.',
-    image: imageByRegion.Sulawesi,
+    image: "A photograph capturing a traditional wedding ceremony in Gorontalo, Indonesia. The bride and groom wear magnificent, detailed traditional Gorontalo Islamic attire, adorned with complex jewelry and headpieces. They stand in front of a traditional decorated background in a reception hall. Warm interior lighting, respectful and festive atmosphere, high detail, photorealistic.",
     history: 'Gorontalo memiliki tradisi kerajaan lokal dan Islam yang kuat. Adat dan agama berpadu dalam banyak upacara.',
     tradition: 'Upacara adat, tujaqi, pakaian adat, dan seni lisan menjadi bagian budaya Gorontalo.',
     wisdom: 'Nilai agama dipakai untuk memperkuat etika sosial dan saling menghormati.',
@@ -541,7 +541,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Pelaut',
     funFact: 'Sandeq, perahu layar Mandar, terkenal ramping dan cepat di laut.',
-    image: imageByRegion.Sulawesi,
+    image: "Action-packed photograph capturing a Sandeq (traditional Mandar outrigger sailboat) sailing very fast across the open ocean under a clear sunny sky in West Sulawesi. The unique triangular sail is full of wind, tilting the boat dramatically. Local crew members balance on the outriggers. Cinematic shot, realistic textures of water and wood, dynamic composition, National Geographic style.",
     history: 'Mandar tumbuh sebagai masyarakat pesisir yang dekat dengan laut. Pelayaran menjadi bagian dari identitas dan ekonomi.',
     tradition: 'Perahu sandeq, tradisi nelayan, dan upacara laut menjadi budaya khas Mandar.',
     wisdom: 'Laut mengajarkan ketelitian membaca alam dan keberanian bekerja sama.',
@@ -555,7 +555,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Manusia laut',
     funFact: 'Sebagian orang Bajo sangat mahir menyelam karena hidupnya dekat sekali dengan laut.',
-    image: imageByRegion.Sulawesi,
+    image: "A documentary photograph taken in a Bajo (Sea Gypsy) stilt village built entirely over the turquoise water in Wakatobi, Sulawesi, Indonesia. Simple wooden houses are connected by planks. Underneath, Bajo children are swimming or paddling a small dugout canoe. Background of the open sea. Natural daylight, realistic, high dynamic range, photorealistic.",
     history: 'Bajo dikenal sebagai pengembara laut. Rumah, perahu, dan kehidupan mereka berputar di sekitar air.',
     tradition: 'Rumah panggung laut, menangkap ikan, dan pengetahuan arus menjadi bagian budaya Bajo.',
     wisdom: 'Laut bukan batas, tetapi rumah yang harus dihormati.',
@@ -569,7 +569,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Hindu dan upacara',
     funFact: 'Di Bali, seni dan upacara sering hadir dalam keseharian, bukan hanya saat festival.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Majestic photograph capturing a serene scene of Balinese Hindu women in traditional white and yellow attire and ornate headpieces carrying Canang Sari offerings in a processional walk along the stone steps of a traditional water temple, Pura Ulun Danu Beratan, at dawn. Soft mist over the lake, mountain background, cinematic golden hour lighting, authentic, ultra-realistic, high detail.",
     history: 'Bali mempertahankan tradisi Hindu yang kuat dan berpadu dengan seni lokal. Desa adat memegang peran besar dalam kehidupan masyarakat.',
     tradition: 'Tari kecak, upacara melasti, canang sari, gamelan, dan pura menjadi wajah budaya Bali.',
     wisdom: 'Tri Hita Karana mengajarkan harmoni manusia dengan Tuhan, sesama, dan alam.',
@@ -584,7 +584,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Lombok',
     funFact: 'Rumah adat Sasak memakai lantai tanah yang dirawat dengan cara tradisional.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "An interior photograph taken inside a traditional Sasak wooden house with a unique Bale Tani thatched roof and cow dung polished floor in Sade village, Lombok. A Sasak woman in traditional textile clothing sits on the floor, hand-weaving a Songket textile using a backstrap loom. Background shows daily life items. Warm natural light, authentic, realistic, high detail.",
     history: 'Sasak adalah masyarakat asli Lombok dengan tradisi desa adat, tenun, dan musik yang kuat.',
     tradition: 'Tenun songket, gendang beleq, desa Sade, dan upacara adat menjadi ciri Sasak.',
     wisdom: 'Kesederhanaan rumah adat menunjukkan hubungan erat manusia dengan tanah.',
@@ -598,7 +598,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Agraris',
     funFact: 'Budaya Sumbawa dekat dengan peternakan, pertanian, dan tradisi lisan.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Action-packed photograph capturing a Main Jaran (traditional Sumbawa horse race) during a festival in Sumbawa, Indonesia. Local child jockeys in casual traditional clothing race fast across a dusty field. The background features other villagers watching. Bright sunny day, dynamic composition, realistic textures of horses and dust, 8k.",
     history: 'Sumbawa memiliki kerajaan lokal dan budaya agraris yang membentuk kehidupan masyarakatnya.',
     tradition: 'Main jaran, musik tradisional, dan adat panen menjadi bagian budaya Sumbawa.',
     wisdom: 'Ketahanan hidup lahir dari kerja keras mengelola tanah dan ternak.',
@@ -612,7 +612,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Budaya kuda',
     funFact: 'Kuda punya tempat penting dalam sejarah, ekonomi, dan tradisi Bima.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Close-up portrait of a Bima woman wearing Rimpu, a unique traditional veil made of woven cloth that covers her entire face except the eyes, standing next to a traditional house with intricate wood carvings, holding a horse. Strong cultural expression, warm natural daylight, high dynamic range, photorealistic.",
     history: 'Bima memiliki sejarah kerajaan dan tradisi yang kuat di wilayah timur Sumbawa. Budaya kuda menjadi salah satu identitasnya.',
     tradition: 'Pacuan kuda, pakaian adat rimpu, dan upacara lokal menjadi ciri Bima.',
     wisdom: 'Ketangkasan dan keberanian perlu diimbangi tanggung jawab.',
@@ -626,7 +626,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Pasola',
     funFact: 'Pasola adalah tradisi berkuda yang menjadi bagian dari ritual adat Sumba.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Action photograph capturing a scene from the Pasola ritual in Sumba, Indonesia. Horsemen in traditional warrior clothing, adorned with beadwork and feathers, brandish wooden spears while riding fast across a large field. They wear detailed traditional tenun ikat cloth. In the background, other warriors and villagers watch from a distance under a cloudy sky. Epic scale, cinematic lighting, ultra-realistic, 8k.",
     history: 'Sumba memiliki tradisi megalitik, rumah adat tinggi, dan kain tenun yang penuh simbol. Alam kering membentuk budaya yang tangguh.',
     tradition: 'Pasola, tenun ikat, kampung adat, dan kepercayaan Marapu menjadi identitas Sumba.',
     wisdom: 'Ritual mengajarkan keseimbangan antara manusia, leluhur, dan alam.',
@@ -641,7 +641,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Sawah unik',
     funFact: 'Sawah lingko berbentuk seperti jaring laba-laba karena pembagian tanah adat.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Wide-angle landscape photograph of the unique Sawah Lingko (spider web-shaped rice paddies) in a green valley in Manggarai, Flores, Indonesia, at sunrise. In the distance, several traditional Mbaru Niang conical houses are nestled in the hills. Majestic view, cinematic golden hour lighting, authentic, realistic, high resolution.",
     history: 'Manggarai tumbuh di pegunungan Flores. Sistem tanah adat dan kampung tradisional membentuk pola hidup masyarakatnya.',
     tradition: 'Caci, rumah adat mbaru niang, dan sawah lingko menjadi ikon Manggarai.',
     wisdom: 'Pembagian tanah adat mengajarkan keadilan dan keteraturan komunitas.',
@@ -655,7 +655,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Sejarah Soekarno',
     funFact: 'Ende dikenal sebagai salah satu tempat perenungan Soekarno sebelum lahirnya gagasan Pancasila.',
-    image: imageByRegion['Bali & Nusa Tenggara'],
+    image: "Portrait quality photo of an Ende woman wearing a traditional tenun ikat cloth, standing with a thoughtful expression near the historical site of Soekarno's exile in Ende, Flores. In the background are old colonial buildings and local houses. Soft natural lighting, deep focus on textile textures, realistic, authentic, high detail.",
     history: 'Ende memiliki budaya Flores yang kaya dan jejak sejarah nasional. Tempat ini menghubungkan budaya lokal dengan cerita Indonesia modern.',
     tradition: 'Tenun ikat, musik lokal, dan tradisi kampung Flores menjadi bagian budaya Ende.',
     wisdom: 'Keberagaman dapat menjadi bahan renungan untuk membangun persatuan.',
@@ -669,7 +669,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Musik',
     funFact: 'Ambon sering disebut kota musik karena banyak penyanyi besar lahir dari sana.',
-    image: imageByRegion.Maluku,
+    image: "Dynamic photograph capturing a street music performance in Ambon, Indonesia, known as the City of Music. A group of Ambon youth in modern but culturally-inflected clothing play traditional vokal and instruments like Tifa drums and brass. A large Pela Gandong (fraternity) mural is visible in the background. Lively atmosphere, street photography style, high dynamic range, photorealistic.",
     history: 'Ambon berkembang sebagai kota pelabuhan rempah dan pertemuan budaya. Musik menjadi bahasa sosial yang kuat.',
     tradition: 'Musik vokal, pela gandong, dan budaya pesisir menjadi identitas Ambon.',
     wisdom: 'Pela gandong mengajarkan persaudaraan lintas kampung dan latar belakang.',
@@ -684,7 +684,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Sejarah rempah',
     funFact: 'Cengkih membuat Ternate pernah menjadi pusat perhatian perdagangan dunia.',
-    image: imageByRegion.Maluku,
+    image: "A historical photograph capturing the Ternate Sultanate palace with its traditional architecture, located near the coast in Ternate, Maluku Utara, at twilight. In the background, the powerful volcano Mount Gamalama stands majestic. Fishing boats are on the water. Cinematic evening lighting, dramatic atmosphere, realistic, National Geographic style.",
     history: 'Ternate adalah kerajaan rempah penting di Maluku Utara. Letaknya membuatnya terhubung dengan jalur dunia sejak lama.',
     tradition: 'Kesultanan, tradisi laut, dan cerita rempah menjadi ciri Ternate.',
     wisdom: 'Sumber daya alam perlu dikelola bijak agar tidak hanya memicu perebutan.',
@@ -698,7 +698,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Kerajaan Islam',
     funFact: 'Tidore memiliki sejarah kesultanan yang kuat dalam jaringan Islam dan rempah.',
-    image: imageByRegion.Maluku,
+    image: "A historical photograph of the Tidore Sultanate palace interior, adorned with traditional Maluku artifacts and Islamic elements, during a formal ceremony. Several elders in traditional Kesultanan attire with elaborate headpieces sit and converse. Respectful atmosphere, warm interior lighting, authentic, realistic, high detail.",
     history: 'Tidore berdiri sebagai kerajaan Islam penting di kawasan Maluku. Hubungannya dengan laut dan rempah membentuk politik serta budaya.',
     tradition: 'Kesultanan, adat istana, dan tradisi pesisir menjadi wajah budaya Tidore.',
     wisdom: 'Identitas lokal dapat berdiri kuat sambil berhubungan dengan dunia luar.',
@@ -712,7 +712,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Hukum adat',
     funFact: 'Hukum adat Larvul Ngabal dikenal sebagai pedoman hidup masyarakat Kei.',
-    image: imageByRegion.Maluku,
+    image: "A detailed documentary photograph of a farmer family in Maluku Tengah regency, happily harvesting cloves from tall trees using traditional ladders and baskets. Background shows lush spice plantations with nutmeg trees. Misty mountains in the distance. Cool palette, natural daylight, authentic, realistic, National Geographic style.",
     history: 'Kei hidup di kepulauan dengan ikatan adat yang kuat. Hukum adat membantu menjaga keteraturan masyarakat pesisir.',
     tradition: 'Larvul Ngabal, tradisi laut, dan ikatan keluarga menjadi ciri budaya Kei.',
     wisdom: 'Aturan adat membantu masyarakat menyelesaikan masalah dengan rasa adil.',
@@ -726,7 +726,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Animisme',
     funFact: 'Pulau Seram sering dianggap sebagai pulau ibu dalam banyak cerita Maluku.',
-    image: imageByRegion.Maluku,
+    image: "A detailed documentary photograph of a farmer family in Maluku Tengah regency, happily harvesting cloves from tall trees using traditional ladders and baskets. Background shows lush spice plantations with nutmeg trees. Misty mountains in the distance. Cool palette, natural daylight, authentic, realistic, National Geographic style.",
     history: 'Seram menyimpan banyak tradisi tua Maluku yang dekat dengan hutan, gunung, dan laut.',
     tradition: 'Cerita leluhur, ritual alam, dan adat kampung menjadi bagian budaya Seram.',
     wisdom: 'Menghormati alam dan leluhur membantu masyarakat menjaga batas perilaku.',
@@ -740,7 +740,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Koteka dan pegunungan',
     funFact: 'Lembah Baliem menjadi salah satu pusat budaya pegunungan Papua yang paling dikenal.',
-    image: imageByRegion.Papua,
+    image: "Intimate documentary photograph taken in a Dani village, Lembah Baliem, Papua. Several elderly Dani men adorned with Koteka (traditional penis gourds), bead necklaces, and feather headpieces sit around a small fire inside a circular Honai wooden house with a thatched roof. Deep wrinkles, authentic expressions. Warm natural light, rich textures, photorealistic, National Geographic style.",
     history: 'Dani hidup di pegunungan Papua dengan sistem kebun, kampung, dan tradisi yang kuat. Lingkungan tinggi membentuk cara hidup yang khas.',
     tradition: 'Honai, koteka, perang-perangan adat, dan kebun ubi menjadi ciri Dani.',
     wisdom: 'Hidup di pegunungan mengajarkan ketahanan, kerja bersama, dan adaptasi.',
@@ -755,7 +755,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Ukiran kayu',
     funFact: 'Ukiran Asmat dihormati dunia karena detail dan makna spiritualnya.',
-    image: imageByRegion.Papua,
+    image: "Intimate portrait of an Asmat woodcarver artisan in a communal workshop near the river in Asmat regency, Papua. He is meticulously carving a complex ancestor figure into a large wooden pole using a traditional tool. He wears simple traditional attire and headwear. Warm natural light streams through the open side of the workshop, highlighting the wood texture and his hands. Documentary style, ultra-realistic, high detail.",
     history: 'Asmat hidup di wilayah sungai dan rawa. Kayu menjadi media untuk menceritakan leluhur, alam, dan identitas.',
     tradition: 'Ukiran, patung bisj, tarian, dan ritual sungai menjadi bagian budaya Asmat.',
     wisdom: 'Seni adalah cara mengingat asal-usul dan menghormati alam sekitar.',
@@ -770,7 +770,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Rumah pohon',
     funFact: 'Rumah pohon Korowai dibangun tinggi sebagai cara beradaptasi dengan hutan.',
-    image: imageByRegion.Papua,
+    image: "Dynamic action photograph of a Marind-anim traditional ritual dance performance on a sandy beach in Papua at dusk. Dancers in elaborate ceremonial costumes made of natural fibers, feathers, and body paint, holding Tifa drums, move rhythmically. Warm, colorful evening lighting from the sunset, dramatic atmosphere, realistic, National Geographic style.",
     history: 'Korowai dikenal dengan rumah pohon dan kehidupan yang sangat dekat dengan hutan. Arsitekturnya lahir dari kebutuhan lingkungan.',
     tradition: 'Rumah pohon, berburu, meramu, dan pengetahuan hutan menjadi ciri Korowai.',
     wisdom: 'Tempat tinggal yang baik adalah yang memahami alam sekitarnya.',
@@ -784,7 +784,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Pegunungan',
     funFact: 'Masyarakat Lani hidup di wilayah tinggi dan mengandalkan kebun sebagai pusat kehidupan.',
-    image: imageByRegion.Papua,
+    image: "A historical photograph capturing a large traditional Biak dugout canoe sailing along the coral coast of Biak Island, Papua, at twilight. Several Biak people in traditional attire adorned with shells and feathers are on board. Cinematic landscape shot, realistic textures of water and wood, dramatic evening lighting, high detail, National Geographic style.",
     history: 'Lani adalah masyarakat pegunungan Papua yang membangun kampung dan kebun di wilayah dingin.',
     tradition: 'Honai, kebun ubi, dan tradisi komunitas pegunungan menjadi ciri Lani.',
     wisdom: 'Ketahanan pangan lokal sangat penting untuk hidup di wilayah sulit.',
@@ -798,7 +798,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Tradisional',
     funFact: 'Yali memiliki tradisi kampung pegunungan yang kuat dan dekat dengan alam.',
-    image: imageByRegion.Papua,
+    image: "Portrait quality photo of a Sentani artist woman from Jayapura regency, Papua, standing near the serene Lake Sentani with rolling hills in the background. She is proudly holding a piece of barkcloth painting with traditional Sentani geometric motifs. She wears traditional bead necklaces and clothing. Soft daylight, authentic expressions, high detail, photorealistic.",
     history: 'Yali hidup di daerah pegunungan dengan medan sulit. Tradisi mereka tumbuh dari kebutuhan saling menjaga dalam komunitas kecil.',
     tradition: 'Rumah tradisional, kebun, dan ritual lokal menjadi bagian budaya Yali.',
     wisdom: 'Kebersamaan menjadi bekal utama saat lingkungan menantang.',
@@ -812,7 +812,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Seni lukis',
     funFact: 'Motif Sentani sering terlihat pada lukisan kulit kayu dan karya seni lokal.',
-    image: imageByRegion.Papua,
+    image: "Portrait quality photo of a Sentani artist woman from Jayapura regency, Papua, standing near the serene Lake Sentani with rolling hills in the background. She is proudly holding a piece of barkcloth painting with traditional Sentani geometric motifs. She wears traditional bead necklaces and clothing. Soft daylight, authentic expressions, high detail, photorealistic.",
     history: 'Sentani tumbuh di sekitar danau yang indah. Air, perahu, dan seni visual menjadi bagian dari identitas masyarakat.',
     tradition: 'Lukisan kulit kayu, festival danau, perahu, dan tarian menjadi ciri Sentani.',
     wisdom: 'Danau mengajarkan hubungan antara keindahan alam dan ekspresi seni.',
@@ -826,7 +826,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Budaya laut',
     funFact: 'Budaya Biak memiliki banyak cerita pelayaran dan hubungan dengan pulau-pulau sekitar.',
-    image: imageByRegion.Papua,
+    image: "A historical photograph capturing a large traditional Biak dugout canoe sailing along the coral coast of Biak Island, Papua, at twilight. Several Biak people in traditional attire adorned with shells and feathers are on board. Cinematic landscape shot, realistic textures of water and wood, dramatic evening lighting, high detail, National Geographic style.",
     history: 'Biak adalah masyarakat kepulauan Papua yang dekat dengan laut. Pelayaran, perdagangan, dan cerita lisan membentuk identitasnya.',
     tradition: 'Wor, tradisi laut, tarian, dan cerita pelayaran menjadi bagian budaya Biak.',
     wisdom: 'Laut mengajarkan keberanian sekaligus kehati-hatian.',
@@ -1283,7 +1283,16 @@ export function HistoryCultureSection({ lang }: Props) {
               className="group relative overflow-hidden rounded-2xl border border-border bg-card text-left shadow-lg transition-all duration-300 hover:border-primary/50 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               <div className="relative h-56 overflow-hidden">
-                <motion.img layoutId={`culture-image-${card.id}`} src={card.image} alt={card.name} className="h-full w-full object-cover grayscale-[20%] sepia-[18%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0 group-hover:sepia-0" />
+                <motion.img
+                  layoutId={`culture-image-${card.id}`}
+                  src={card.image}
+                  alt={card.name}
+                  onError={(event) => {
+                    const fallback = imageByRegion[card.region];
+                    if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+                  }}
+                  className="h-full w-full object-cover grayscale-[20%] sepia-[18%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0 group-hover:sepia-0"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-card/95 via-card/35 to-black/10 transition duration-500 group-hover:from-card/90 group-hover:via-card/15" />
                 <div
                   className="absolute inset-x-0 bottom-0 h-32 translate-y-16 opacity-0 mix-blend-screen transition duration-500 group-hover:translate-y-0 group-hover:opacity-100"
@@ -1425,7 +1434,16 @@ export function HistoryCultureSection({ lang }: Props) {
                     </div>
 
                     <div className="relative min-h-[24rem] overflow-hidden border-t border-background/10 lg:border-l lg:border-t-0">
-                      <motion.img layoutId={`culture-image-${selectedCard.id}`} src={selectedCard.image} alt={selectedCard.name} className="absolute inset-0 h-full w-full object-cover" />
+                      <motion.img
+                        layoutId={`culture-image-${selectedCard.id}`}
+                        src={selectedCard.image}
+                        alt={selectedCard.name}
+                        onError={(event) => {
+                          const fallback = imageByRegion[selectedCard.region];
+                          if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+                        }}
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                       <MiniRadar region={selectedCard.region} location={selectedCard.location} />
                       <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur">
@@ -1471,10 +1489,26 @@ export function HistoryCultureSection({ lang }: Props) {
                     <div className="overflow-hidden rounded-2xl border border-border bg-muted/30">
                       <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
                         <div className="relative h-72 overflow-hidden">
-                          <img src={selectedCard.image} alt={`${selectedCard.name} eco comparison`} className="absolute inset-0 h-full w-full object-cover grayscale saturate-50" />
+                          <img
+                            src={selectedCard.image}
+                            alt={`${selectedCard.name} eco comparison`}
+                            onError={(event) => {
+                              const fallback = imageByRegion[selectedCard.region];
+                              if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+                            }}
+                            className="absolute inset-0 h-full w-full object-cover grayscale saturate-50"
+                          />
                           <div className="absolute inset-0 bg-destructive/30" />
                           <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${ecoSlider}%` }}>
-                            <img src={selectedCard.image} alt="" className="h-full w-[42rem] max-w-none object-cover saturate-125" />
+                            <img
+                              src={selectedCard.image}
+                              alt=""
+                              onError={(event) => {
+                                const fallback = imageByRegion[selectedCard.region];
+                                if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+                              }}
+                              className="h-full w-[42rem] max-w-none object-cover saturate-125"
+                            />
                             <div className="absolute inset-0 bg-primary/15" />
                           </div>
                           <div className="absolute inset-y-0" style={{ left: `${ecoSlider}%` }}>

@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { useState, useEffect, useMemo, useRef } from 'react';
+=======
+import { useMemo, useState, useEffect } from 'react';
+>>>>>>> Stashed changes
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   MapPin, Search, Filter, ArrowLeftRight, BookOpen, Eye, X, 
@@ -11,6 +15,7 @@ import {
 } from 'recharts';
 import { MapContainer, TileLayer, Marker, useMap, Polyline } from 'react-leaflet';
 import * as L from 'leaflet';
+import { useTerranesiaCMSContent } from '../contentBridge';
 interface Props { 
   lang: 'id' | 'en';
   isDark?: boolean;
@@ -49,7 +54,7 @@ interface CulturePoint {
   philosophyEn: string;
 }
 
-const cultures: CulturePoint[] = [
+const culturesBase: CulturePoint[] = [
   {
     id: 'baduy',
     name: 'Suku Baduy',
@@ -494,6 +499,22 @@ const cultures: CulturePoint[] = [
   },
 ];
 
+const culturesById = culturesBase.reduce<Record<string, CulturePoint>>((acc, culture) => {
+  acc[culture.id] = culture;
+  return acc;
+}, {});
+
+function getCMSRegion(island: string): CulturePoint['region'] {
+  const lower = island.toLowerCase();
+  if (lower.includes('sulawesi')) return 'sulawesi';
+  if (lower.includes('kalimantan')) return 'kalimantan';
+  if (lower.includes('sumatera')) return 'sumatera';
+  if (lower.includes('bali')) return 'bali';
+  if (lower.includes('papua')) return 'papua';
+  if (lower.includes('nusa')) return 'nusatenggara';
+  return 'jawa';
+}
+
 const preservationData = [
   { year: '2000', baduy: 98, toraja: 90, dayak: 85, minang: 82, bali: 93, asmat: 90, naga: 96, sasak: 84, kajang: 98, mentawai: 90, waerebo: 88, sumba: 85, dani: 89, bajo: 94, tengger: 92, nias: 88, dayak_iban: 98 },
   { year: '2005', baduy: 97, toraja: 87, dayak: 80, minang: 81, bali: 92, asmat: 90, naga: 95, sasak: 83, kajang: 97, mentawai: 89, waerebo: 87, sumba: 84, dani: 88, bajo: 93, tengger: 92, nias: 87, dayak_iban: 97 },
@@ -919,6 +940,7 @@ const storyScenarios: ScenarioStep[] = [
 ];
 
 export function JelajahSection({ lang, isDark }: Props) {
+  const cmsContent = useTerranesiaCMSContent();
   // Filters & State
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [regionFilter, setRegionFilter] = useState<string>('all');
@@ -931,6 +953,47 @@ export function JelajahSection({ lang, isDark }: Props) {
   const [compareLeft, setCompareLeft] = useState<string>('baduy');
   const [compareRight, setCompareRight] = useState<string>('toraja');
   const [activeTrail, setActiveTrail] = useState<string | null>(null);
+  const cultures = useMemo<CulturePoint[]>(() => {
+    const published = cmsContent.cultures
+      .filter((culture) => culture.status === 'Published')
+      .map((culture) => {
+        const existing = culturesById[culture.id];
+        return {
+          id: culture.id,
+          name: culture.name,
+          nameEn: culture.name,
+          location: culture.location,
+          region: getCMSRegion(culture.island),
+          regionLabel: culture.island.replace('Pulau ', ''),
+          regionLabelEn: culture.island.replace('Pulau ', ''),
+          type: culture.category,
+          sustainability: culture.sustainability,
+          desc: culture.summary,
+          descEn: culture.summary,
+          image: culture.image,
+          lat: culture.lat,
+          lng: culture.lng,
+          radarData: existing?.radarData ?? [
+            { subject: 'Lingkungan', value: culture.sustainability },
+            { subject: 'Tradisi', value: 84 },
+            { subject: 'Sosial', value: 78 },
+            { subject: 'Spiritual', value: 82 },
+            { subject: 'Ekonomi', value: 66 },
+          ],
+          envPractice: culture.wisdom,
+          envPracticeEn: culture.wisdom,
+          wayOfLife: existing?.wayOfLife ?? culture.summary,
+          wayOfLifeEn: existing?.wayOfLifeEn ?? culture.summary,
+          philosophy: existing?.philosophy ?? culture.wisdom,
+          philosophyEn: existing?.philosophyEn ?? culture.wisdom,
+        };
+      });
+
+    culturesBase.forEach((culture) => {
+      if (!published.some((item) => item.id === culture.id)) published.push(culture);
+    });
+    return published;
+  }, [cmsContent]);
   
   const leftCulture = useMemo(() => cultures.find(c => c.id === compareLeft)!, [compareLeft]);
   const rightCulture = useMemo(() => cultures.find(c => c.id === compareRight)!, [compareRight]);
