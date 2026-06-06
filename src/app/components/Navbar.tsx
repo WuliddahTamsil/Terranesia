@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Moon, Sun, Globe, Bell } from 'lucide-react';
 import { Logo } from './Logo';
@@ -16,11 +17,20 @@ const t = {
   en: { home: 'Home', explore: 'Explore', history: 'History & Culture', lab: 'Lab', edu: 'Education', donate: 'Donate' },
 };
 
+const smoothScroll = (elementId: string) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const tx = t[lang];
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -29,13 +39,38 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
   }, []);
 
   const links = [
-    { label: tx.home, href: '#beranda' },
-    { label: tx.explore, href: '#jelajah' },
-    { label: tx.history, href: '#historyculture' },
-    { label: tx.lab, href: '#lab' },
-    { label: tx.edu, href: '#edukasi' },
-    { label: tx.donate, href: '#donasi' },
+    { label: tx.home, href: '#beranda', id: 'beranda' },
+    { label: tx.explore, href: '#jelajah', id: 'jelajah' },
+    { label: tx.history, href: '#sejarah-budaya', id: 'sejarah-budaya' },
+    { label: tx.edu, href: '#edukasi', id: 'edukasi' },
+    { label: tx.donate, href: '#donasi', id: 'donasi' },
+    { label: tx.lab, href: '/lab', id: 'lab' },
   ];
+
+  const handleNavClick = (link: (typeof links)[0]) => {
+    setMenuOpen(false);
+    
+    if (link.href.startsWith('#')) {
+      // If we're not on home page, navigate to home first
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Scroll after a short delay to ensure page is loaded
+        setTimeout(() => smoothScroll(link.id), 100);
+      } else {
+        // Already on home page, just scroll
+        smoothScroll(link.id);
+      }
+    }
+  };
+
+  const isCurrentSection = (id: string) => {
+    if (location.pathname !== '/') return false;
+    // Check if the section is currently in view
+    const element = document.getElementById(id);
+    if (!element) return false;
+    const rect = element.getBoundingClientRect();
+    return rect.top < window.innerHeight * 0.5 && rect.bottom > 0;
+  };
 
   return (
     <motion.nav
@@ -51,26 +86,48 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#beranda" className="flex items-center gap-1.5 group">
+          <button 
+            onClick={() => {
+              navigate('/');
+              setTimeout(() => smoothScroll('beranda'), 100);
+            }}
+            className="flex items-center gap-1.5 group cursor-pointer"
+          >
             <Logo 
               variant={isDark ? 'alternative-white' : 'main'} 
               size="sm" 
               showTypeface={true}
               className="group-hover:scale-105 transition-transform h-8"
             />
-          </a>
+          </button>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-primary/8 rounded-lg transition-all duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+            {links.map((link) => {
+              const isActive = link.href === '/lab' 
+                ? location.pathname === '/lab'
+                : isCurrentSection(link.id);
+              
+              return (
+                <button
+                  key={link.href}
+                  onClick={() => {
+                    if (link.href === '/lab') {
+                      navigate('/lab');
+                    } else {
+                      handleNavClick(link);
+                    }
+                  }}
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${
+                    isActive
+                      ? 'text-primary bg-primary/8'
+                      : 'text-muted-foreground hover:text-primary hover:bg-primary/8'
+                  }`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
           </div>
 
           {/* Controls */}
@@ -119,16 +176,31 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
             className="md:hidden bg-background/95 backdrop-blur-2xl border-b border-border"
           >
             <div className="px-4 py-4 flex flex-col gap-1">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="px-4 py-3 text-sm text-muted-foreground hover:text-primary hover:bg-primary/8 rounded-lg transition-all"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {links.map((link) => {
+                const isActive = link.href === '/lab' 
+                  ? location.pathname === '/lab'
+                  : isCurrentSection(link.id);
+                
+                return (
+                  <button
+                    key={link.href}
+                    onClick={() => {
+                      if (link.href === '/lab') {
+                        navigate('/lab');
+                      } else {
+                        handleNavClick(link);
+                      }
+                    }}
+                    className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left w-full ${
+                      isActive
+                        ? 'text-primary bg-primary/8'
+                        : 'text-muted-foreground hover:text-primary hover:bg-primary/8'
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                );
+              })}
               <button
                 onClick={() => {
                   setMenuOpen(false);
