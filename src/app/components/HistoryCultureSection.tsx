@@ -1,23 +1,15 @@
 import { type CSSProperties, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  Award,
   BookOpen,
   Brain,
   ChevronRight,
   Clock,
-  Flame,
-  Gamepad2,
   Leaf,
   MapPin,
-  Play,
-  RefreshCw,
   Search,
-  Ship,
   Sparkles,
   Target,
-  Trophy,
-  Volume2,
   X,
 } from 'lucide-react';
 
@@ -1044,18 +1036,14 @@ export function HistoryCultureSection({ lang }: Props) {
   const [search, setSearch] = useState('');
   const [selectedCard, setSelectedCard] = useState<CultureCard | null>(null);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
-  const [randomFactIndex, setRandomFactIndex] = useState(0);
+
   const [quizAnswer, setQuizAnswer] = useState('');
   const [ecoSlider, setEcoSlider] = useState(58);
   const [rhythmScore, setRhythmScore] = useState(62);
   const [vrOpen, setVrOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const cultureOfDay = useMemo(getCultureOfTheDay, []);
-  const trendingCards = useMemo(() => cultureCards.filter((card) => card.trending).slice(0, 6), []);
-  const didYouKnow = cultureCards[randomFactIndex % cultureCards.length];
-  const explorePercent = Math.round((viewedIds.length / cultureCards.length) * 100);
-  const badgeLabel = explorePercent >= 75 ? 'Culture Ranger' : explorePercent >= 35 ? 'Penjelajah Nusantara' : viewedIds.length > 0 ? 'Rookie Explorer' : 'Mulai Jelajah';
+
 
   const filteredCards = useMemo(() => {
     const normalizedSearch = search.toLowerCase().trim();
@@ -1107,15 +1095,7 @@ export function HistoryCultureSection({ lang }: Props) {
     setVrOpen(false);
   };
 
-  const showRandomCulture = () => {
-    const pool = filteredCards.length > 0 ? filteredCards : cultureCards;
-    const randomCard = pool[Math.floor(Math.random() * pool.length)];
-    openCard(randomCard);
-  };
 
-  const nextRandomFact = () => {
-    setRandomFactIndex((current) => (current + 7) % cultureCards.length);
-  };
 
   const selectedStory = selectedCard ? getCultureStory(selectedCard) : null;
 
@@ -1179,84 +1159,7 @@ export function HistoryCultureSection({ lang }: Props) {
           </select>
         </div>
 
-        <div className="mb-8 grid gap-4 lg:grid-cols-[1.2fr_1fr_1fr]">
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-primary">{tx.progress}</p>
-                <p className="mt-1 text-2xl font-bold text-foreground">{explorePercent}%</p>
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <Award className="h-3.5 w-3.5" />
-                {badgeLabel}
-              </div>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-muted">
-              <motion.div
-                className="h-full rounded-full bg-primary"
-                initial={{ width: 0 }}
-                animate={{ width: `${explorePercent}%` }}
-              />
-            </div>
-            <p className="mt-3 text-xs text-muted-foreground">{viewedIds.length} dari {cultureCards.length} budaya sudah dibuka.</p>
-          </div>
 
-          <button
-            onClick={showRandomCulture}
-            className="group rounded-2xl border border-primary/30 bg-primary/10 p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/60 hover:bg-primary/15"
-          >
-            <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <RefreshCw className="h-5 w-5 transition group-hover:rotate-180" />
-            </div>
-            <p className="text-sm font-semibold text-foreground">{tx.random}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Buka satu budaya acak dan tambah progress eksplorasi.</p>
-          </button>
-
-          <button
-            onClick={() => openCard(cultureOfDay)}
-            className="group rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/40"
-          >
-            <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-              <Trophy className="h-4 w-4" />
-              {tx.cultureOfDay}
-            </div>
-            <p className="text-xl font-bold text-foreground">{cultureOfDay.name}</p>
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{cultureOfDay.funFact}</p>
-          </button>
-        </div>
-
-        <div className="mb-10 grid gap-4 lg:grid-cols-[1fr_1.4fr]">
-          <div className="rounded-2xl border border-border bg-card p-5">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Brain className="h-4 w-4 text-primary" />
-                {tx.didYouKnow}
-              </div>
-              <button onClick={nextRandomFact} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition hover:border-primary/40 hover:text-primary">
-                Ganti
-              </button>
-            </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">{didYouKnow.funFact}</p>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-card p-5">
-            <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Flame className="h-4 w-4 text-primary" />
-              {tx.trending}
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {trendingCards.map((card) => (
-                <button
-                  key={card.id}
-                  onClick={() => openCard(card)}
-                  className="shrink-0 rounded-full border border-border bg-muted/40 px-4 py-2 text-xs font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
-                >
-                  {card.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
 
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
@@ -1391,72 +1294,26 @@ export function HistoryCultureSection({ lang }: Props) {
               </button>
 
               <div className="max-h-[90vh] overflow-y-auto">
-                <div className="relative overflow-hidden border-b border-border bg-foreground text-background">
-                  <div className="absolute inset-0 opacity-25" style={getMotifStyle(selectedCard)} />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(82,183,136,0.3),transparent_30%),radial-gradient(circle_at_80%_30%,rgba(244,162,97,0.22),transparent_28%)]" />
-                  {[0, 1, 2, 3, 4, 5].map((dot) => (
-                    <motion.span
-                      key={dot}
-                      className="absolute h-1.5 w-1.5 rounded-full bg-primary/70"
-                      style={{ left: `${12 + dot * 14}%`, top: `${18 + (dot % 3) * 18}%` }}
-                      animate={{ y: [0, -10, 0], opacity: [0.25, 0.8, 0.25] }}
-                      transition={{ duration: 3 + dot * 0.35, repeat: Infinity, ease: 'easeInOut' }}
-                    />
-                  ))}
-
-                  <div className="relative grid gap-0 lg:grid-cols-[1.25fr_0.85fr]">
-                    <div className="flex min-h-[24rem] flex-col justify-end px-6 pb-8 pt-24 sm:px-8">
-                      <div className="mb-4 flex flex-wrap gap-2">
-                        <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">{selectedCard.category}</span>
-                        <span className="rounded-full bg-background/15 px-3 py-1 text-xs font-semibold text-background backdrop-blur">{selectedCard.region}</span>
-                      </div>
-                      <motion.h3
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl font-bold text-background sm:text-5xl"
-                      >
-                        {selectedCard.name}
-                      </motion.h3>
-                      <motion.p
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.08 }}
-                        className="mt-3 max-w-2xl text-sm leading-relaxed text-background/70"
-                      >
-                        {selectedCard.location} | {selectedCard.culture}
-                      </motion.p>
-
-                      <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                        {getEcoScores(selectedCard).map((score) => (
-                          <EcoScoreWheel key={score.label} {...score} />
-                        ))}
-                      </div>
+                {/* Clean header with image */}
+                <div className="relative overflow-hidden">
+                  <motion.img
+                    layoutId={`culture-image-${selectedCard.id}`}
+                    src={selectedCard.image}
+                    alt={selectedCard.name}
+                    onError={(event) => {
+                      const fallback = imageByRegion[selectedCard.region];
+                      if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+                    }}
+                    className="h-96 w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 px-8 pb-8">
+                    <div className="mb-4 flex flex-wrap gap-2">
+                      <span className="rounded-lg bg-primary/90 px-3 py-1 text-xs font-semibold text-primary-foreground">{selectedCard.category}</span>
+                      <span className="rounded-lg bg-background/20 px-3 py-1 text-xs font-semibold text-foreground backdrop-blur">{selectedCard.region}</span>
                     </div>
-
-                    <div className="relative min-h-[24rem] overflow-hidden border-t border-background/10 lg:border-l lg:border-t-0">
-                      <motion.img
-                        layoutId={`culture-image-${selectedCard.id}`}
-                        src={selectedCard.image}
-                        alt={selectedCard.name}
-                        onError={(event) => {
-                          const fallback = imageByRegion[selectedCard.region];
-                          if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
-                        }}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                      <MiniRadar region={selectedCard.region} location={selectedCard.location} />
-                      <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur">
-                        <div className="mb-3 flex items-center justify-between gap-3">
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-white/60">Audio & Trivia</p>
-                            <p className="text-sm font-semibold">{selectedStory.glossary[0]?.term ?? selectedCard.culture}</p>
-                          </div>
-                          <AudioWaveform />
-                        </div>
-                        <p className="text-xs leading-relaxed text-white/70">{selectedStory.trivia}</p>
-                      </div>
-                    </div>
+                    <h3 className="text-3xl font-bold text-foreground sm:text-4xl">{selectedCard.name}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{selectedCard.location} • {selectedCard.culture}</p>
                   </div>
                 </div>
 
@@ -1472,159 +1329,115 @@ export function HistoryCultureSection({ lang }: Props) {
                   />
                 )}
 
-                <div className="grid gap-6 p-6 lg:grid-cols-[1.35fr_0.8fr]">
-                  <div className="space-y-5">
+                {/* Main content */}
+                <div className="space-y-12 px-8 py-10">
+                  {/* Eco Scores */}
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {getEcoScores(selectedCard).map((score) => (
+                      <div key={score.label} className="rounded-lg border border-border bg-card p-4 text-center">
+                        <div className="text-2xl font-bold text-foreground">{score.value}%</div>
+                        <div className="text-xs uppercase tracking-widest text-muted-foreground mt-1">{score.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 4 Pillars - Vertical Stack */}
+                  <div className="space-y-6">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">4-Pillars of Culture</p>
-                      <h4 className="mt-1 text-xl font-bold text-foreground">Story Mode {selectedCard.name}</h4>
+                      <h4 className="text-lg font-bold text-foreground mb-1">Empat Pilar Budaya</h4>
+                      <p className="text-sm text-muted-foreground">Pemahaman mendalam tentang tradisi {selectedCard.name}</p>
                     </div>
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <StoryBlock icon={<BookOpen className="h-4 w-4" />} title="Asal-Usul & Sejarah" text={selectedCard.history} />
-                      <StoryBlock icon={<Leaf className="h-4 w-4" />} title="Kearifan Ekologis" text={selectedStory.ecoWisdom} />
-                      <StoryBlock icon={<Sparkles className="h-4 w-4" />} title="Seni & Simbolisme" text={selectedStory.artIdentity} />
-                      <StoryBlock icon={<Brain className="h-4 w-4" />} title="Did You Know?" text={selectedStory.trivia} />
-                    </div>
-
-                    <div className="overflow-hidden rounded-2xl border border-border bg-muted/30">
-                      <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-                        <div className="relative h-72 overflow-hidden">
-                          <img
-                            src={selectedCard.image}
-                            alt={`${selectedCard.name} eco comparison`}
-                            onError={(event) => {
-                              const fallback = imageByRegion[selectedCard.region];
-                              if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
-                            }}
-                            className="absolute inset-0 h-full w-full object-cover grayscale saturate-50"
-                          />
-                          <div className="absolute inset-0 bg-destructive/30" />
-                          <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${ecoSlider}%` }}>
-                            <img
-                              src={selectedCard.image}
-                              alt=""
-                              onError={(event) => {
-                                const fallback = imageByRegion[selectedCard.region];
-                                if (event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
-                              }}
-                              className="h-full w-[42rem] max-w-none object-cover saturate-125"
-                            />
-                            <div className="absolute inset-0 bg-primary/15" />
-                          </div>
-                          <div className="absolute inset-y-0" style={{ left: `${ecoSlider}%` }}>
-                            <div className="-ml-px h-full w-0.5 bg-background shadow-lg" />
-                            <div className="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/70 bg-black/45 text-xs font-bold text-white backdrop-blur">
-                              {ecoSlider}
-                            </div>
-                          </div>
-                          <input
-                            type="range"
-                            min="25"
-                            max="82"
-                            value={ecoSlider}
-                            onChange={(event) => setEcoSlider(Number(event.target.value))}
-                            className="absolute inset-x-6 bottom-5 accent-primary"
-                            aria-label="Eco wisdom comparison slider"
-                          />
-                        </div>
-                        <div className="p-5">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Interactive Eco-Wisdom</p>
-                          <h5 className="mt-2 text-lg font-bold text-foreground">Dari eksploitasi menuju ruang hidup yang dijaga</h5>
-                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{selectedStory.ecoWisdom}</p>
-                          <div className="mt-4 grid grid-cols-3 gap-2">
-                            {getEcoScores(selectedCard).map((score) => (
-                              <div key={score.label} className="rounded-xl border border-border bg-card p-3 text-center">
-                                <div className="text-lg font-bold text-foreground">{score.value}%</div>
-                                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{score.label}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-border bg-muted/30 p-5">
-                      <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
-                        <Clock className="h-4 w-4 text-primary" />
-                        Timeline Sejarah
-                      </div>
-                      <div className="space-y-3">
-                        {selectedStory.timeline.map((item) => (
-                          <div key={`${selectedCard.id}-${item.era}`} className="grid gap-2 sm:grid-cols-[7rem_1fr]">
-                            <div className="text-xs font-semibold uppercase tracking-wider text-primary">{item.era}</div>
-                            <p className="border-l border-border pl-4 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
-                          </div>
-                        ))}
-                      </div>
+                    <div className="space-y-4">
+                      <StoryBlock icon={<BookOpen className="h-5 w-5" />} title="Asal-Usul & Sejarah" text={selectedCard.history} />
+                      <StoryBlock icon={<Leaf className="h-5 w-5" />} title="Kearifan Ekologis" text={selectedStory.ecoWisdom} />
+                      <StoryBlock icon={<Sparkles className="h-5 w-5" />} title="Seni & Simbolisme" text={selectedStory.artIdentity} />
+                      <StoryBlock icon={<Brain className="h-5 w-5" />} title="Pengetahuan Tradisional" text={selectedStory.trivia} />
                     </div>
                   </div>
 
+                  {/* Timeline */}
                   <div className="space-y-4">
-                    <div className="rounded-2xl border border-border bg-muted/30 p-5">
-                      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
-                        <Brain className="h-4 w-4 text-primary" />
-                        Fun Fact
-                      </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-foreground flex items-center gap-2">
+                        <Clock className="h-5 w-5 text-primary" />
+                        Perjalanan Sejarah
+                      </h4>
+                    </div>
+                    <div className="space-y-4 ml-4 border-l-2 border-primary/30 pl-6">
+                      {selectedStory.timeline.map((item) => (
+                        <div key={`${selectedCard.id}-${item.era}`}>
+                          <div className="text-xs uppercase tracking-widest font-semibold text-primary mb-1">{item.era}</div>
+                          <p className="text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Kamus Mini */}
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-bold text-foreground">Istilah Penting</h4>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {selectedStory.glossary.map((item) => (
+                        <div key={`${selectedCard.id}-${item.term}`} className="rounded-lg border border-border bg-muted/30 p-4">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="font-semibold text-foreground text-sm">{item.term}</p>
+                              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.meaning}</p>
+                            </div>
+                            {item.pronunciation && (
+                              <span className="text-[10px] font-semibold text-primary whitespace-nowrap pt-0.5">{item.pronunciation}</span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Fun Fact & Challenge */}
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="rounded-lg border border-border bg-muted/30 p-6">
+                      <h4 className="text-sm font-semibold text-foreground mb-3">Fakta Menarik</h4>
                       <p className="text-sm leading-relaxed text-muted-foreground">{selectedCard.funFact}</p>
                     </div>
 
-                    <div className="rounded-2xl border border-primary/25 bg-primary/10 p-5">
-                      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <div className="rounded-lg border border-primary/25 bg-primary/5 p-6">
+                      <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                         <Target className="h-4 w-4 text-primary" />
-                        Eco-Challenge
-                      </div>
+                        Tantangan Ekologi
+                      </h4>
                       <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.challenge}</p>
                     </div>
+                  </div>
 
-                    <div className="rounded-2xl border border-border bg-muted/30 p-5">
-                      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
-                        <Volume2 className="h-4 w-4 text-primary" />
-                        Kamus Mini
-                      </div>
-                      <div className="space-y-3">
-                        {selectedStory.glossary.map((item) => (
-                          <div key={`${selectedCard.id}-${item.term}`} className="rounded-xl border border-border bg-card p-3">
-                            <div className="flex items-center justify-between gap-3">
-                              <p className="text-sm font-semibold text-foreground">{item.term}</p>
-                              {item.pronunciation && (
-                                <span className="rounded-full bg-primary/10 px-2 py-1 text-[10px] font-semibold text-primary">{item.pronunciation}</span>
-                              )}
-                            </div>
-                            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.meaning}</p>
-                          </div>
+                  {/* Quiz */}
+                  <div className="rounded-lg border border-border bg-muted/30 p-6 space-y-4">
+                    <h4 className="text-sm font-semibold text-foreground">{tx.quiz}</h4>
+                    <p className="text-sm text-muted-foreground">Suku {selectedCard.name} berasal dari wilayah mana?</p>
+                    <div className="grid gap-2">
+                      {[selectedCard.region, 'Sumatera', 'Papua']
+                        .filter((value, index, array) => array.indexOf(value) === index)
+                        .slice(0, 3)
+                        .map((answer) => (
+                          <button
+                            key={answer}
+                            onClick={() => setQuizAnswer(answer)}
+                            className={`rounded-lg border px-4 py-3 text-left text-sm font-semibold transition ${
+                              quizAnswer === answer
+                                ? answer === selectedCard.region
+                                  ? 'border-primary bg-primary/10 text-primary'
+                                  : 'border-destructive/40 bg-destructive/10 text-destructive'
+                                : 'border-border bg-card text-foreground hover:border-primary/40'
+                            }`}
+                          >
+                            {answer}
+                          </button>
                         ))}
-                      </div>
                     </div>
-
-                    <div className="rounded-2xl border border-border bg-muted/30 p-5">
-                      <div className="mb-3 text-sm font-semibold text-foreground">{tx.quiz}</div>
-                      <p className="mb-3 text-sm text-muted-foreground">Suku {selectedCard.name} berasal dari wilayah mana?</p>
-                      <div className="grid gap-2">
-                        {[selectedCard.region, 'Sumatera', 'Papua']
-                          .filter((value, index, array) => array.indexOf(value) === index)
-                          .slice(0, 3)
-                          .map((answer) => (
-                            <button
-                              key={answer}
-                              onClick={() => setQuizAnswer(answer)}
-                              className={`rounded-xl border px-4 py-2 text-left text-xs font-semibold transition ${
-                                quizAnswer === answer
-                                  ? answer === selectedCard.region
-                                    ? 'border-primary bg-primary/10 text-primary'
-                                    : 'border-destructive/40 bg-destructive/10 text-destructive'
-                                  : 'border-border bg-card text-foreground hover:border-primary/40'
-                              }`}
-                            >
-                              {answer}
-                            </button>
-                          ))}
-                      </div>
-                      {quizAnswer && (
-                        <p className="mt-3 text-xs text-muted-foreground">
-                          {quizAnswer === selectedCard.region ? tx.correct : tx.wrong}
-                        </p>
-                      )}
-                    </div>
+                    {quizAnswer && (
+                      <p className="text-xs text-muted-foreground">
+                        {quizAnswer === selectedCard.region ? tx.correct : tx.wrong}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {vrOpen && selectedCard.id === 'aceh' && (
@@ -1752,14 +1565,15 @@ function AcehVrSimulator({ onClose }: { onClose: () => void }) {
 }
 
 function StoryBlock({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-
   return (
-    <div className="rounded-2xl border border-border bg-muted/30 p-5">
-      <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-        {icon}
-        {title}
+    <div className="rounded-lg border border-border bg-card p-6 hover:border-primary/40 transition">
+      <div className="flex items-start gap-4">
+        <div className="text-primary mt-1">{icon}</div>
+        <div className="flex-1 min-w-0">
+          <h5 className="font-semibold text-foreground text-sm">{title}</h5>
+          <p className="text-sm leading-relaxed text-muted-foreground mt-2">{text}</p>
+        </div>
       </div>
-      <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>
     </div>
   );
 }
