@@ -805,23 +805,33 @@ function ZoomControls() {
 // Custom Marker Creator helper
 const createCustomIcon = (type: 'tradisi' | 'ritual' | 'lingkungan', active: boolean) => {
   const color = typeColors[type];
-  const activeClass = active ? 'scale-125 ring-4 ring-white/40 shadow-2xl' : 'hover:scale-110';
+  const activeClass = active 
+    ? 'scale-125 z-[1000]' 
+    : 'hover:scale-110 opacity-90 hover:opacity-100';
+  
   const html = `
-    <div class="relative flex items-center justify-center transition-all duration-300 ${activeClass}" style="width: 32px; height: 32px;">
-      <div class="absolute inset-0 rounded-full animate-ping opacity-30" style="background-color: ${color};"></div>
-      <div class="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center relative z-10 transition-transform duration-300" style="background-color: ${color};">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-          <circle cx="12" cy="10" r="3"/>
-        </svg>
-      </div>
+    <div class="relative flex flex-col items-center justify-end transition-all duration-300 ${activeClass}" style="width: 32px; height: 40px;">
+      <!-- Google Maps-style Teardrop Pin SVG -->
+      <svg viewBox="0 0 24 32" class="w-full h-full select-none" style="filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.4));">
+        <!-- Pin path -->
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 20 12 20s12-11 12-20c0-6.63-5.37-12-12-12z" fill="${color}" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" />
+        <!-- Inner white dot -->
+        <circle cx="12" cy="12" r="5.5" fill="#ffffff" />
+        <!-- Inner colored center dot -->
+        <circle cx="12" cy="12" r="2.8" fill="${color}" />
+      </svg>
+      
+      <!-- Small pulsing glow ripple directly at the anchor point under the pin -->
+      ${active ? `
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-1.5 rounded-full bg-white/40 blur-xs animate-ping pointer-events-none" style="z-index: -1;"></div>
+      ` : ''}
     </div>
   `;
   return L.divIcon({
     html,
-    className: 'custom-leaflet-icon',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
+    className: 'custom-leaflet-icon-pin',
+    iconSize: [32, 40],
+    iconAnchor: [16, 40], // Anchor points exactly to the bottom tip
   });
 };
 
@@ -1638,6 +1648,21 @@ export function JelajahSection({ lang, isDark }: Props) {
         .leaflet-container {
           background-color: ${isDark ? '#0D1B14' : '#F7F3EE'} !important;
         }
+        @keyframes scanSweep {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(200%); }
+        }
+        .animate-scan-sweep {
+          animation: scanSweep 3s infinite linear;
+        }
+        @keyframes radarPulse {
+          0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.1; }
+          50% { opacity: 0.5; }
+          100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+        }
+        .animate-radar-pulse {
+          animation: radarPulse 2.5s infinite ease-out;
+        }
       `}</style>
 
       {/* Section Header */}
@@ -1905,6 +1930,17 @@ export function JelajahSection({ lang, isDark }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-12">
         <div className="relative rounded-3xl overflow-hidden border border-border shadow-2xl bg-muted" style={{ height: 520 }}>
           
+          {/* Custom GIS Scanning Overlay HUD */}
+          {aiConsoleStatus === 'scanning' && (
+            <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
+              <div className="absolute left-0 right-0 h-1/2 bg-gradient-to-b from-transparent via-emerald-500/15 to-transparent border-b-2 border-emerald-500/40 animate-scan-sweep" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full border border-emerald-500/30 bg-emerald-500/[0.02] animate-radar-pulse flex items-center justify-center">
+                <div className="w-[180px] h-[180px] rounded-full border border-emerald-500/20 bg-emerald-500/[0.01]" />
+              </div>
+            </div>
+          )}
+
           {/* Leaflet Map with class applying our Custom CSS hue filter */}
           <MapContainer 
             center={[-2.5489, 118.0149]} 
@@ -2115,37 +2151,42 @@ export function JelajahSection({ lang, isDark }: Props) {
                     </button>
                   </div>
 
-                  {/* Baduy Custom Gauges */}
-                  <div className="space-y-2 mb-4 bg-primary/5 border border-primary/10 rounded-2xl p-3">
-                    {/* Eco Score */}
-                    <div className="flex flex-col gap-1">
-                      <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                        <span>🌿 {tx.ecoScore}</span>
-                        <span className="text-emerald-500 font-bold">{ecoScore}%</span>
+                  {/* Baduy Custom Telemetry HUD */}
+                  <div className="grid grid-cols-3 gap-2 mb-5 bg-muted/40 border border-border/30 rounded-2xl p-3.5">
+                    {/* Eco Score Circular Gauge */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative w-14 h-14 flex items-center justify-center">
+                        <svg className="absolute w-full h-full transform -rotate-90">
+                          <circle cx="28" cy="28" r="24" className="stroke-muted/40 fill-none" strokeWidth="4" />
+                          <circle cx="28" cy="28" r="24" className="stroke-emerald-500 fill-none transition-all duration-500" strokeWidth="4.5" strokeDasharray="150" strokeDashoffset={150 - (150 * ecoScore) / 100} strokeLinecap="round" />
+                        </svg>
+                        <span className="text-[10px] font-extrabold text-foreground">{ecoScore}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500 transition-all duration-500" style={{ width: `${ecoScore}%` }} />
-                      </div>
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase mt-2">🌿 Eco</span>
                     </div>
-                    {/* Custom Score */}
-                    <div className="flex flex-col gap-1">
-                      <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                        <span>📜 {tx.tradScore}</span>
-                        <span className="text-amber-500 font-bold">{tradScore}%</span>
+
+                    {/* Custom Score Circular Gauge */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative w-14 h-14 flex items-center justify-center">
+                        <svg className="absolute w-full h-full transform -rotate-90">
+                          <circle cx="28" cy="28" r="24" className="stroke-muted/40 fill-none" strokeWidth="4" />
+                          <circle cx="28" cy="28" r="24" className="stroke-amber-500 fill-none transition-all duration-500" strokeWidth="4.5" strokeDasharray="150" strokeDashoffset={150 - (150 * tradScore) / 100} strokeLinecap="round" />
+                        </svg>
+                        <span className="text-[10px] font-extrabold text-foreground">{tradScore}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 transition-all duration-500" style={{ width: `${tradScore}%` }} />
-                      </div>
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase mt-2">📜 Adat</span>
                     </div>
-                    {/* Spiritual Score */}
-                    <div className="flex flex-col gap-1">
-                      <div className="flex justify-between text-[11px] font-semibold text-muted-foreground">
-                        <span>✨ {tx.sprScore}</span>
-                        <span className="text-purple-500 font-bold">{sprScore}%</span>
+
+                    {/* Spiritual Score Circular Gauge */}
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative w-14 h-14 flex items-center justify-center">
+                        <svg className="absolute w-full h-full transform -rotate-90">
+                          <circle cx="28" cy="28" r="24" className="stroke-muted/40 fill-none" strokeWidth="4" />
+                          <circle cx="28" cy="28" r="24" className="stroke-purple-500 fill-none transition-all duration-500" strokeWidth="4.5" strokeDasharray="150" strokeDashoffset={150 - (150 * sprScore) / 100} strokeLinecap="round" />
+                        </svg>
+                        <span className="text-[10px] font-extrabold text-foreground">{sprScore}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-purple-500 transition-all duration-500" style={{ width: `${sprScore}%` }} />
-                      </div>
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase mt-2">✨ Spirit</span>
                     </div>
                   </div>
 
@@ -2419,7 +2460,7 @@ export function JelajahSection({ lang, isDark }: Props) {
             )}
           </AnimatePresence>
 
-          {/* Floating Slide-in Detail Sidebar (Google Arts & Culture style) */}
+          {/* Floating Slide-in Detail Sidebar (NatGeo & Google Arts & Culture style) */}
           <AnimatePresence>
             {selected && !storyActive && (
               <motion.div
@@ -2427,69 +2468,77 @@ export function JelajahSection({ lang, isDark }: Props) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: '100%', opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 z-[1000] w-full sm:w-[420px] bg-card/95 backdrop-blur-md border-l border-border shadow-2xl flex flex-col h-full"
+                className="absolute right-0 top-0 bottom-0 z-[1000] w-full sm:w-[440px] bg-card/60 backdrop-blur-xl border-l border-border/40 shadow-2xl flex flex-col h-full overflow-hidden"
               >
-                {/* Cover Image */}
-                <div className="relative h-48 flex-shrink-0 bg-black">
-                  <img src={selected.image} alt={selected.name} className="w-full h-full object-cover opacity-85" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent animate-pulse" style={{ animationDuration: '4s' }} />
+                {/* Cover Image & Asymmetric visual frame */}
+                <div className="relative h-56 flex-shrink-0 bg-black overflow-hidden">
+                  <img src={selected.image} alt={selected.name} className="w-full h-full object-cover opacity-90 transition-transform duration-[4000ms] hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
 
-                  {/* Real-time spectrum visualizer */}
+                  {/* Real-time audio spectrum visualizer (glowing canvas) */}
                   {analyserNode && <AudioVisualizer analyser={analyserNode} />}
                   
                   {/* Close button */}
                   <button 
                     onClick={() => setSelected(null)} 
-                    className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors cursor-pointer"
+                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/55 text-white flex items-center justify-center hover:bg-black/80 border border-white/10 hover:scale-105 transition-all z-20 cursor-pointer"
                   >
                     <X className="w-4.5 h-4.5" />
                   </button>
 
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-white text-[11px] font-bold uppercase tracking-wider bg-primary">
+                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-white text-[10px] font-extrabold uppercase tracking-widest bg-primary border border-white/10 shadow-sm z-20">
                     {tx[selected.type as keyof typeof tx]}
+                  </div>
+
+                  <div className="absolute bottom-4 left-6 z-20 right-6">
+                    <h3 className="text-white text-3xl font-extrabold font-serif drop-shadow-md tracking-tight leading-tight">{selected.name}</h3>
+                    <p className="text-white/80 text-[11px] flex items-center gap-1.5 font-bold drop-shadow-md mt-1 font-mono uppercase tracking-wider">
+                      <MapPin className="w-3.5 h-3.5 text-primary" /> {selected.location}
+                    </p>
                   </div>
                 </div>
 
                 {/* Content Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                  <div>
-                    <h3 className="text-foreground text-2xl font-bold mb-1">{selected.name}</h3>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 font-semibold">
-                      <MapPin className="w-3.5 h-3.5 text-primary" /> {selected.location} ({lang === 'id' ? selected.regionLabel : selected.regionLabelEn})
-                    </p>
-                  </div>
-
+                <div className="flex-1 overflow-y-auto p-6 space-y-7 custom-scrollbar">
                   {/* Sustainability Metric */}
-                  <div className="flex items-center gap-2 bg-muted/50 border border-border/50 rounded-2xl p-3">
-                    <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">{tx.sustainability}:</span>
-                    <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${selected.sustainability}%` }}
-                        transition={{ duration: 1, ease: 'easeOut' }}
-                        className="h-full rounded-full bg-primary"
-                      />
+                  <div className="bg-primary/[0.03] border border-primary/20 rounded-2xl p-4 flex items-center gap-3">
+                    <div className="text-center flex-shrink-0">
+                      <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Sustainability</div>
+                      <div className="text-xl font-extrabold text-primary font-mono mt-0.5">{selected.sustainability}%</div>
                     </div>
-                    <span className="text-xs font-extrabold text-primary">{selected.sustainability}%</span>
+                    <div className="flex-grow">
+                      <div className="flex justify-between items-center text-[10px] text-muted-foreground font-semibold mb-1">
+                        <span>Indeks Pelestarian Budaya</span>
+                        <span>Sangat Tinggi</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-muted overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${selected.sustainability}%` }}
+                          transition={{ duration: 1, ease: 'easeOut' }}
+                          className="h-full rounded-full bg-primary"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Audio Sonification Widget */}
-                  <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 space-y-3">
+                  <div className="p-4 bg-gradient-to-br from-primary/10 via-primary/[0.02] to-transparent rounded-2xl border border-primary/20 space-y-3 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-xs font-bold text-primary">
-                        <Sparkles className="w-4 h-4" />
-                        {lang === 'id' ? 'Musik Tradisional Suku' : 'Tribe Traditional Music'}
+                      <div className="flex items-center gap-2 text-xs font-extrabold text-primary uppercase tracking-wider">
+                        <Compass className="w-4 h-4 text-primary animate-spin-slow" />
+                        Sonifikasi Audio Spasial
                       </div>
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase">Procedural Synth</span>
+                      <span className="text-[9px] font-mono bg-primary/10 text-primary border border-primary/20 rounded px-1.5 py-0.2">Procedural Synth</span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground leading-normal">
+                    <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
                       {lang === 'id' 
                         ? 'Memutar instrumen dan lagu khas daerah ini secara dinamis melalui Web Audio API.' 
                         : 'Synthesizing dynamic regional instruments and melodies via Web Audio API.'}
                     </p>
                     <button
                       onClick={togglePlay}
-                      className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer ${
+                      className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer active:scale-98 shadow-sm ${
                         isPlaying 
                           ? 'bg-emerald-600 border-emerald-500 text-white animate-pulse' 
                           : 'bg-background border-border text-foreground hover:bg-muted'
@@ -2510,62 +2559,63 @@ export function JelajahSection({ lang, isDark }: Props) {
                   </div>
 
                   {/* Eco-Weather Telemetry Sensors Widget */}
-                  <div className="p-4 bg-card border border-border rounded-2xl space-y-3">
-                    <div className="flex items-center gap-2 text-xs font-bold text-foreground border-b border-border pb-2">
+                  <div className="p-5 bg-card/40 border border-border/40 rounded-2xl space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-extrabold text-foreground border-b border-border/40 pb-2.5">
                       <Sliders className="w-4 h-4 text-primary" />
-                      {tx.ecoWeather}
+                      WEATHER & ECOLOGICAL TELEMETRY
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3.5">
                       {/* Lat Lng */}
-                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1 relative group">
-                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.latitude} / {tx.longitude}</div>
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.latitude} / {tx.longitude}</div>
                         <div className="text-[10px] font-mono font-bold text-foreground truncate">
                           {selected.lat.toFixed(4)}, {selected.lng.toFixed(4)}
                         </div>
                       </div>
 
                       {/* Forest Density NDVI */}
-                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
-                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.ndviForest}</div>
-                        <div className="text-[11px] font-bold text-foreground flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                          {selected.type === 'lingkungan' ? '0.85 - 0.98' : selected.type === 'tradisi' ? '0.70 - 0.82' : '0.78 - 0.88'}
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.ndviForest}</div>
+                        <div className="text-[11px] font-bold text-foreground flex items-center gap-1.5 font-mono">
+                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                          {selected.type === 'lingkungan' ? '0.94 NDVI' : selected.type === 'tradisi' ? '0.78 NDVI' : '0.86 NDVI'}
                         </div>
                       </div>
 
                       {/* Temperature */}
-                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
-                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.temperature}</div>
-                        <div className="text-[11px] font-bold text-foreground">
-                          {selected.region === 'papua' || selected.region === 'nusatenggara' ? '22°C - 27°C' : '26°C - 31°C'}
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.temperature}</div>
+                        <div className="text-[11px] font-bold text-foreground font-mono">
+                          {selected.region === 'papua' || selected.region === 'nusatenggara' ? '24.5 °C' : '28.2 °C'}
                         </div>
                       </div>
 
                       {/* Humidity */}
-                      <div className="bg-muted/30 p-2.5 rounded-xl border border-border/40 space-y-1">
-                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{tx.humidity}</div>
-                        <div className="text-[11px] font-bold text-foreground">
-                          {selected.region === 'nusatenggara' ? '65% - 75%' : '80% - 92%'}
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.humidity}</div>
+                        <div className="text-[11px] font-bold text-foreground font-mono">
+                          {selected.region === 'nusatenggara' ? '72%' : '88%'}
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Cultural Description */}
-                  <div>
-                    <h4 className="text-xs uppercase font-extrabold text-muted-foreground tracking-wider mb-2">Deskripsi</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                  <div className="space-y-2">
+                    <h4 className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Deskripsi Ringkasan</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                       {lang === 'id' ? selected.desc : selected.descEn}
                     </p>
                   </div>
 
                   {/* Quantitative Radar Analysis */}
-                  <div className="h-44 bg-muted/30 border border-border/50 rounded-3xl p-2 flex flex-col justify-center">
-                    <ResponsiveContainer width="100%" height="100%">
+                  <div className="h-48 bg-muted/20 border border-border/30 rounded-3xl p-3 flex flex-col justify-center shadow-inner">
+                    <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest text-center mb-1">Dimensi Kebudayaan</div>
+                    <ResponsiveContainer width="100%" height="90%">
                       <RadarChart data={selected.radarData.map(d => ({ ...d, subject: translateSubject(d.subject, lang) }))}>
-                        <PolarGrid stroke="var(--border)" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--muted-foreground)', fontSize: 10, fontWeight: '600' }} />
+                        <PolarGrid stroke="rgba(255,255,255,0.06)" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--muted-foreground)', fontSize: 9, fontWeight: '700' }} />
                         <Radar dataKey="value" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} />
                       </RadarChart>
                     </ResponsiveContainer>
@@ -2573,66 +2623,66 @@ export function JelajahSection({ lang, isDark }: Props) {
 
                   {/* AI Recommendation Card panel */}
                   <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10 space-y-2">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
-                      <Sparkles className="w-4 h-4" />
-                      {lang === 'id' ? 'Rekomendasi Cerdas AI Asisten' : 'Smart AI Recommendations'}
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-primary uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+                      Analisis Kecocokan AI
                     </div>
-                    <div className="text-[10px] text-muted-foreground leading-normal">
-                      {lang === 'id' ? 'Budaya serupa yang terdeteksi satelit:' : 'Satellite-detected similar culture:'}{' '}
+                    <div className="text-[10px] text-muted-foreground leading-normal font-medium">
+                      Kombinasi algoritma GIS mendeteksi kemiripan tertinggi dengan:{' '}
                       <span className="font-extrabold text-foreground">{getAIRecommendation(selected.id).targetName}</span>{' '}
-                      (Kemiripan: <span className="font-extrabold text-primary">{getAIRecommendation(selected.id).score}%</span>)
+                      (<span className="font-extrabold text-primary">{getAIRecommendation(selected.id).score}% match</span>)
                     </div>
-                    <p className="text-[11px] text-muted-foreground leading-relaxed italic bg-background border border-border/40 p-2.5 rounded-xl">
-                      {lang === 'id' ? getAIRecommendation(selected.id).reasonId : getAIRecommendation(selected.id).reasonEn}
+                    <p className="text-[11px] text-muted-foreground leading-relaxed italic bg-background/50 border border-border/40 p-3 rounded-xl">
+                      "{lang === 'id' ? getAIRecommendation(selected.id).reasonId : getAIRecommendation(selected.id).reasonEn}"
                     </p>
                   </div>
 
-                  {/* Qualitative Aspects */}
-                  <div className="space-y-4 pt-2 border-t border-border">
-                    <div className="flex items-center gap-1 text-xs font-bold text-foreground">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                      {tx.qualitative}
+                  {/* Qualitative Aspects (MatGeographics Style) */}
+                  <div className="space-y-4 pt-4 border-t border-border/40">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                      <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+                      ANALISIS KUALITATIF SPASIAL
                     </div>
                     <div className="space-y-3">
-                      <div className="p-3 bg-muted/40 rounded-xl border border-border/50">
-                        <div className="text-[10px] font-bold uppercase text-primary tracking-wider mb-1">
+                      <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
+                        <div className="text-[9px] font-bold uppercase text-primary tracking-widest mb-1">
                           🌿 {tx.envPracticeTitle}
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                           {lang === 'id' ? selected.envPractice : selected.envPracticeEn}
                         </p>
                       </div>
-                      <div className="p-3 bg-muted/40 rounded-xl border border-border/50">
-                        <div className="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400 tracking-wider mb-1">
+                      <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
+                        <div className="text-[9px] font-bold uppercase text-purple-600 dark:text-purple-400 tracking-widest mb-1">
                           🏡 {tx.wayOfLifeTitle}
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                           {lang === 'id' ? selected.wayOfLife : selected.wayOfLifeEn}
                         </p>
                       </div>
-                      <div className="p-3 bg-muted/40 rounded-xl border border-border/50">
-                        <div className="text-[10px] font-bold uppercase text-amber-500 tracking-wider mb-1">
+                      <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
+                        <div className="text-[9px] font-bold uppercase text-amber-500 tracking-widest mb-1.5">
                           📜 {tx.philosophyTitle}
                         </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed italic font-medium">
-                          {lang === 'id' ? selected.philosophy : selected.philosophyEn}
-                        </p>
+                        <blockquote className="text-xs text-foreground leading-relaxed italic font-serif pl-3.5 border-l-2 border-amber-500 font-medium">
+                          "{lang === 'id' ? selected.philosophy : selected.philosophyEn}"
+                        </blockquote>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Sidebar CTA Footer */}
-                <div className="p-4 border-t border-border bg-muted/20 flex gap-3 flex-shrink-0">
+                <div className="p-4 border-t border-border/40 bg-card/65 flex gap-3 flex-shrink-0">
                   <button 
                     onClick={handleVRClick}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:opacity-95 transition-all shadow-md cursor-pointer active:scale-98"
+                    className="flex-grow flex items-center justify-center gap-1.5 py-3 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:opacity-95 transition-all shadow-md cursor-pointer active:scale-98"
                   >
-                    <Eye className="w-4 h-4" /> {tx.vr}
+                    <Eye className="w-4 h-4 animate-pulse" /> {tx.vr}
                   </button>
                   <button 
                     onClick={() => setSelected(null)}
-                    className="py-3 px-4 rounded-xl border border-border text-foreground text-xs font-bold hover:bg-muted transition-colors cursor-pointer"
+                    className="py-3 px-4 rounded-xl border border-border/40 text-foreground text-xs font-bold hover:bg-muted transition-colors cursor-pointer"
                   >
                     {tx.close}
                   </button>
@@ -2866,36 +2916,45 @@ export function JelajahSection({ lang, isDark }: Props) {
                 <defs>
                   <linearGradient id="colorBaduy" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10B981" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0.01} />
                   </linearGradient>
                   <linearGradient id="colorToraja" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#A855F7" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#A855F7" stopOpacity={0} />
+                    <stop offset="95%" stopColor="#A855F7" stopOpacity={0.01} />
                   </linearGradient>
                   <linearGradient id="colorDayak" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#F4A261" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#F4A261" stopOpacity={0} />
+                    <stop offset="95%" stopColor="#F4A261" stopOpacity={0.01} />
                   </linearGradient>
                   <linearGradient id="colorMinang" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.01} />
                   </linearGradient>
                   <linearGradient id="colorBali" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
+                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0.01} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="year" tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '600' }} axisLine={false} tickLine={false} />
-                <YAxis domain={[65, 100]} tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '600' }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="year" tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} />
+                <YAxis domain={[65, 100]} tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, color: 'var(--foreground)', fontSize: 12, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                  contentStyle={{ 
+                    background: 'rgba(25, 35, 30, 0.75)', 
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(16, 185, 129, 0.2)', 
+                    borderRadius: 20, 
+                    color: 'var(--foreground)', 
+                    fontSize: 11, 
+                    fontWeight: '600',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)' 
+                  }}
                 />
-                <Area type="monotone" dataKey="baduy" name="Suku Baduy" stroke="#10B981" strokeWidth={2.5} fill="url(#colorBaduy)" />
-                <Area type="monotone" dataKey="naga" name="Kampung Naga" stroke="#059669" strokeWidth={2} strokeDasharray="3 3" fill="none" />
-                <Area type="monotone" dataKey="toraja" name="Toraja" stroke="#A855F7" strokeWidth={2.5} fill="url(#colorToraja)" />
-                <Area type="monotone" dataKey="dayak" name="Suku Dayak" stroke="#F4A261" strokeWidth={2.5} fill="url(#colorDayak)" />
-                <Area type="monotone" dataKey="minang" name="Minangkabau" stroke="#3B82F6" strokeWidth={2.5} fill="url(#colorMinang)" />
-                <Area type="monotone" dataKey="bali" name="Bali Subak" stroke="#06B6D4" strokeWidth={2.5} fill="url(#colorBali)" />
+                <Area type="monotone" dataKey="baduy" name="Suku Baduy" stroke="#10B981" strokeWidth={3} fill="url(#colorBaduy)" />
+                <Area type="monotone" dataKey="naga" name="Kampung Naga" stroke="#059669" strokeWidth={2.5} strokeDasharray="4 4" fill="none" />
+                <Area type="monotone" dataKey="toraja" name="Toraja" stroke="#A855F7" strokeWidth={3} fill="url(#colorToraja)" />
+                <Area type="monotone" dataKey="dayak" name="Suku Dayak" stroke="#F4A261" strokeWidth={3} fill="url(#colorDayak)" />
+                <Area type="monotone" dataKey="minang" name="Minangkabau" stroke="#3B82F6" strokeWidth={3} fill="url(#colorMinang)" />
+                <Area type="monotone" dataKey="bali" name="Bali Subak" stroke="#06B6D4" strokeWidth={3} fill="url(#colorBali)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

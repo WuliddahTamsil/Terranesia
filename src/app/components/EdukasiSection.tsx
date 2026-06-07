@@ -212,6 +212,86 @@ const dayDetails = [
   }
 ];
 
+const questionsDailyPool: QuizQuestion[] = [
+  {
+    id: 1,
+    q: 'Berapa rata-rata waktu yang dibutuhkan kantong plastik untuk terurai secara alami di tanah?',
+    qEn: 'What is the average time required for a plastic bag to decompose naturally in soil?',
+    opts: ['10-20 tahun', '50-100 tahun', '100-500 tahun', 'Lebih dari 1000 tahun'],
+    optsEn: ['10-20 years', '50-100 years', '100-500 years', 'More than 1000 years'],
+    correct: 2,
+    explanation: 'Kantong plastik membutuhkan waktu sekitar 100 hingga 500 tahun untuk hancur sepenuhnya di alam liar.',
+    explanationEn: 'Plastic bags take about 100 to 500 years to decompose completely in the wild.'
+  },
+  {
+    id: 2,
+    q: 'Metode pengolahan sampah daun kering yang paling ramah lingkungan tanpa polusi udara adalah...',
+    qEn: 'The most eco-friendly method of processing dry leaves without air pollution is...',
+    opts: ['Membakarnya langsung', 'Membuatnya menjadi kompos organik', 'Membuangnya ke sungai', 'Menimbunnya di bawah semen'],
+    optsEn: ['Burning it directly', 'Composting it into organic fertilizer', 'Throwing it into the river', 'Burying it under cement'],
+    correct: 1,
+    explanation: 'Membuat kompos menyuburkan tanah dan menghindari pelepasan gas CO2 dan asap pembakaran ke udara.',
+    explanationEn: 'Composting fertilizes the soil and avoids releasing CO2 and smoke into the air.'
+  },
+  {
+    id: 3,
+    q: 'Komunitas adat mana di Indonesia Timur yang terkenal dengan hukum sasi untuk menjaga ekosistem laut?',
+    qEn: 'Which indigenous community in Eastern Indonesia is famous for the sasi law to protect the marine ecosystem?',
+    opts: ['Maluku dan Papua', 'Baduy', 'Dayak Kenyah', 'Tana Toraja'],
+    optsEn: ['Maluku and Papua', 'Baduy', 'Dayak Kenyah', 'Tana Toraja'],
+    correct: 0,
+    explanation: 'Hukum sasi di Maluku dan Papua mengatur larangan pengambilan hasil laut dalam waktu tertentu demi pemulihan ekosistem.',
+    explanationEn: 'The sasi law in Maluku and Papua regulates the prohibition of harvesting marine resources for a certain period for ecosystem recovery.'
+  },
+  {
+    id: 4,
+    q: 'Mengapa penggunaan AC berlebihan dapat memperburuk pemanasan global?',
+    qEn: 'Why does excessive use of air conditioning worsen global warming?',
+    opts: ['Karena mengalirkan air berlebih', 'Karena melepaskan gas refrigeran (HFC) yang bertindak sebagai gas rumah kaca yang kuat', 'Karena memancarkan cahaya silau', 'Karena mendinginkan udara sekitar'],
+    optsEn: ['Because it drains excess water', 'Because it releases refrigerant gases (HFCs) which act as potent greenhouse gases', 'Because it emits glaring light', 'Because it cools the surrounding air'],
+    correct: 1,
+    explanation: 'Bocoran atau pembuangan refrigeran seperti HFC dari AC memiliki potensi pemanasan global ribuan kali lebih kuat dibanding CO2.',
+    explanationEn: 'Refrigerant leaks or disposal such as HFCs from ACs have a global warming potential thousands of times stronger than CO2.'
+  },
+  {
+    id: 5,
+    q: 'Prinsip "Kamase-masea" dari Kajang, Sulawesi Selatan mengajarkan kita untuk...',
+    qEn: 'The principle of "Kamase-masea" from Kajang, South Sulawesi teaches us to...',
+    opts: ['Hidup bermegah-megahan', 'Hidup sederhana dan bersahaja demi menjaga keharmonisan alam', 'Menggunakan teknologi modern tanpa batas', 'Menebang pohon untuk membangun jalan'],
+    optsEn: ['Live extravagantly', 'Live simply and modestly to maintain harmony with nature', 'Use modern technology without boundaries', 'Cut down trees to build roads'],
+    correct: 1,
+    explanation: 'Filosofi Kamase-masea menekankan hidup sederhana dan pembatasan keinginan konsumtif agar alam tidak tereksploitasi berlebihan.',
+    explanationEn: 'The Kamase-masea philosophy emphasizes simple living and limiting consumerist desires so that nature is not over-exploited.'
+  },
+  {
+    id: 6,
+    q: 'Jenis pohon apa yang biasanya ditanam di pesisir pantai untuk menahan abrasi air laut?',
+    qEn: 'What type of tree is usually planted on coasts to prevent seawater abrasion?',
+    opts: ['Pohon Kelapa', 'Pohon Mangrove (Bakau)', 'Pohon Beringin', 'Pohon Pinus'],
+    optsEn: ['Coconut Tree', 'Mangrove Tree (Bakau)', 'Banyan Tree', 'Pine Tree'],
+    correct: 1,
+    explanation: 'Mangrove memiliki akar yang kokoh untuk memecah ombak, menahan abrasi, dan menyediakan habitat untuk kehidupan laut.',
+    explanationEn: 'Mangroves have sturdy roots to break waves, prevent erosion, and provide habitats for marine life.'
+  }
+];
+
+const getDailyQuestions = (): QuizQuestion[] => {
+  const dateStr = new Date().toDateString();
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = dateStr.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  const shuffled = [...questionsDailyPool];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.abs(hash + i) % (i + 1);
+    const temp = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = temp;
+  }
+  return shuffled.slice(0, 4);
+};
+
 const t = {
   id: {
     title: 'Edukasi Pelestarian',
@@ -233,12 +313,13 @@ const t = {
     earned: 'Diperoleh',
     locked: 'Terkunci',
     
-    // New translations
     chooseCategory: 'Pilih Kategori Kuis',
     catTradition: 'Kearifan Lokal & Tradisi',
     catTraditionDesc: 'Menguji pengetahuan tentang hukum adat, tata ruang sakral, dan filosofi hidup Nusantara.',
     catEcology: 'Ekologi & Gaya Hidup Hijau',
     catEcologyDesc: 'Menguji pengetahuan tentang dampak jejak karbon, pengomposan, dan aksi ramah lingkungan sehari-hari.',
+    catDaily: 'Tantangan Harian (Daily)',
+    catDailyDesc: 'Pertanyaan acak yang di-refresh setiap hari untuk menguji konsistensi wawasan hijau.',
     lives: 'Nyawa Kuis',
     failedTitle: 'Kuis Gagal!',
     failedDesc: 'Kamu kehabisan nyawa (❤️). Jangan berkecil hati, pelajari kembali filosofi Nusantara di atas dan coba lagi kuis ini!',
@@ -255,6 +336,17 @@ const t = {
     philoTabModern: 'Konteks Modern',
     philoTabAction: 'Aksi Nyata',
     philoTipClick: 'Klik kartu filosofi untuk melakukan eksplorasi mendalam!',
+    dailyHighScore: 'Skor Harian Tertinggi',
+    leaderboardTitle: 'Papan Peringkat Terranesia',
+    leaderboardSub: 'Peringkat pelestari terbaik berdasarkan kuis dan lencana',
+    submitNamePlaceholder: 'Masukkan namamu...',
+    submitScoreBtn: 'Submit ke Leaderboard',
+    submittedSuccess: 'Skor berhasil disubmit!',
+    totalScore: 'Total Skor',
+    aiCoachTitle: 'AI Eco-Coach Terranesia',
+    aiCoachSub: 'Analisis dampak lingkungan dari aksi nyata harian Anda',
+    aiCoachEmpty: 'Selesaikan minimal 1 tantangan harian untuk melihat analisis dampak lingkungan oleh AI Coach.',
+    aiCoachFeedback: 'Ulasan Pelestarian',
   },
   en: {
     title: 'Conservation Education',
@@ -276,12 +368,13 @@ const t = {
     earned: 'Earned',
     locked: 'Locked',
     
-    // New translations
     chooseCategory: 'Choose Quiz Category',
     catTradition: 'Local Wisdom & Traditions',
     catTraditionDesc: 'Test your knowledge of customary laws, sacred spaces, and Nusantara philosophies.',
     catEcology: 'Ecology & Green Lifestyle',
     catEcologyDesc: 'Test your knowledge on carbon footprints, composting, and daily eco-friendly actions.',
+    catDaily: 'Daily Challenge',
+    catDailyDesc: 'Randomized questions refreshed daily to test your green consistency.',
     lives: 'Quiz Lives',
     failedTitle: 'Quiz Failed!',
     failedDesc: 'You ran out of lives (❤️). Don\'t worry, re-read the Nusantara philosophies above and try again!',
@@ -298,6 +391,17 @@ const t = {
     philoTabModern: 'Modern Context',
     philoTabAction: 'Real Action',
     philoTipClick: 'Click a philosophy card to explore deeply!',
+    dailyHighScore: 'Daily High Score',
+    leaderboardTitle: 'Terranesia Leaderboard',
+    leaderboardSub: 'Top preservationists ranked by quizzes and badges',
+    submitNamePlaceholder: 'Enter your name...',
+    submitScoreBtn: 'Submit to Leaderboard',
+    submittedSuccess: 'Score submitted successfully!',
+    totalScore: 'Total Score',
+    aiCoachTitle: 'Terranesia AI Eco-Coach',
+    aiCoachSub: 'Environmental impact analysis of your real daily actions',
+    aiCoachEmpty: 'Complete at least 1 daily challenge to see environmental impact analysis by AI Coach.',
+    aiCoachFeedback: 'Preservation Review',
   },
 };
 
@@ -315,6 +419,12 @@ export function EdukasiSection({ lang }: Props) {
     } catch { return 0; }
   });
 
+  const [quizHighScoreDaily, setQuizHighScoreDaily] = useState<number>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('ecotwin_quiz_score_daily') || '0');
+    } catch { return 0; }
+  });
+
   const [completedQuizTradition, setCompletedQuizTradition] = useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('ecotwin_quiz_completed_tradition') || 'false');
@@ -324,6 +434,18 @@ export function EdukasiSection({ lang }: Props) {
   const [completedQuizEcology, setCompletedQuizEcology] = useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('ecotwin_quiz_completed_ecology') || 'false');
+    } catch { return false; }
+  });
+
+  const [completedQuizDaily, setCompletedQuizDaily] = useState<boolean>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('ecotwin_quiz_completed_daily') || 'false');
+    } catch { return false; }
+  });
+
+  const [hasInteractedPhilosophy, setHasInteractedPhilosophy] = useState<boolean>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('ecotwin_philosophy_interacted') || 'false');
     } catch { return false; }
   });
 
@@ -339,9 +461,28 @@ export function EdukasiSection({ lang }: Props) {
     } catch { return []; }
   });
 
+  // --- Leaderboard States ---
+  const initialLeaderboard = [
+    { name: 'Rian Nusantara', score: 8, badgeCount: 5 },
+    { name: 'Siti Lestari', score: 7, badgeCount: 4 },
+    { name: 'Budi Ekologi', score: 6, badgeCount: 3 },
+    { name: 'Dewi Wiwitan', score: 5, badgeCount: 3 },
+    { name: 'Joko Hijau', score: 4, badgeCount: 2 },
+  ];
+
+  const [leaderboard, setLeaderboard] = useState<{ name: string; score: number; badgeCount: number; isUser?: boolean }[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecotwin_leaderboard_data');
+      return saved ? JSON.parse(saved) : initialLeaderboard;
+    } catch { return initialLeaderboard; }
+  });
+
+  const [userName, setUserName] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   // --- Quiz Engine States ---
   const [quizState, setQuizState] = useState<'idle' | 'active' | 'done' | 'failed'>('idle');
-  const [quizCategory, setQuizCategory] = useState<'tradition' | 'ecology'>('tradition');
+  const [quizCategory, setQuizCategory] = useState<'tradition' | 'ecology' | 'daily'>('tradition');
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -349,7 +490,6 @@ export function EdukasiSection({ lang }: Props) {
   const [lives, setLives] = useState(3);
   
   // Track answers for review panel
-  // Array format: { qIndex: number, selected: number, isCorrect: boolean }
   const [userAnswersHistory, setUserAnswersHistory] = useState<{ qIndex: number; selected: number; isCorrect: boolean }[]>([]);
 
   // --- Interactive Philosophy Drawer States ---
@@ -371,12 +511,24 @@ export function EdukasiSection({ lang }: Props) {
   }, [quizHighScoreEcology]);
 
   useEffect(() => {
+    localStorage.setItem('ecotwin_quiz_score_daily', JSON.stringify(quizHighScoreDaily));
+  }, [quizHighScoreDaily]);
+
+  useEffect(() => {
     localStorage.setItem('ecotwin_quiz_completed_tradition', JSON.stringify(completedQuizTradition));
   }, [completedQuizTradition]);
 
   useEffect(() => {
     localStorage.setItem('ecotwin_quiz_completed_ecology', JSON.stringify(completedQuizEcology));
   }, [completedQuizEcology]);
+
+  useEffect(() => {
+    localStorage.setItem('ecotwin_quiz_completed_daily', JSON.stringify(completedQuizDaily));
+  }, [completedQuizDaily]);
+
+  useEffect(() => {
+    localStorage.setItem('ecotwin_philosophy_interacted', JSON.stringify(hasInteractedPhilosophy));
+  }, [hasInteractedPhilosophy]);
 
   useEffect(() => {
     localStorage.setItem('ecotwin_challenge_joined', JSON.stringify(challengeJoined));
@@ -386,19 +538,57 @@ export function EdukasiSection({ lang }: Props) {
     localStorage.setItem('ecotwin_completed_days', JSON.stringify(completedDays));
   }, [completedDays]);
 
+  useEffect(() => {
+    localStorage.setItem('ecotwin_leaderboard_data', JSON.stringify(leaderboard));
+  }, [leaderboard]);
+
+  // Daily questions memoized based on today's seed
+  const dailyQuestions = useMemo(() => {
+    return getDailyQuestions();
+  }, []);
+
   // Map current active questions based on selected category
   const activeQuestions = useMemo(() => {
-    return quizCategory === 'tradition' ? questionsTradition : questionsEcology;
-  }, [quizCategory]);
+    if (quizCategory === 'tradition') return questionsTradition;
+    if (quizCategory === 'ecology') return questionsEcology;
+    return dailyQuestions;
+  }, [quizCategory, dailyQuestions]);
 
   const q = activeQuestions[currentQ];
+
+  // AI Eco-Coach Impact calculation based on 7 day challenge
+  const ecoCoachImpact = useMemo(() => {
+    let co2Saved = 0;
+    let waterSaved = 0;
+    let plasticSaved = 0;
+    let communityCount = 0;
+
+    completedDays.forEach(dayIndex => {
+      if (dayIndex === 0) plasticSaved += 0.5; // kg
+      if (dayIndex === 1) co2Saved += 1.2;     // kg
+      if (dayIndex === 2) waterSaved += 50;     // liters
+      if (dayIndex === 3) co2Saved += 0.1;     // kg
+      if (dayIndex === 4) co2Saved += 0.8;     // kg
+      if (dayIndex === 5) plasticSaved += 1.0; // kg
+      if (dayIndex === 6) communityCount += 1;
+    });
+
+    return {
+      co2Saved: Number(co2Saved.toFixed(1)),
+      waterSaved,
+      plasticSaved: Number(plasticSaved.toFixed(1)),
+      communityCount
+    };
+  }, [completedDays]);
 
   // Dynamic Badges Collection
   const dynamicBadges = useMemo(() => {
     const scoredTraditionPerfect = quizHighScoreTradition === questionsTradition.length && completedQuizTradition;
     const scoredEcologyPerfect = quizHighScoreEcology === questionsEcology.length && completedQuizEcology;
-    const scoredThreeOrMore = quizHighScoreTradition >= 3 || quizHighScoreEcology >= 3;
+    const scoredDailyPerfect = quizHighScoreDaily === 4 && completedQuizDaily;
+    const scoredThreeOrMore = quizHighScoreTradition >= 3 || quizHighScoreEcology >= 3 || quizHighScoreDaily >= 3;
     const completedAllDays = completedDays.length === 7;
+    const isUserInTopThree = leaderboard.slice(0, 3).some(entry => entry.isUser);
 
     return [
       { 
@@ -406,9 +596,9 @@ export function EdukasiSection({ lang }: Props) {
         icon: '🌱', 
         name: 'Penjelajah Pemula', 
         nameEn: 'Beginner Explorer', 
-        desc: 'Mulai penjelajahan ekologis', 
-        descEn: 'Begin ecological exploration', 
-        earned: true, 
+        desc: 'Mulai dengan membaca salah satu filosofi', 
+        descEn: 'Begin by reading at least one philosophy', 
+        earned: hasInteractedPhilosophy, 
         color: 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 shadow-emerald-500/10 dark:shadow-emerald-500/5' 
       },
       { 
@@ -442,14 +632,14 @@ export function EdukasiSection({ lang }: Props) {
         color: 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-300 shadow-cyan-500/10 dark:shadow-cyan-500/5' 
       },
       { 
-        id: 'pelestari', 
-        icon: '🏆', 
-        name: 'Duta Pelestari', 
-        nameEn: 'Eco Ambassador', 
-        desc: 'Selesaikan seluruh tantangan 7 hari', 
-        descEn: 'Complete all 7 days challenge', 
-        earned: completedAllDays, 
-        color: 'border-yellow-500 bg-yellow-50 dark:bg-yellow-950/30 text-yellow-800 dark:text-yellow-300 shadow-yellow-500/10 dark:shadow-yellow-500/5' 
+        id: 'pesaing', 
+        icon: '⚔️', 
+        name: 'Pesaing Unggul', 
+        nameEn: 'Top Challenger', 
+        desc: 'Masuk dalam peringkat 3 besar Leaderboard', 
+        descEn: 'Rank in top 3 of the Leaderboard', 
+        earned: isUserInTopThree, 
+        color: 'border-rose-500 bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-300 shadow-rose-500/10 dark:shadow-rose-500/5' 
       },
       { 
         id: 'master', 
@@ -458,11 +648,11 @@ export function EdukasiSection({ lang }: Props) {
         nameEn: 'Terranesia Master', 
         desc: 'Skor sempurna di semua kuis', 
         descEn: 'Perfect score on all quizzes', 
-        earned: scoredTraditionPerfect && scoredEcologyPerfect, 
+        earned: scoredTraditionPerfect && scoredEcologyPerfect && scoredDailyPerfect, 
         color: 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 text-purple-800 dark:text-purple-300 shadow-purple-500/10 dark:shadow-purple-500/5' 
       },
     ];
-  }, [quizHighScoreTradition, quizHighScoreEcology, completedQuizTradition, completedQuizEcology, challengeJoined, completedDays]);
+  }, [quizHighScoreTradition, quizHighScoreEcology, quizHighScoreDaily, completedQuizTradition, completedQuizEcology, completedQuizDaily, challengeJoined, completedDays, hasInteractedPhilosophy, leaderboard]);
 
   const handleAnswer = (idx: number) => {
     if (answered) return;
@@ -494,16 +684,22 @@ export function EdukasiSection({ lang }: Props) {
     } else {
       // Completed successfully
       setQuizState('done');
+      setIsSubmitted(false);
       
+      const finalScore = userAnswersHistory.filter(h => h.isCorrect).length;
+
       if (quizCategory === 'tradition') {
         setCompletedQuizTradition(true);
-        setQuizHighScoreTradition(prev => Math.max(prev, score));
-      } else {
+        setQuizHighScoreTradition(prev => Math.max(prev, finalScore));
+      } else if (quizCategory === 'ecology') {
         setCompletedQuizEcology(true);
-        setQuizHighScoreEcology(prev => Math.max(prev, score));
+        setQuizHighScoreEcology(prev => Math.max(prev, finalScore));
+      } else {
+        setCompletedQuizDaily(true);
+        setQuizHighScoreDaily(prev => Math.max(prev, finalScore));
       }
 
-      if (score === activeQuestions.length) {
+      if (finalScore === activeQuestions.length) {
         // Trigger explosion of confetti for perfect score!
         confetti({
           particleCount: 150,
@@ -514,7 +710,7 @@ export function EdukasiSection({ lang }: Props) {
     }
   };
 
-  const startQuiz = (category: 'tradition' | 'ecology') => {
+  const startQuiz = (category: 'tradition' | 'ecology' | 'daily') => {
     setQuizCategory(category);
     setQuizState('active');
     setCurrentQ(0);
@@ -533,6 +729,53 @@ export function EdukasiSection({ lang }: Props) {
     setScore(0);
     setLives(3);
     setUserAnswersHistory([]);
+  };
+
+  // Submit to mock leaderboard
+  const handleSubmitLeaderboard = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userName.trim()) return;
+
+    const scoredTraditionPerfect = quizHighScoreTradition === questionsTradition.length && completedQuizTradition;
+    const scoredEcologyPerfect = quizHighScoreEcology === questionsEcology.length && completedQuizEcology;
+    const scoredDailyPerfect = quizHighScoreDaily === 4 && completedQuizDaily;
+    
+    const finalScore = userAnswersHistory.filter(h => h.isCorrect).length;
+    const baseHighScore = 
+      (quizCategory === 'tradition' ? Math.max(quizHighScoreTradition, finalScore) : quizHighScoreTradition) +
+      (quizCategory === 'ecology' ? Math.max(quizHighScoreEcology, finalScore) : quizHighScoreEcology) +
+      (quizCategory === 'daily' ? Math.max(quizHighScoreDaily, finalScore) : quizHighScoreDaily);
+
+    const completedAllDays = completedDays.length === 7;
+    const scoredThreeOrMore = quizHighScoreTradition >= 3 || quizHighScoreEcology >= 3 || quizHighScoreDaily >= 3;
+    
+    let badgeCount = 0;
+    if (hasInteractedPhilosophy) badgeCount++;
+    if (scoredThreeOrMore) badgeCount++;
+    if (challengeJoined) badgeCount++;
+    if (scoredTraditionPerfect) badgeCount++;
+    if (completedAllDays) badgeCount++;
+    if (scoredTraditionPerfect && scoredEcologyPerfect && scoredDailyPerfect) badgeCount++;
+
+    const newEntry = {
+      name: userName,
+      score: baseHighScore,
+      badgeCount,
+      isUser: true,
+    };
+
+    setLeaderboard(prev => {
+      const filtered = prev.filter(entry => !entry.isUser);
+      const updated = [...filtered, newEntry];
+      return updated.sort((a, b) => b.score - a.score || b.badgeCount - a.badgeCount);
+    });
+
+    setIsSubmitted(true);
+    confetti({
+      particleCount: 50,
+      spread: 40,
+      origin: { y: 0.8 }
+    });
   };
 
   const toggleDayCompleted = (index: number) => {
@@ -594,6 +837,9 @@ export function EdukasiSection({ lang }: Props) {
                   onClick={() => {
                     setActivePhilosophy(i);
                     setPhilosophyTab('history');
+                    if (!hasInteractedPhilosophy) {
+                      setHasInteractedPhilosophy(true);
+                    }
                   }}
                   className={`rounded-2xl p-6 border border-border bg-card/60 backdrop-blur-md transition-all cursor-pointer hover:shadow-xl hover:border-primary/30 flex flex-col justify-between`}
                 >
@@ -658,7 +904,7 @@ export function EdukasiSection({ lang }: Props) {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-6">
                   <h4 className="text-sm font-bold text-foreground mb-4 text-center">{tx.chooseCategory}</h4>
                   
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-3 gap-4">
                     {/* Category 1 */}
                     <div 
                       onClick={() => startQuiz('tradition')}
@@ -694,6 +940,24 @@ export function EdukasiSection({ lang }: Props) {
                         <span className="text-[11px] font-bold text-primary inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
                       </div>
                     </div>
+
+                    {/* Category 3 */}
+                    <div 
+                      onClick={() => startQuiz('daily')}
+                      className="p-5 rounded-2xl border border-border bg-muted/20 hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="w-10 h-10 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 flex items-center justify-center mb-3">
+                          <Flame className="w-5 h-5" />
+                        </div>
+                        <h5 className="text-sm font-bold text-foreground mb-1">{tx.catDaily}</h5>
+                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catDailyDesc}</p>
+                      </div>
+                      <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                        <span className="text-[11px] text-muted-foreground">{tx.dailyHighScore}: <strong className="text-foreground">{quizHighScoreDaily}/4</strong></span>
+                        <span className="text-[11px] font-bold text-primary inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -715,7 +979,7 @@ export function EdukasiSection({ lang }: Props) {
 
                   <div className="mb-6 p-5 rounded-2xl bg-primary/5 border border-primary/15">
                     <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold uppercase text-primary mb-2">
-                      {quizCategory === 'tradition' ? tx.catTradition : tx.catEcology}
+                      {quizCategory === 'tradition' ? tx.catTradition : quizCategory === 'ecology' ? tx.catEcology : tx.catDaily}
                     </span>
                     <p className="text-foreground text-sm font-semibold leading-relaxed">{lang === 'id' ? q.q : q.qEn}</p>
                   </div>
@@ -878,6 +1142,35 @@ export function EdukasiSection({ lang }: Props) {
                     </button>
                   </div>
 
+                  {/* Leaderboard Submission Form */}
+                  <div className="max-w-xs mx-auto mb-8 p-4 rounded-2xl bg-muted/40 border border-border">
+                    <h4 className="text-xs font-bold text-foreground mb-2 flex items-center justify-center gap-1.5">
+                      🏆 Submit Skor ke Leaderboard
+                    </h4>
+                    {isSubmitted ? (
+                      <p className="text-[11px] text-green-600 dark:text-green-400 font-semibold">
+                        ✅ {tx.submittedSuccess}
+                      </p>
+                    ) : (
+                      <form onSubmit={handleSubmitLeaderboard} className="flex gap-2">
+                        <input
+                          type="text"
+                          required
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          placeholder={tx.submitNamePlaceholder}
+                          className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                        />
+                        <button
+                          type="submit"
+                          className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-semibold text-[11px] hover:opacity-90 transition-all shadow-sm"
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    )}
+                  </div>
+
                   {/* Review Answers for completed state */}
                   <div className="border-t border-border pt-6 text-left max-w-xl mx-auto">
                     <h4 className="text-xs font-bold text-foreground mb-4 inline-flex items-center gap-1.5 uppercase tracking-wider">
@@ -918,55 +1211,114 @@ export function EdukasiSection({ lang }: Props) {
             </div>
           </motion.div>
 
-          {/* Badges Collection Dashboard */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="bg-card border border-border rounded-3xl p-6 shadow-sm flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center gap-2 mb-1 border-b border-border pb-4">
-                <Trophy className="w-5.5 h-5.5 text-amber-500" />
-                <div>
-                  <h3 className="text-foreground text-base font-bold">{tx.badgeTitle}</h3>
-                  <p className="text-muted-foreground text-xs leading-none mt-0.5">{tx.badgeSub}</p>
+          {/* Badges Collection & Leaderboard Sidebar */}
+          <div className="space-y-6">
+            {/* Badges Collection Dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 }}
+              className="bg-card border border-border rounded-3xl p-6 shadow-sm flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-1 border-b border-border pb-4">
+                  <Trophy className="w-5.5 h-5.5 text-amber-500" />
+                  <div>
+                    <h3 className="text-foreground text-base font-bold">{tx.badgeTitle}</h3>
+                    <p className="text-muted-foreground text-xs leading-none mt-0.5">{tx.badgeSub}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 mt-5">
+                  {dynamicBadges.map(badge => (
+                    <motion.div
+                      key={badge.id}
+                      whileHover={{ x: 4 }}
+                      className={`flex items-center gap-3.5 p-3.5 rounded-2xl border-2 transition-all shadow-sm ${
+                        badge.earned 
+                          ? `${badge.color} border-current/20` 
+                          : 'border-border bg-muted/20 opacity-45'
+                      }`}
+                    >
+                      <div className={`text-3xl filter transition-transform ${badge.earned ? 'drop-shadow-md scale-110' : 'grayscale'}`}>
+                        {badge.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-xs font-bold truncate ${badge.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+                          {lang === 'id' ? badge.name : badge.nameEn}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground truncate">{lang === 'id' ? badge.desc : badge.descEn}</div>
+                      </div>
+                      <div>
+                        {badge.earned ? (
+                          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                        ) : (
+                          <div className="w-4.5 h-4.5 rounded-full border border-border/80 flex items-center justify-center text-[10px] text-muted-foreground/50">🔒</div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
+            </motion.div>
 
-              <div className="space-y-3 mt-5">
-                {dynamicBadges.map(badge => (
-                  <motion.div
-                    key={badge.id}
-                    whileHover={{ x: 4 }}
-                    className={`flex items-center gap-3.5 p-3.5 rounded-2xl border-2 transition-all shadow-sm ${
-                      badge.earned 
-                        ? `${badge.color} border-current/20` 
-                        : 'border-border bg-muted/20 opacity-45'
-                    }`}
-                  >
-                    <div className={`text-3xl filter transition-transform ${badge.earned ? 'drop-shadow-md scale-110' : 'grayscale'}`}>
-                      {badge.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className={`text-xs font-bold truncate ${badge.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        {lang === 'id' ? badge.name : badge.nameEn}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground truncate">{lang === 'id' ? badge.desc : badge.descEn}</div>
-                    </div>
-                    <div>
-                      {badge.earned ? (
-                        <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                      ) : (
-                        <div className="w-4.5 h-4.5 rounded-full border border-border/80 flex items-center justify-center text-[10px] text-muted-foreground/50">🔒</div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+            {/* Leaderboard Dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-card border border-border rounded-3xl p-6 shadow-sm flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-1 border-b border-border pb-4">
+                  <Award className="w-5.5 h-5.5 text-primary" />
+                  <div>
+                    <h3 className="text-foreground text-base font-bold">{tx.leaderboardTitle}</h3>
+                    <p className="text-muted-foreground text-xs leading-none mt-0.5">{tx.leaderboardSub}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5 mt-5">
+                  {leaderboard.map((entry, idx) => {
+                    const placeColor = 
+                      idx === 0 ? 'bg-amber-500 text-white font-extrabold shadow-sm' :
+                      idx === 1 ? 'bg-slate-400 text-white font-extrabold shadow-sm' :
+                      idx === 2 ? 'bg-amber-700 text-white font-extrabold shadow-sm' :
+                      'bg-muted text-muted-foreground font-semibold';
+
+                    return (
+                      <motion.div
+                        key={idx}
+                        whileHover={{ scale: 1.01 }}
+                        className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                          entry.isUser 
+                            ? 'border-primary bg-primary/5 shadow-sm ring-1 ring-primary/20' 
+                            : 'border-border bg-card'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${placeColor}`}>
+                            {idx + 1}
+                          </div>
+                          <div>
+                            <div className={`text-xs ${entry.isUser ? 'font-bold text-primary' : 'font-semibold text-foreground'}`}>
+                              {entry.name} {entry.isUser && <span className="text-[10px] font-normal text-muted-foreground">(Kamu)</span>}
+                            </div>
+                            <div className="text-[10px] text-muted-foreground">{entry.badgeCount} Lencana</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs font-bold text-foreground">{entry.score} pts</div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Interactive 7 Day Challenge & Progress */}
@@ -1090,6 +1442,76 @@ export function EdukasiSection({ lang }: Props) {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* AI Eco-Coach Panel */}
+            <div className="mt-8 border-t border-border pt-6">
+              <div className="flex items-center gap-2.5 mb-4">
+                <Sparkles className="w-5.5 h-5.5 text-primary animate-pulse" />
+                <div>
+                  <h4 className="text-foreground text-sm font-bold leading-tight">{tx.aiCoachTitle}</h4>
+                  <p className="text-muted-foreground text-xs">{tx.aiCoachSub}</p>
+                </div>
+              </div>
+
+              {completedDays.length === 0 ? (
+                <div className="p-4 rounded-2xl bg-muted/30 border border-border text-center text-xs text-muted-foreground">
+                  {tx.aiCoachEmpty}
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-3 gap-6 items-stretch">
+                  {/* Left Impact Statistics */}
+                  <div className="md:col-span-1 p-4 rounded-2xl bg-muted/40 border border-border flex flex-col justify-around gap-2 text-xs">
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                      Estimasi Dampak Lingkungan
+                    </div>
+                    {ecoCoachImpact.co2Saved > 0 && (
+                      <div className="flex justify-between items-center py-1 border-b border-border/40">
+                        <span className="text-muted-foreground">Emisi CO2 Dikurangi:</span>
+                        <span className="font-bold text-foreground">{ecoCoachImpact.co2Saved} kg</span>
+                      </div>
+                    )}
+                    {ecoCoachImpact.waterSaved > 0 && (
+                      <div className="flex justify-between items-center py-1 border-b border-border/40">
+                        <span className="text-muted-foreground">Air Bersih Dihemat:</span>
+                        <span className="font-bold text-foreground">{ecoCoachImpact.waterSaved} L</span>
+                      </div>
+                    )}
+                    {ecoCoachImpact.plasticSaved > 0 && (
+                      <div className="flex justify-between items-center py-1 border-b border-border/40">
+                        <span className="text-muted-foreground">Sampah Plastik Dikurangi:</span>
+                        <span className="font-bold text-foreground">{ecoCoachImpact.plasticSaved} kg</span>
+                      </div>
+                    )}
+                    {ecoCoachImpact.communityCount > 0 && (
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-muted-foreground">Aksi Komunitas:</span>
+                        <span className="font-bold text-foreground">Saling Berbagi</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Coach Analysis Feedback */}
+                  <div className="md:col-span-2 p-5 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col justify-between">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary mb-2 uppercase">
+                        {tx.aiCoachFeedback}
+                      </div>
+                      <p className="text-xs text-foreground leading-relaxed">
+                        {completedDays.length === 7 ? (
+                          lang === 'id' 
+                            ? 'Luar biasa! Kamu telah menyelesaikan seluruh rangkaian tantangan 7 hari. Kamu tidak hanya mempelajari teori kearifan lokal, melainkan mempraktikkannya langsung. Aksi nyata ini menunjukkan pemahaman mendalam tentang Pikukuh (hukum adat pelestarian) di era modern. Kamu layak menyandang gelar Duta Pelestari!'
+                            : 'Incredible! You have completed the entire 7-day challenge. You did not just study local wisdom, you practiced it in the real world. This direct action demonstrates a deep understanding of Pikukuh (preservation customary law) in the modern era. You truly deserve the Eco Ambassador title!'
+                        ) : (
+                          lang === 'id'
+                            ? `Eco-Coach menilai kamu sudah memulai langkah pelestarian yang baik dengan menyelesaikan ${completedDays.length} tantangan. Kombinasi perkiraan reduksi plastik, air, dan emisi karbon berdampak langsung pada kelangsungan ekosistem. Teruskan untuk membuka status Duta Pelestari!`
+                            : `Eco-Coach evaluates that you have made a great start towards preservation by completing ${completedDays.length} challenges. Combining estimated reductions in plastic, water, and carbon footprint directly impacts local ecosystems. Keep going to unlock the Eco Ambassador title!`
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
