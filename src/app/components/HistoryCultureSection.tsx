@@ -1,15 +1,10 @@
 import { type CSSProperties, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  BookOpen,
-  Brain,
   ChevronRight,
-  Clock,
-  Leaf,
   MapPin,
   Search,
   Sparkles,
-  Target,
   X,
 } from 'lucide-react';
 
@@ -59,9 +54,6 @@ const translations = {
     didYouKnow: 'Did You Know?',
     progress: 'Progress Explore',
     badge: 'Badge',
-    quiz: 'Quiz Ringan',
-    correct: 'Benar. Keren, kamu makin peka budaya.',
-    wrong: 'Belum tepat. Coba lihat lagi petunjuk di card.',
     noResults: 'Tidak ada hasil ditemukan. Coba ubah filter atau pencarian Anda.',
   },
   en: {
@@ -79,9 +71,6 @@ const translations = {
     didYouKnow: 'Did You Know?',
     progress: 'Explore Progress',
     badge: 'Badge',
-    quiz: 'Quick Quiz',
-    correct: 'Correct. Nice cultural instinct.',
-    wrong: 'Not quite. Check the card clue again.',
     noResults: 'No results found. Try changing your search or filters.',
   },
 };
@@ -96,6 +85,18 @@ const imageByRegion: Record<Region, string> = {
   Papua: 'https://images.unsplash.com/photo-1529400971008-f566de0e6dfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=900&q=80',
 };
 
+const realCultureImages: Record<string, string> = {
+  aceh: 'https://commons.wikimedia.org/wiki/Special:FilePath/Saman%20dance%20%28Aceh%29.jpg',
+  gayo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gayo%20Wedding.JPG',
+  alas: 'https://commons.wikimedia.org/wiki/Special:FilePath/Adat%20Alas.jpg',
+};
+
+function getCultureImage(card: CultureCard) {
+  if (realCultureImages[card.id]) return realCultureImages[card.id];
+  if (/^https?:\/\//.test(card.image)) return card.image;
+  return imageByRegion[card.region];
+}
+
 const cultureCards: CultureCard[] = [
   {
     id: 'aceh',
@@ -105,7 +106,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Islam kuat dan Tari Saman',
     funFact: 'Tari Saman bisa terlihat seperti gelombang karena penarinya bergerak sangat kompak.',
-    image: "Professional documentary photograph of a dynamic Saman dance performance in Aceh, Indonesia. A tight row of young Acehnese men sitting closely together, wearing traditional black and gold intricate outfits with Gayo patterns. They are performing rapid synchronized hand and body movements, creating a wave-like effect. Strong rhythmic expression, focus on togetherness. Background of an old traditional wooden building. Cinematic lighting, high resolution, National Geographic style.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Saman%20dance%20%28Aceh%29.jpg',
     history: 'Aceh lama dikenal sebagai gerbang perdagangan dan penyebaran Islam di Nusantara. Dari pelabuhan, ulama, pedagang, dan masyarakat bertemu lalu membentuk budaya yang tegas sekaligus hangat.',
     tradition: 'Tari Saman, adat meugang, dan tradisi musyawarah membuat kebersamaan terasa kuat dalam kehidupan sehari-hari.',
     wisdom: 'Masyarakat Aceh mengajarkan disiplin, hormat pada ilmu, dan keberanian menjaga identitas.',
@@ -120,11 +121,11 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Kopi dunia dan seni tari',
     funFact: 'Kopi Gayo terkenal sampai luar negeri karena aroma dan cita rasanya khas dataran tinggi.',
-    image: "A detailed documentary photograph taken in the Takengon highlands, Gayo, Aceh. A local farmer with a cheerful expression wearing traditional textile headwear and clothing is harvesting ripe red coffee cherries in a lush plantation. Blurred background of other farmers. Rolling mist covering mountains in the distance, cool palette, natural daylight, 8k.",
-    history: 'Orang Gayo tumbuh di wilayah pegunungan yang sejuk. Alam, kebun kopi, dan seni lisan menjadi bagian penting dari cerita hidup mereka.',
-    tradition: 'Didong, tari tradisional, dan budaya bertani kopi menjadi wajah budaya Gayo yang mudah dikenali.',
-    wisdom: 'Kerja tekun dan menjaga tanah subur adalah pelajaran besar dari masyarakat Gayo.',
-    education: 'Budaya Gayo menunjukkan bahwa komoditas lokal bisa menjadi kebanggaan dunia.',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gayo%20Wedding.JPG',
+    history: 'Orang Gayo hidup di dataran tinggi Aceh Tengah, Bener Meriah, dan Gayo Lues. Lanskap pegunungan, danau, kebun kopi, serta tradisi tutur membentuk masyarakat yang kuat dalam kerja kolektif dan ingatan lisan.',
+    tradition: 'Didong, Saman, kerawang Gayo, kenduri kampung, dan budaya bertani kopi menjadi ruang tempat syair, nasihat, humor, dan kritik sosial diwariskan.',
+    wisdom: 'Tanah subur dipandang sebagai titipan yang harus dirawat lewat kerja tekun, pengaturan musim, dan hubungan saling bantu antarpetani.',
+    education: 'Gayo memperlihatkan bahwa komoditas global seperti kopi tetap punya akar lokal: bahasa, tanah, ritme kerja, dan martabat petani.',
   },
   {
     id: 'alas',
@@ -134,11 +135,11 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Adat kuat dan agraris',
     funFact: 'Kehidupan agraris membuat kalender adat Alas dekat dengan musim tanam dan panen.',
-    image: "A vibrant landscape photo of the Alas Valley in Southeast Aceh, Indonesia, during the rice harvesting season. Local Alas people, dressed in modest traditional agrarian clothes, are working together ('gotong royong') in the paddies. In the background is a traditional Alas wooden house with its unique architecture, surrounded by lush green hills. Golden hour lighting, peaceful atmosphere, cinematic composition.",
-    history: 'Suku Alas hidup di lembah subur dan membangun tradisi yang dekat dengan pertanian. Adat menjadi cara menjaga hubungan antarwarga.',
-    tradition: 'Upacara adat, bahasa Alas, dan gotong royong sawah sering menjadi pusat kegiatan sosial.',
-    wisdom: 'Mereka mengajarkan bahwa pangan, keluarga, dan kerja bersama adalah fondasi komunitas.',
-    education: 'Pelajar dapat melihat bagaimana budaya agraris melatih tanggung jawab terhadap alam.',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Adat%20Alas.jpg',
+    history: 'Suku Alas berakar di Lembah Alas, Aceh Tenggara, kawasan yang dilalui sungai, sawah, kebun, dan jalur pertemuan masyarakat pedalaman Sumatera. Identitasnya dibangun lewat bahasa Alas, marga, adat kampung, dan hubungan erat dengan tanah garapan.',
+    tradition: 'Mesikhat, bangsi Alas, kenduri, adat perkawinan, dan kerja sawah menjadi bagian dari cara masyarakat menandai peristiwa hidup: kelahiran, pernikahan, panen, musyawarah, dan penyelesaian sengketa.',
+    wisdom: 'Pangan, keluarga, dan kerja bersama tidak diperlakukan sebagai tema romantis, tetapi sebagai sistem sosial: siapa menanam, siapa membantu, siapa menjaga air, dan siapa bertanggung jawab ketika kampung menghadapi krisis.',
+    education: 'Budaya Alas membantu pelajar membaca agraris bukan sekadar pekerjaan tani, melainkan pengetahuan tentang musim, air, solidaritas, dan tata hidup komunitas.',
   },
   {
     id: 'batak-toba',
@@ -148,7 +149,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Danau Toba dan ulos',
     funFact: 'Ulos bukan sekadar kain, tetapi simbol doa, kasih, dan ikatan keluarga.',
-    image: "Portrait quality photo of a Batak Toba family dressed in fine, handwoven traditional Ulos textiles, standing proudly with the serene Lake Toba and the iconic Samosir Island in the background. The father wears an Ulos Ragidup, the mother an Ulos Sadum. Behind them is a traditional Bolon house with intricate carvings. Soft sunlight, deep focus on textile textures, realistic, candid moment, highly detailed.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lake_Toba%2C_North_Sumatra%2C_Indonesia.jpg',
     history: 'Budaya Batak Toba berkembang di sekitar Danau Toba. Marga, lagu, dan adat membuat hubungan keluarga terasa sangat penting.',
     tradition: 'Ulos, gondang, tortor, dan upacara adat keluarga menjadi bagian besar dari identitas Batak Toba.',
     wisdom: 'Nilai hormat kepada leluhur dan saling mendukung dalam keluarga besar sangat kuat.',
@@ -163,7 +164,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Sistem marga unik',
     funFact: 'Marga dalam masyarakat Karo membantu orang memahami hubungan keluarga dan aturan adat.',
-    image: "An interior photograph of a traditional Karo house, Siwaluh Juhar, in the highlands of North Sumatra. A group of Batak Karo women in traditional clothing sit together, weaving or preparing for 'Kerja Tahun' (annual harvest festival). Warm light streaming through small windows, highlighting the aged timber structure and colorful textiles. Authentic, documentary style, rich textures, high detail.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Rumah_Adat_Batak.jpg',
     history: 'Batak Karo hidup di dataran tinggi dengan tradisi kekerabatan yang rapi. Setiap upacara adat menunjukkan posisi keluarga dan peran sosial.',
     tradition: 'Kerja tahun, rumah adat Karo, dan musik tradisional hadir dalam banyak acara komunitas.',
     wisdom: 'Karo mengajarkan pentingnya tahu asal-usul dan menjaga sopan santun dalam keluarga besar.',
@@ -177,7 +178,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Musik gordang',
     funFact: 'Gordang sambilan dimainkan beramai-ramai dan menghasilkan suara yang megah.',
-    image: "A dynamic photo of nine large drums (Gordang Sambilan) being played by a group of Mandailing men in vibrant red and black traditional attire in the Mandailing Natal regency. They are performing outdoors with a backdrop of rugged mountains and palm trees at dusk. Majestic and powerful atmosphere, cinematic lighting, realistic, high resolution.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mandailing_culture.jpg',
     history: 'Mandailing memiliki tradisi adat, sastra lisan, dan musik yang kuat. Budayanya tumbuh di antara pegunungan, kampung, dan jalur perantauan.',
     tradition: 'Gordang sambilan, upacara adat, dan bahasa Mandailing menjadi ciri khas yang hidup sampai sekarang.',
     wisdom: 'Masyarakat Mandailing menekankan kehormatan, pendidikan, dan solidaritas keluarga.',
@@ -191,7 +192,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Lompat batu',
     funFact: 'Tradisi lompat batu dahulu menjadi simbol kedewasaan dan keberanian pemuda.',
-    image: "An action photograph capturing a young Nias warrior performing Fahombo (stone jumping). He is flying over a large pile of stacked traditional stones. He wears traditional warrior clothing and a helmet. Below him, other villagers watch from the steps of massive traditional wooden Omo Hada houses in a stone-paved village square, Nias Island, Indonesia. Clear daylight, dynamic composition, realistic, highly detailed textures.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Nias_Fahombo.jpg',
     history: 'Nias memiliki desa adat batu, rumah panggung besar, dan tradisi yang kuat. Pulau ini menyimpan kisah keberanian dan ketahanan masyarakat pesisir.',
     tradition: 'Fahombo atau lompat batu, tarian perang, dan arsitektur omo hada menjadi ikon Nias.',
     wisdom: 'Keberanian di Nias bukan hanya soal fisik, tetapi juga kesiapan bertanggung jawab.',
@@ -205,7 +206,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Matrilineal dan Rumah Gadang',
     funFact: 'Minangkabau dikenal sebagai salah satu komunitas matrilineal terbesar di dunia.',
-    image: "Majestic photograph of a magnificent Minangkabau Rumah Gadang traditional house with multiple spired roofs resembling buffalo horns, located in West Sumatra, Indonesia, at sunset. A group of women in vibrant traditional silk clothing ('baju kurung') and ornate gold headpieces ('suntiang') stand gracefully on the stairs. Golden hour lighting, architectural wonder, rich colors, National Geographic style, ultra-realistic, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Rumah_Gadang.jpg',
     history: 'Minangkabau tumbuh dengan adat yang memberi peran penting pada garis ibu. Rumah Gadang menjadi simbol keluarga besar dan tempat nilai adat diwariskan.',
     tradition: 'Randai, silek, kuliner, rumah gadang, dan tradisi merantau membuat budaya Minang mudah dikenal.',
     wisdom: 'Adat mengajarkan musyawarah, kecakapan berdagang, dan keberanian mencari pengalaman.',
@@ -220,7 +221,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Tato tradisional',
     funFact: 'Tato Mentawai bisa menunjukkan perjalanan hidup, status, dan hubungan dengan alam.',
-    image: "Intimate portrait photograph of an elderly Mentawai Sikerei (shaman) covered in intricate traditional tattoos (Titi), sitting inside his Uma (clan longhouse) in the Mentawai rainforest. He is smoking a traditional tobacco and wearing bead necklaces and headwear made of feathers and leaves. Warm, natural daylight filters through the thatched roof, highlighting his wrinkled skin and dark tattoos. Authentic, high detail, cinematic lighting, photorealistic.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mentawai_Rainforest.jpg',
     history: 'Mentawai menjaga tradisi tua yang dekat dengan hutan, sungai, dan roh leluhur. Rumah uma menjadi pusat kehidupan bersama.',
     tradition: 'Tato titi, sikerei, tarian, dan obat alam menjadi bagian penting budaya Mentawai.',
     wisdom: 'Alam diperlakukan sebagai sahabat hidup, bukan sekadar sumber bahan.',
@@ -234,7 +235,7 @@ const cultureCards: CultureCard[] = [
     category: 'Maritim',
     culture: 'Budaya pesisir',
     funFact: 'Pantun Melayu sering dipakai untuk menyampaikan nasihat dengan cara halus dan indah.',
-    image: "An elegant photograph of a Zapin dance performance on a traditional wooden stage at the edge of a historical Malay coastal town at twilight. Male and female dancers wear detailed silk Malay attire and headgear. The background features traditional stilt houses over the water and a bustling small port. Soft evening lighting, artistic composition, realistic, high detail.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Zapin_dance.jpg',
     history: 'Melayu berkembang di wilayah sungai dan pesisir yang ramai perdagangan. Bahasa, sastra, dan adatnya memengaruhi banyak daerah Nusantara.',
     tradition: 'Pantun, zapin, adat bersendi syarak, dan budaya pelabuhan menjadi ciri Melayu.',
     wisdom: 'Budi bahasa dan sopan santun menjadi nilai utama dalam pergaulan.',
@@ -248,7 +249,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Suku tua',
     funFact: 'Aksara Rejang atau Kaganga adalah salah satu warisan tulis penting di Sumatera.',
-    image: "Close-up, highly detailed photograph of an aged, traditional Rejang bamboo manuscript inscribed with the ancient Kaganga script. The manuscript rests on a piece of woven textile inside a traditional wooden house. Warm, natural light spotlights the carvings and the delicate texture of the bamboo and text. Authentic, rich texture, high resolution, realistic.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bengkulu_Rejang_Culture.jpg',
     history: 'Rejang dikenal sebagai salah satu suku tua di Bengkulu. Mereka memiliki bahasa dan aksara yang menunjukkan tradisi intelektual lokal.',
     tradition: 'Aksara Kaganga, adat desa, dan seni lisan menjadi penanda budaya Rejang.',
     wisdom: 'Menjaga bahasa berarti menjaga cara berpikir sebuah masyarakat.',
@@ -262,7 +263,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Pepadun dan Saibatin',
     funFact: 'Lampung memiliki kain tapis yang dibuat dengan sulaman benang emas.',
-    image: "A close-up portrait of a Lampung woman wearing a traditional Tapis cloth wrapped as a sarong and a magnificent golden Siger headpiece, adorned with jewelry. The focus is on the intricate, shimmering gold thread embroidery (Tapis) and the reflective Siger against a softly blurred traditional wooden interior. Professional fashion photography style, high detail, soft cinematic lighting, ultra-realistic, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lampung_Tapis.jpg',
     history: 'Budaya Lampung tumbuh dari dua kelompok adat besar: Pepadun dan Saibatin. Keduanya memiliki tata adat dan simbol kehormatan masing-masing.',
     tradition: 'Kain tapis, siger, upacara adat, dan bahasa Lampung memperkaya identitas daerah.',
     wisdom: 'Piil pesenggiri mengajarkan harga diri, keramahan, dan tanggung jawab sosial.',
@@ -276,7 +277,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Budaya keraton',
     funFact: 'Rumah joglo punya filosofi tentang keseimbangan manusia, alam, dan Sang Pencipta.',
-    image: "A peaceful photograph capturing the interior of a traditional Javanese Joglo wooden house during a Gamelan music session in Yogyakarta, Indonesia. Musicians in traditional beskap clothing and blangkon hats sit on woven mats playing aged bronze instruments. A Wayang Kulit shadow puppet is visible in the background. Soft, diffused natural light, warm ambiance, highly detailed textures of wood and cloth, National Geographic style.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gamelan_Indonesia.jpg',
     history: 'Budaya Jawa berkembang lewat kerajaan, pesantren, desa, dan kota. Wayang, batik, dan keraton menyimpan cerita tentang etika hidup.',
     tradition: 'Wayang, gamelan, batik, sekaten, dan tata krama menjadi bagian penting budaya Jawa.',
     wisdom: 'Rukun, tepa selira, dan eling mengajarkan hidup tenang serta menghargai orang lain.',
@@ -291,7 +292,7 @@ const cultureCards: CultureCard[] = [
     category: 'Pegunungan',
     culture: 'Ramah dan angklung',
     funFact: 'Angklung mengajarkan harmoni karena satu pemain biasanya memegang nada berbeda.',
-    image: "A joyful portrait of several Sundanese children in traditional cotton clothing playing Angklung instruments together, with smiling faces, while sitting on a bamboo structure next to lush terraced rice fields in West Java, Indonesia. Behind them, rolling blue mountains and palm trees are visible under a clear sky. Bright natural daylight, vibrant colors, authentic, photorealistic, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Angklung_Sunda.jpg',
     history: 'Sunda tumbuh di wilayah pegunungan, sawah, dan kota. Budayanya dikenal ramah, musikal, dan dekat dengan alam.',
     tradition: 'Angklung, jaipongan, seren taun, dan bahasa Sunda menjadi identitas yang hangat.',
     wisdom: 'Silih asah, silih asih, silih asuh mengajarkan saling mengembangkan, menyayangi, dan menjaga.',
@@ -305,7 +306,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Akulturasi',
     funFact: 'Ondel-ondel dulu dipercaya sebagai penjaga kampung, kini menjadi ikon budaya Jakarta.',
-    image: "A vibrant photograph capturing a pair of towering Ondel-ondel (traditional Betawi effigies) dancing and moving through a bustling, modern street market in Jakarta, Indonesia. They are surrounded by crowds, street food stalls, and the juxtaposition of colorful traditional elements against modern city buildings in the background. Lively atmosphere, realistic street photography style, high dynamic range, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ondel-ondel.jpg',
     history: 'Betawi lahir dari pertemuan banyak bangsa dan suku di Batavia. Karena itu budayanya terasa lincah, terbuka, dan penuh campuran.',
     tradition: 'Ondel-ondel, lenong, tanjidor, kerak telor, dan palang pintu menjadi ciri Betawi.',
     wisdom: 'Perbedaan bisa menjadi identitas baru yang menyenangkan jika dirawat dengan saling hormat.',
@@ -320,7 +321,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Hidup tanpa teknologi modern',
     funFact: 'Baduy Dalam menjaga aturan adat ketat, termasuk pembatasan listrik dan kendaraan.',
-    image: "A documentary photograph taken in a Baduy village, Lebak, Banten, Indonesia. An elderly Baduy woman in simple, handwoven dark blue clothing and a white headband sits on a wooden porch, focused on hand-weaving textile using a traditional loom. Behind her are simple wooden and bamboo stilt houses with thatched roofs amidst lush forest. No electricity or modern items visible. Soft natural daylight, tranquil atmosphere, authentic, photorealistic, high resolution.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Baduy_village.jpg',
     history: 'Baduy mempertahankan cara hidup sederhana untuk menjaga hutan dan adat. Pilihan itu membuat mereka menjadi contoh kuat tentang konsistensi budaya.',
     tradition: 'Tenun, berjalan kaki, pikukuh adat, dan gotong royong menjadi bagian keseharian Baduy.',
     wisdom: 'Kesederhanaan dapat menjadi cara menjaga alam dan menjaga diri dari hidup berlebihan.',
@@ -334,7 +335,7 @@ const cultureCards: CultureCard[] = [
     category: 'Ritual',
     culture: 'Ritual Kasada',
     funFact: 'Saat Kasada, masyarakat Tengger membawa sesaji ke kawasan kawah Bromo.',
-    image: "A dynamic photograph capturing a large group of Tengger people clad in warm traditional clothing and blankets carrying offerings (sesaji) along the misty edge of the Mount Bromo volcanic crater in East Java, Indonesia, during the Yadnya Kasada festival. In the background, active smoke rises from the crater and other mountains in the caldera under a dramatic, cloudy sky at dawn. Epic scale, cinematic lighting, highly detailed textures, photorealistic.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Bromo.jpg',
     history: 'Tengger hidup di kawasan pegunungan Bromo. Cerita leluhur dan alam vulkanik membentuk ritual yang khas.',
     tradition: 'Yadnya Kasada, pakaian hangat khas pegunungan, dan pertanian lereng gunung menjadi ciri Tengger.',
     wisdom: 'Mereka mengajarkan rasa syukur kepada alam yang keras tetapi memberi kehidupan.',
@@ -348,7 +349,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Budaya Banyuwangi',
     funFact: 'Gandrung Banyuwangi menjadi tarian ikonik yang penuh energi dan warna.',
-    image: "Dynamic photograph of a Gandrung Banyuwangi dancer performing with intense expression on a traditional stage. She wears a vibrant red costume with detailed gold embroidery and a specific Omprok headdress. She holds a fan and moves energetically. The background features other musicians with Gamelan instruments inside a traditional wooden structure. High detail, realistic texture, vibrant colors, cinematic lighting, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gandrung_Banyuwangi.jpg',
     history: 'Osing adalah masyarakat asli Banyuwangi yang memiliki bahasa, musik, dan ritual khas. Budayanya terasa kuat di ujung timur Jawa.',
     tradition: 'Tari Gandrung, Seblang, bahasa Osing, dan festival budaya menjadi identitas Osing.',
     wisdom: 'Bangga pada bahasa daerah membuat budaya tetap hidup di tengah perubahan.',
@@ -362,7 +363,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Karapan sapi',
     funFact: 'Karapan sapi bukan hanya lomba cepat, tetapi juga gengsi, seni hias, dan pesta rakyat.',
-    image: "Action-packed photograph of a Karapan Sapi (bull racing) event in Madura, Indonesia. Two powerful bulls are racing at high speed across a muddy field, guided by a young jockey in colorful traditional clothing standing on a wooden sled. Dust and mud fly everywhere. Spectators watch from the sidelines. Bright sunny day, dynamic composition, realistic, high dynamic range, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Karapan_Sapi.jpg',
     history: 'Madura dikenal dengan masyarakat yang tangguh, pekerja keras, dan dekat dengan budaya pesisir. Tradisi rakyatnya meriah dan penuh semangat.',
     tradition: 'Karapan sapi, saronen, batik Madura, dan tradisi merantau menjadi ciri khas.',
     wisdom: 'Kerja keras dan keberanian mengambil tantangan menjadi nilai penting.',
@@ -376,7 +377,7 @@ const cultureCards: CultureCard[] = [
     category: 'Urban / Akulturasi',
     culture: 'Budaya campuran',
     funFact: 'Batik mega mendung Cirebon terinspirasi bentuk awan dan memiliki makna keteduhan.',
-    image: "Portrait of a Cirebon artisan woman in a traditional batik workshop, meticulously applying wax with a canting to a cloth featuring the iconic blue and white Megamendung cloud patterns. She is surrounded by other batik cloths. Background shows a traditional wooden house interior. Soft daylight, focus on texture and artistry, authentic, realistic, National Geographic style.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Batik_Cirebon.jpg',
     history: 'Cirebon berada di jalur pesisir yang ramai. Pengaruh Jawa, Sunda, Islam, Tionghoa, dan perdagangan membuat budayanya kaya campuran.',
     tradition: 'Batik mega mendung, keraton, tari topeng, dan tradisi pesisir menjadi identitas Cirebon.',
     wisdom: 'Pertemuan budaya bisa melahirkan seni baru yang indah.',
@@ -390,7 +391,7 @@ const cultureCards: CultureCard[] = [
     category: 'Tradisional',
     culture: 'Hutan dan rumah panjang',
     funFact: 'Rumah panjang Dayak dapat menjadi tempat tinggal banyak keluarga sekaligus.',
-    image: "A wide-angle documentary photograph of a massive Dayak Betang (longhouse) situated deep within the lush rainforest of Kalimantan, Indonesia. Several Dayak elders in traditional clothing adorned with beads and feathers stand on the long wooden veranda. A slow-moving river flows nearby. Cinematic lighting with dappled sunlight through the canopy, majestic atmosphere, ultra-realistic, 8k.",
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Dayak_Longhouse.jpg',
     history: 'Dayak hidup erat dengan sungai dan hutan Kalimantan. Rumah panjang menjadi simbol kebersamaan dan perlindungan komunitas.',
     tradition: 'Tari Dayak, ukiran, mandau, tato, dan upacara adat hutan menjadi bagian identitasnya.',
     wisdom: 'Hutan dipandang sebagai ruang hidup yang harus dijaga untuk generasi berikutnya.',
@@ -847,6 +848,225 @@ const cultureStoryOverrides: Record<string, Partial<CultureStoryContent>> = {
     ],
     challenge: 'Coba prinsip Panglima Laot versi harian: ambil secukupnya dari alam. Hari ini, pilih makanan laut atau produk alam yang asalnya lebih bertanggung jawab.',
   },
+  gayo: {
+    ecoWisdom: 'Dataran Tinggi Gayo mengajarkan hubungan yang sangat konkret antara iklim mikro, hutan, air, dan kopi. Kualitas panen tidak hanya lahir dari varietas, tetapi dari cara kebun dijaga, naungan pohon dipertahankan, dan tanah tidak dipaksa bekerja di luar batasnya.',
+    artIdentity: 'Didong adalah arena tutur yang cerdas: kelompok seniman menyampaikan syair, nasihat, sejarah, humor, dan kritik sosial dalam ritme tepuk dan vokal. Kerawang Gayo pada busana adat menghadirkan identitas visual lewat pola yang rapi, padat, dan berwibawa.',
+    trivia: 'Kopi Gayo dikenal sebagai kopi arabika dataran tinggi; reputasinya tumbuh bersama kerja petani, koperasi, dan lanskap pegunungan Aceh.',
+    timeline: [
+      { era: 'Dataran tinggi', text: 'Permukiman Gayo berkembang di ruang pegunungan yang dekat dengan danau, hutan, dan lahan pertanian.' },
+      { era: 'Tradisi tutur', text: 'Didong dan Saman menjaga ingatan kolektif melalui syair, tubuh, tempo, dan dialog sosial.' },
+      { era: 'Kopi', text: 'Kebun kopi menghubungkan rumah tangga petani dengan pasar dunia tanpa memutus akar lokalnya.' },
+      { era: 'Kini', text: 'Gayo menjadi contoh bagaimana budaya, lanskap, dan ekonomi lokal bisa dibaca sebagai satu ekosistem.' },
+    ],
+    glossary: [
+      { term: 'Didong', meaning: 'Seni tutur dan vokal Gayo yang berisi syair, nasihat, humor, dan kritik sosial.' },
+      { term: 'Kerawang Gayo', meaning: 'Ragam hias khas Gayo yang sering hadir pada busana adat dan identitas visual masyarakat.' },
+      { term: 'Kopi Gayo', meaning: 'Kopi arabika dataran tinggi yang melekat dengan ekonomi dan lanskap budaya Gayo.' },
+    ],
+    challenge: 'Lacak asal satu produk yang kamu konsumsi hari ini. Kalau itu kopi, beras, atau rempah, cari tahu siapa komunitas yang bekerja di baliknya dan bagaimana lahannya dijaga.',
+  },
+  alas: {
+    ecoWisdom: 'Bagi masyarakat Alas, lembah, sungai, sawah, dan kebun adalah infrastruktur hidup. Kearifan ekologisnya tidak selalu muncul sebagai slogan konservasi, tetapi tampak dalam pembagian kerja, gotong royong, pengaturan air, pilihan tanaman, dan adat yang menjaga hubungan antar-keluarga.',
+    artIdentity: 'Mesikhat memberi identitas visual yang kuat lewat warna dan motif pada pakaian adat Alas. Bangsi Alas, bahasa daerah, serta prosesi adat perkawinan memperlihatkan budaya yang tumbuh dari ruang agraris namun tetap punya ekspresi artistik yang khas.',
+    trivia: 'Nama Alas berkaitan erat dengan Lembah Alas di Aceh Tenggara; ruang hidup ini membentuk bahasa, pertanian, musik, dan adat masyarakatnya.',
+    timeline: [
+      { era: 'Lembah Alas', text: 'Komunitas Alas tumbuh di Aceh Tenggara, dekat sungai, sawah, kebun, dan jalur pertemuan masyarakat pedalaman.' },
+      { era: 'Adat kampung', text: 'Marga, bahasa, kenduri, dan musyawarah menjadi cara menjaga relasi sosial agar konflik tidak merusak ikatan keluarga.' },
+      { era: 'Budaya agraris', text: 'Musim tanam, panen, gotong royong, dan pengaturan air membentuk ritme hidup sehari-hari.' },
+      { era: 'Kini', text: 'Mesikhat, bangsi Alas, dan adat perkawinan menjadi penanda identitas yang terus diperkenalkan ulang ke generasi muda.' },
+    ],
+    glossary: [
+      { term: 'Mesikhat', meaning: 'Busana dan ragam hias khas Alas yang dikenal melalui warna kuat serta motif adat.' },
+      { term: 'Bangsi Alas', meaning: 'Alat musik tiup bambu dari tradisi Alas yang hidup di Aceh Tenggara.' },
+      { term: 'Lembah Alas', meaning: 'Ruang geografis dan budaya utama masyarakat Alas, terkait erat dengan sungai, sawah, dan kampung.' },
+    ],
+    challenge: 'Ambil satu pelajaran dari budaya agraris Alas: rawat sumber yang membuat hidup berjalan. Hari ini bisa sesederhana menghemat air, membeli pangan lokal, atau tidak menyia-nyiakan makanan.',
+  },
+  'batak-toba': {
+    ecoWisdom: 'Danau Toba dalam mitologi Batak Toba bukan hanya fenomena geografis, tetapi pusat identitas spiritual dan sosial. Air danau, ikan, dan jalur transportasi membuat masyarakat mengerti saling ketergantungan antar-komunitas.',
+    artIdentity: 'Ulos adalah teks hidup: setiap ragam hias, warna, dan pola menceritakan doa, harapan, dan hubungan. Tari tortor menampilkan kerendahan hati dan hormat pada leluhur lewat gerak tubuh yang ritualik namun hangat.',
+    trivia: 'Ulos tidak diperjual-belikan sembarangan karena diandaikan sebagai pembawa doa dan kasih sayang. Ulos adalah hadiah yang mengandung tanggung jawab relasional.',
+    timeline: [
+      { era: 'Masyarakat danau', text: 'Kehidupan Batak Toba tumbuh di sekitar Danau Toba dengan sistem marga yang kuat dan hubungan keluarga yang hierarkis.' },
+      { era: 'Ulos & kenduri', text: 'Upacara adat keluarga menjadi ruang utama di mana ulos diberikan, musik dibunyikan, dan ikatan diperkuat.' },
+      { era: 'Gondang', text: 'Musik gondang sambilan menjadi bahasa emosi, syukur, dan doa kolektif dalam banyak acara.' },
+      { era: 'Kini', text: 'Ulos dan gondang tetap menjadi simbol identitas meski masyarakat Batak Toba tersebar di berbagai wilayah.' },
+    ],
+    glossary: [
+      { term: 'Ulos', meaning: 'Kain tenun adat Batak Toba yang membawa doa, kasih, dan ikatan keluarga.', pronunciation: 'oo-los' },
+      { term: 'Gondang', meaning: 'Musik tradisional Batak yang dimainkan dengan alat pukul dan mengisi acara upacara adat.' },
+      { term: 'Tortor', meaning: 'Tarian adat Batak Toba yang menampilkan hormat pada leluhur dan kerendahan hati.' },
+    ],
+    challenge: 'Pikirkan satu anggota keluarga yang kamu hormati. Ekspresikan rasa hormat itu bukan melalui barang, tetapi melalui waktu, percakapan, atau bantuan nyata.',
+  },
+  'batak-karo': {
+    ecoWisdom: 'Tanah Karo yang subur membuat masyarakat memahami hubungan timbal balik dengan alam: tanah yang diberi kerja berkualitas akan memberikan hasil. Sistem marga yang rapi juga membuat pengambilan keputusan tentang lahan sangat terstruktur.',
+    artIdentity: 'Rumah adat Karo (Siwaluh Juhar) memiliki tiang, kayu, dan ukiran yang menampilkan sistem marga dan stratifikasi sosial. Pakaian adat, terutama untuk perempuan, menggunakan kain songket dengan warna-warna berani yang menunjukkan status dan identitas marga.',
+    trivia: 'Marga dalam adat Karo bukan sekadar nama keluarga, tetapi sistem yang mengatur siapa boleh menikah siapa, peran dalam upacara, dan tanggung jawab sosial.',
+    timeline: [
+      { era: 'Dataran Karo', text: 'Permukiman Karo tumbuh di ketinggian sedang dengan lahan berbukit, perkebunan, dan sistem air yang baik.' },
+      { era: 'Sistem marga', text: 'Empat marga utama (Karo, Ginting, Sembiring, Tarigan) membentuk struktur sosial yang sangat teratur.' },
+      { era: 'Kerja tahun', text: 'Kerja Tahun adalah upacara panen yang melibatkan seluruh komunitas dan menjadi ajang merawat hubungan sosial.' },
+      { era: 'Kini', text: 'Sistem marga masih dipegang teguh meski kota modern makin dekat.' },
+    ],
+    glossary: [
+      { term: 'Marga', meaning: 'Garis keturunan dan sistem organisasi sosial dalam masyarakat Batak Karo.' },
+      { term: 'Siwaluh Juhar', meaning: 'Rumah adat Karo yang terdiri dari delapan ruang, mencerminkan sistem marga.' },
+      { term: 'Kerja Tahun', meaning: 'Upacara panen dan merawat hubungan sosial komunitas di Tanah Karo.' },
+    ],
+    challenge: 'Pelajari satu sistem sosial dalam komunitas tempat kamu tinggal. Bagaimana aturan tersebut menjaga ketertiban dan relasi?',
+  },
+  'batak-mandailing': {
+    ecoWisdom: 'Mandailing hidup di wilayah berbukit dengan sungai yang beberapa darinya cukup deras. Kehidupan agraris di lereng membuat masyarakat memahami risiko longsor dan pentingnya menjaga tutupan hutan.',
+    artIdentity: 'Gordang Sambilan dimainkan oleh sembilan musisi dengan tempo yang sangat presisi. Suara yang dihasilkan bukan hanya ritual, tetapi juga bentuk seni yang memukau. Pakaian adat Mandailing, terutama warna merah dan motif emas, menampilkan keberanian dan kecerahan.',
+    trivia: 'Seni musik Mandailing tidak hanya hidup dalam acara adat, tetapi juga menjadi kebanggaan komunitas yang ditampilkan di berbagai kesempatan besar.',
+    timeline: [
+      { era: 'Lereng bukit', text: 'Masyarakat Mandailing tersebar di wilayah berbukit dengan tradisi pertanian dan peternakan yang kuat.' },
+      { era: 'Sastra lisan', text: 'Tradisi tutur dan musik membawa sejarah, nasihat, dan nilai-nilai sosial dari generasi ke generasi.' },
+      { era: 'Gordang Sambilan', text: 'Alat musik pukul nine-piece menjadi simbol seni musik Mandailing yang presisi dan megah.' },
+      { era: 'Kini', text: 'Musik Mandailing dikenal lebih luas di tingkat nasional sebagai warisan budaya yang unik.' },
+    ],
+    glossary: [
+      { term: 'Gordang Sambilan', meaning: 'Alat musik tradisional Mandailing yang terdiri dari sembilan drum dengan suara yang kaya dan megah.', pronunciation: 'gor-dang sam-bi-lan' },
+      { term: 'Sirimba', meaning: 'Tarian tradisional Mandailing yang energik dan penuh emosi.' },
+    ],
+    challenge: 'Dengarkan musik tradisional dari daerah kamu atau daerah lain. Apa yang bisa kamu pahami tentang nilai budayanya dari musik tersebut?',
+  },
+  nias: {
+    ecoWisdom: 'Kehidupan di pulau Nias yang terisolasi mengajarkan kemandirian dan pemanfaatan sumber daya lokal dengan bijak. Desa adat batu dengan sistem pertanian tertentu menunjukkan adaptasi pada topografi dan tanah yang spesifik.',
+    artIdentity: 'Fahombo (lompat batu) adalah dramatisasi keberanian dan kedewasaan. Omo Hada (rumah adat besar) dengan arsitektur yang kokoh menampilkan nilai solidaritas dan perlindungan komunitas. Tarian perang mencerminkan sejarah panjang masyarakat yang tangguh.',
+    trivia: 'Lompat batu Fahombo dahulu adalah inisiasi pemuda menjelang pernikahan; sekarang lebih banyak dipraktikkan sebagai olahraga dan ikon budaya.',
+    timeline: [
+      { era: 'Pulau terisolasi', text: 'Pulau Nias yang jauh dari Sumatera besar membuat budaya berkembang dengan ciri khasnya sendiri.' },
+      { era: 'Fahombo', text: 'Tradisi lompat batu menjadi cara masyarakat menandai pertumbuhan, keberanian, dan tanggung jawab.' },
+      { era: 'Omo Hada', text: 'Rumah adat besar menjadi pusat komunitas, tempat musyawarah, dan simbol solidaritas.' },
+      { era: 'Kini', text: 'Fahombo dan budaya Nias menarik perhatian turis dan peneliti sebagai warisan budaya yang unik.' },
+    ],
+    glossary: [
+      { term: 'Fahombo', meaning: 'Lompat batu tradisional Nias yang menjadi simbol keberanian dan kedewasaan pemuda.', pronunciation: 'fa-hom-bo' },
+      { term: 'Omo Hada', meaning: 'Rumah adat besar Nias yang berfungsi sebagai pusat komunitas dan tempat berkumpul.' },
+    ],
+    challenge: 'Temukan satu tradisi yang menandai tahap pertumbuhan dalam budaya atau komunitas kamu. Apa maknanya bagi masyarakat?',
+  },
+  mentawai: {
+    ecoWisdom: 'Mentawai hidup dalam ekosistem hutan tropis yang sangat kompleks. Pengetahuan tentang tanaman obat, daging buruan, dan pemanfaatan sumber daya hutan hanya bisa bertahan jika hutan tetap utuh. Konsep Sikerei (dukun) memadukan spiritual dan pengetahuan ekologis.',
+    artIdentity: 'Tato titi (tato tradisional Mentawai) bukan sekadar dekorasi kulit, tetapi peta kehidupan, perjalanan, dan hubungan dengan roh. Rumah Uma adalah unit sosial tempat keluarga besar tinggal bersama dan berbagi sumber daya.',
+    trivia: 'Setiap tato di tubuh Mentawai menceritakan kisah: perjalanan, pertemuan dengan roh, atau pencapaian dalam hidup. Tato tidak bisa dibuat seketika, tetapi melalui proses panjang yang melibatkan Sikerei.',
+    timeline: [
+      { era: 'Pulau-pulau kecil', text: 'Kepulauan Mentawai yang kecil dan terisolasi menciptakan ekosistem unik dengan spesies flora dan fauna yang endemik.' },
+      { era: 'Cara hidup hutan', text: 'Masyarakat Mentawai menghuni hutan dengan sistem berburu dan meramu yang teratur sesuai musim.' },
+      { era: 'Tato & Sikerei', text: 'Seni tato dan peran Sikerei menjadi pusat kehidupan spiritual dan kesehatan masyarakat.' },
+      { era: 'Kini', text: 'Mentawai menghadapi tantangan: konversi hutan dan perubahan gaya hidup generasi muda.' },
+    ],
+    glossary: [
+      { term: 'Titi', meaning: 'Tato tradisional Mentawai yang menceritakan sejarah hidup dan hubungan spiritual.', pronunciation: 'ti-ti' },
+      { term: 'Sikerei', meaning: 'Pemimpin spiritual dan penyembuh dalam masyarakat Mentawai yang menggabungkan ritual dan pengetahuan obat.' },
+      { term: 'Uma', meaning: 'Rumah komunal Mentawai yang menampung keluarga besar dalam satu struktur besar.' },
+    ],
+    challenge: 'Pelajari satu tanda atau simbol dari budaya lokal kamu. Apa cerita di baliknya dan bagaimana hal itu dibuat?',
+  },
+  melayu: {
+    ecoWisdom: 'Budaya Melayu pesisir mengenal sistem musim angin yang mengatur kapan boleh berlayar dan kapan harus berlindung. Pengetahuan ini sangat penting untuk keselamatan dan pemanfaatan laut yang berkelanjutan.',
+    artIdentity: 'Pantun adalah bentuk puisi yang halus: dalam empat baris, baris pertama dan kedua adalah sampiran (perumpamaan dari alam), sementara baris ketiga dan keempat adalah makna sebenarnya. Zapin adalah tarian yang energik namun penuh keanggunan, sering ditampilkan dalam acara adat dan perayaan.',
+    trivia: 'Pantun Melayu sering dipakai untuk menyampaikan nasihat, kritik, atau rayuan dengan cara halus sehingga lawan bicara tidak merasa malu atau tersinggung.',
+    timeline: [
+      { era: 'Kerajaan pesisir', text: 'Melayu tumbuh sebagai masyarakat pelabuhan yang aktif dalam perdagangan rempah dan jalur laut timur.' },
+      { era: 'Bahasa & sastra', text: 'Bahasa Melayu menjadi lingua franca di seluruh Nusantara, sementara sastra Melayu mengembangkan bentuk-bentuk puisi dan cerita yang kaya.' },
+      { era: 'Adat bersendi syarak', text: 'Nilai-nilai Islam berpadu dengan adat lokal, membentuk etika sosial yang kuat pada kesopanan dan saling menghormati.' },
+      { era: 'Kini', text: 'Bahasa Indonesia yang lahir dari Melayu tetap menjadi identitas nasional yang penting.' },
+    ],
+    glossary: [
+      { term: 'Pantun', meaning: 'Bentuk puisi Melayu yang terdiri dari empat baris dengan rima AABB, dengan sampiran dan isi yang tersembunyi.' },
+      { term: 'Zapin', meaning: 'Tarian tradisional Melayu yang energik dan sering ditampilkan dalam acara adat.' },
+      { term: 'Budi bahasa', meaning: 'Nilai kesopanan dan etika dalam cara berbicara dan berinteraksi dalam budaya Melayu.' },
+    ],
+    challenge: 'Coba buat satu pantun tentang sesuatu yang ingin kamu sampaikan. Bisakah kamu menyampaikan pesan dengan cara halus dan penuh perumpamaan?',
+  },
+  rejang: {
+    ecoWisdom: 'Masyarakat Rejang menempati wilayah Bengkulu yang berbukit dengan hutan yang subur. Pengetahuan tentang tumbuhan obat, makanan hutan, dan pertanian teraser menunjukkan adaptasi lokal yang mendalam.',
+    artIdentity: 'Aksara Rejang (Kaganga) adalah bukti intelektual lokal yang berkembang sebelum pengaruh tulisan modern. Rumah adat Rejang, seni pertukangan kayu, dan tradisi bercerita menjadi penanda budaya yang khas.',
+    trivia: 'Aksara Rejang atau Kaganga adalah salah satu dari beberapa aksara lokal di Nusantara yang menunjukkan tingkat literasi tinggi dalam masyarakat tradisional.',
+    timeline: [
+      { era: 'Aksara lokal', text: 'Masyarakat Rejang mengembangkan sistem tulis sendiri (Kaganga) untuk mencatat pengetahuan dan tradisi.' },
+      { era: 'Pertanian & hutan', text: 'Kehidupan berputar di sekitar pertanian sawah, perkebunan, dan pemanfaatan hasil hutan.' },
+      { era: 'Adat desa', text: 'Struktur adat desa Rejang membimbing keputusan bersama dan penyelesaian sengketa.' },
+      { era: 'Kini', text: 'Aksara Rejang menjadi fokus pelestarian budaya karena risiko terlupakan oleh generasi muda.' },
+    ],
+    glossary: [
+      { term: 'Kaganga', meaning: 'Aksara tradisional Rejang yang digunakan untuk menulis bahasa lokal.', pronunciation: 'ka-ga-nga' },
+      { term: 'Tunggu', meaning: 'Sistem adat desa Rejang yang mengatur kehidupan komunitas dan penyelesaian sengketa.' },
+    ],
+    challenge: 'Pelajari satu sistem tulis atau simbol dari budaya lokal atau budaya tradisional lain. Apa keunikan dan maknanya?',
+  },
+  lampung: {
+    ecoWisdom: 'Lampung dengan dua kelompok adat (Pepadun dan Saibatin) menunjukkan bahwa satu wilayah bisa memiliki beberapa sistem pengetahuan. Kedua sistem ini sama-sama mengerti hubungan manusia dengan tanah, air, dan sumber daya alam.',
+    artIdentity: 'Tapis adalah kain songket yang dibuat dengan menyisipkan benang emas ke dalam tenunan. Setiap pola menceritakan cerita, status, atau daerah asal pemakainya. Siger adalah mahkota adat perempuan Lampung yang megah dan berat, menampilkan kekuatan dan keindahan.',
+    trivia: 'Tapis Lampung dengan benang emas asli memerlukan waktu berbulan-bulan atau bertahun-tahun untuk diselesaikan. Tidak heran bahwa tapis dihargai tinggi dan sering diwariskan antar-generasi.',
+    timeline: [
+      { era: 'Pepadun & Saibatin', text: 'Lampung terbagi menjadi dua kelompok adat utama dengan sistem kehidupan dan hierarki yang berbeda namun saling menghormati.' },
+      { era: 'Tapis & tenun', text: 'Kerajinan tapis menjadi kebanggaan dan sumber ekonomi keluarga Lampung.' },
+      { era: 'Siger', meaning: 'Mahkota adat perempuan Lampung yang dikenakan pada acara adat besar.' },
+      { era: 'Kini', text: 'Piil Pesenggiri (harga diri) tetap menjadi nilai utama dalam kehidupan sosial Lampung.' },
+    ],
+    glossary: [
+      { term: 'Tapis', meaning: 'Kain songket Lampung yang dibuat dengan benang emas dan menceritakan cerita lokal.', pronunciation: 'ta-pis' },
+      { term: 'Siger', meaning: 'Mahkota adat perempuan Lampung yang berat dan penuh emas, melambangkan kecantikan dan status.' },
+      { term: 'Piil Pesenggiri', meaning: 'Nilai harga diri, keramahan, dan tanggung jawab sosial dalam budaya Lampung.' },
+    ],
+    challenge: 'Cari tahu satu hasil kerajinan tradisional dari komunitas kamu atau komunitas lain. Berapa lama waktu pembuatannya dan apa cerita di baliknya?',
+  },
+  jawa: {
+    ecoWisdom: 'Budaya Jawa yang berkembang di daerah yang sangat padat penduduk mengajarkan keseimbangan, sopan santun, dan hormat pada hierarki alam. Filosofi Rukun mengajarkan bagaimana hidup tenang di tengah kepadatan.',
+    artIdentity: 'Wayang adalah seni pertunjukan yang menggunakan boneka kulit tipis yang disinari lampu. Setiap gerak wayang dan suara dalang menceritakan epos yang dalam dengan nilai-nilai moral. Batik adalah seni tulis dan pewarna kain yang menggunakan malam cair untuk membuat pola yang kompleks dan indah.',
+    trivia: 'Satu pertunjukan wayang kulit bisa berlangsung hingga 8-10 jam, menceritakan episode demi episode dari epos Mahabharata atau Ramayana dengan dialek Jawa yang kaya dan pengajaran moral yang mendalam.',
+    timeline: [
+      { era: 'Kerajaan Hindu-Buddha', text: 'Budaya Jawa tumbuh dari pengaruh Hindu-Buddha, mengembangkan bentuk seni dan filosofi yang unik.' },
+      { era: 'Era Islam', text: 'Penyebaran Islam membawa perubahan namun tidak menghapus seni dan tradisi lokal; malah menciptakan bentuk baru yang sintetis.' },
+      { era: 'Batik & wayang', text: 'Seni batik dan wayang berkembang pesat sebagai bentuk ekspresi budaya yang kaya makna dan estetika.' },
+      { era: 'Kini', text: 'Wayang dan batik diakui UNESCO sebagai Masterpiece of the Oral and Intangible Heritage of Humanity.' },
+    ],
+    glossary: [
+      { term: 'Wayang', meaning: 'Seni pertunjukan boneka kulit dengan lampu latar yang menceritakan epos dan ajaran moral.' },
+      { term: 'Batik', meaning: 'Seni pewarnaan kain menggunakan malam cair untuk membuat pola yang kompleks dan indah.' },
+      { term: 'Keraton', meaning: 'Istana kerajaan Jawa yang menjadi pusat budaya dan adat istiadat.' },
+      { term: 'Rukun', meaning: 'Nilai hidup harmonis, tenang, dan saling menghormati dalam budaya Jawa.' },
+    ],
+    challenge: 'Tonton satu pertunjukan wayang atau pelajari satu pola batik tradisional. Apa cerita atau makna yang terdapat di dalamnya?',
+  },
+  sunda: {
+    ecoWisdom: 'Masyarakat Sunda yang tinggal di wilayah pegunungan dan sawah mengembangkan sistem pertanian sawah yang presisi. Filosofi Silih Asah, Silih Asih, Silih Asuh mengajarkan saling mengembangkan, menyayangi, dan menjaga.',
+    artIdentity: 'Angklung adalah alat musik tradisional yang terbuat dari bambu berongga. Setiap pemain memegang angklung yang menghasilkan nada berbeda, dan harmoni terbentuk ketika semuanya bermain bersama. Ini menjadi metafora kuat tentang gotong royong dan saling melengkapi.',
+    trivia: 'Angklung memerlukan presisi: setiap pemain harus mengerti kapan harus bermain dan kapan mendengarkan. Tidak ada pemain yang lebih penting dari yang lain.',
+    timeline: [
+      { era: 'Pegunungan & sawah', text: 'Masyarakat Sunda berkembang di wilayah subur dengan budaya pertanian yang kaya.' },
+      { era: 'Silih asah', text: 'Nilai Silih Asah, Silih Asih, Silih Asuh menjadi fondasi etika sosial Sunda.' },
+      { era: 'Angklung & Jaipongan', text: 'Musik tradisional Sunda mengembangkan bentuk-bentuk yang energik dan melibatkan partisipasi komunitas.' },
+      { era: 'Kini', text: 'Angklung diakui dunia dan sering ditampilkan dalam pertunjukan internasional.' },
+    ],
+    glossary: [
+      { term: 'Angklung', meaning: 'Alat musik tradisional Sunda yang terbuat dari bambu berongga dan dimainkan dengan cara digoyangkan.' },
+      { term: 'Jaipongan', meaning: 'Tarian modern Sunda yang energik dan sering ditampilkan dalam acara sosial.' },
+      { term: 'Silih Asah Silih Asih Silih Asuh', meaning: 'Nilai gotong royong: saling mengembangkan, menyayangi, dan menjaga.' },
+    ],
+    challenge: 'Pelajari satu lagu tradisional Sunda atau coba bermain angklung bersama orang lain. Bagaimana rasanya bermain bersama dan saling melengkapi?',
+  },
+  betawi: {
+    ecoWisdom: 'Betawi lahir dari pertemuan banyak budaya di Batavia. Keterbukaan terhadap yang baru sambil mempertahankan nilai lokal mengajarkan fleksibilitas dan adaptasi dalam menghadapi perubahan lingkungan sosial.',
+    artIdentity: 'Ondel-ondel adalah boneka raksasa yang dimainkan oleh dua orang. Awalnya diyakini sebagai penjaga kampung, kini menjadi ikon budaya Jakarta yang meriah. Lenong adalah pertunjukan humor yang melibatkan dialog, syair, dan pesan sosial dalam dialek Betawi yang kental.',
+    trivia: 'Ondel-ondel sering hadir dalam festival dengan iringan musik rebana dan tarian yang meriah. Saat Ondel-ondel berjalan, orang-orang sering memeluk atau menyentuhnya sambil memberikan uang, percaya bahwa hal itu membawa berkah.',
+    timeline: [
+      { era: 'Batavia kolonial', text: 'Pertemuan budaya Jawa, Sunda, Bugis, Arab, Tionghoa, dan Eropa menciptakan identitas budaya baru.' },
+      { era: 'Ondel-ondel', text: 'Boneka raksasa yang awalnya ritual untuk keselamatan kampung menjadi simbol budaya Betawi.' },
+      { era: 'Lenong & Tanjidor', text: 'Seni pertunjukan dan musik Betawi mengembangkan humor yang tajam dan melayani fungsi sosial.' },
+      { era: 'Kini', text: 'Betawi tetap relevan sebagai budaya kota yang dinamis dan terbuka pada perubahan.' },
+    ],
+    glossary: [
+      { term: 'Ondel-ondel', meaning: 'Boneka raksasa Betawi yang dipercaya sebagai penjaga kampung dan kini menjadi ikon budaya.' },
+      { term: 'Lenong', meaning: 'Pertunjukan seni Betawi yang berisi humor, dialog, dan pesan sosial.' },
+      { term: 'Tanjidor', meaning: 'Musik tradisional Betawi yang dimainkan dengan alat tiup dan pukul.' },
+    ],
+    challenge: 'Bayangkan kamu adalah seorang pendatang di komunitas baru. Bagaimana cara menghormati budaya lokal sambil membawa identitas pribadiku sendiri?',
+  },
   baduy: {
     ecoWisdom: 'Baduy menjaga hulu air melalui aturan Leuweung Tutupan dan Leuweung Titipan. Tanah tidak boleh diubah sembarangan, bahan kimia dan sabun dibatasi di sungai, dan perjalanan dilakukan dengan berjalan kaki agar jejak ekologis tetap rendah.',
     artIdentity: 'Kain tenun Baduy memakai warna sederhana seperti putih, hitam, dan biru tua. Kesederhanaan warna bukan kemiskinan visual, tetapi simbol keteguhan adat, batas diri, dan kedekatan dengan alam.',
@@ -905,30 +1125,6 @@ const cultureStoryOverrides: Record<string, Partial<CultureStoryContent>> = {
       { term: 'Tri Hita Karana', meaning: 'Filosofi harmoni antara manusia, Tuhan, sesama, dan alam.' },
     ],
     challenge: 'Cek penggunaan air hari ini. Kurangi satu kebiasaan boros air, lalu catat dampaknya.',
-  },
-  kei: {
-    ecoWisdom: 'Masyarakat Kei mengenal hukum adat Larvul Ngabal, sementara tradisi Maluku juga kuat dengan Sasi: larangan mengambil hasil laut atau darat pada waktu tertentu agar ekosistem pulih.',
-    artIdentity: 'Identitas Kei tumbuh dari laut, perahu, relasi keluarga, dan hukum adat. Budaya maritimnya menekankan rasa adil karena kehidupan pulau sangat bergantung pada sumber daya bersama.',
-    trivia: 'Sasi adalah contoh sustainable harvesting lokal: mengambil secukupnya, lalu memberi waktu alam memulihkan diri.',
-    timeline: [
-      { era: 'Kepulauan', text: 'Laut menjadi penghubung keluarga, pasar, dan aturan hidup.' },
-      { era: 'Larvul Ngabal', text: 'Hukum adat menguatkan batas, keadilan, dan tanggung jawab sosial.' },
-      { era: 'Sasi', text: 'Praktik jeda panen menjaga stok alam tetap berkelanjutan.' },
-    ],
-    glossary: [
-      { term: 'Larvul Ngabal', meaning: 'Hukum adat masyarakat Kei yang mengatur martabat dan keadilan sosial.' },
-      { term: 'Sasi', meaning: 'Larangan adat mengambil hasil alam dalam periode tertentu.' },
-    ],
-    challenge: 'Coba prinsip jeda panen versi rumah: habiskan stok makanan yang ada sebelum membeli baru agar limbah berkurang.',
-  },
-  ambon: {
-    ecoWisdom: 'Budaya pesisir Ambon dekat dengan praktik jaga laut dan solidaritas antar-kampung. Nilai pela gandong dapat dibaca sebagai modal sosial untuk menjaga ruang hidup bersama.',
-    artIdentity: 'Musik Ambon menjadi identitas sosial yang menyatukan memori keluarga, gereja, kampung, dan laut. Harmoni vokal mencerminkan budaya yang kuat dalam rasa kebersamaan.',
-    trivia: 'Ambon dikenal sebagai kota musik karena tradisi bernyanyi hidup kuat di ruang keluarga dan komunitas.',
-    glossary: [
-      { term: 'Pela Gandong', meaning: 'Ikatan persaudaraan antar-kampung yang menekankan saling bantu dan damai.' },
-    ],
-    challenge: 'Bangun satu aksi gotong royong kecil: ajak teman memilah sampah atau membersihkan ruang bersama.',
   },
 };
 
@@ -1037,10 +1233,7 @@ export function HistoryCultureSection({ lang }: Props) {
   const [selectedCard, setSelectedCard] = useState<CultureCard | null>(null);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
 
-  const [quizAnswer, setQuizAnswer] = useState('');
-  const [ecoSlider, setEcoSlider] = useState(58);
-  const [rhythmScore, setRhythmScore] = useState(62);
-  const [vrOpen, setVrOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
 
 
@@ -1084,33 +1277,16 @@ export function HistoryCultureSection({ lang }: Props) {
   const openCard = (card: CultureCard) => {
     setSelectedCard(card);
     setViewedIds((current) => (current.includes(card.id) ? current : [...current, card.id]));
-    setQuizAnswer('');
-    setEcoSlider(58);
-    setRhythmScore(card.id === 'aceh' ? 62 : rhythmScore);
-    setVrOpen(false);
   };
 
   const closeStoryMode = () => {
     setSelectedCard(null);
-    setVrOpen(false);
   };
 
 
 
   const selectedStory = selectedCard ? getCultureStory(selectedCard) : null;
 
-  useEffect(() => {
-    if (selectedCard?.id !== 'aceh') return undefined;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (['a', 's', 'd', 'f'].includes(event.key.toLowerCase())) {
-        setRhythmScore((current) => Math.min(100, current + 3));
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCard?.id]);
 
   return (
     <section id="historyculture" className="relative py-24 px-4 sm:px-6 lg:px-8">
@@ -1317,132 +1493,89 @@ export function HistoryCultureSection({ lang }: Props) {
                   </div>
                 </div>
 
-                {selectedCard.id === 'aceh' && (
-                  <AcehLivingCanvas
-                    card={selectedCard}
-                    story={selectedStory}
-                    ecoSlider={ecoSlider}
-                    setEcoSlider={setEcoSlider}
-                    rhythmScore={rhythmScore}
-                    setRhythmScore={setRhythmScore}
-                    onLaunchVr={() => setVrOpen(true)}
-                  />
-                )}
 
-                {/* Main content */}
-                <div className="space-y-12 px-8 py-10">
-                  {/* Eco Scores */}
-                  <div className="grid gap-3 sm:grid-cols-3">
+                {/* Main content - Clean editorial layout */}
+                <div className="max-w-3xl mx-auto px-8 py-12 space-y-10">
+                  {/* Eco Scores - Minimal centered */}
+                  <div className="flex gap-8 justify-center py-4 border-b border-border">
                     {getEcoScores(selectedCard).map((score) => (
-                      <div key={score.label} className="rounded-lg border border-border bg-card p-4 text-center">
+                      <div key={score.label} className="text-center">
                         <div className="text-2xl font-bold text-foreground">{score.value}%</div>
-                        <div className="text-xs uppercase tracking-widest text-muted-foreground mt-1">{score.label}</div>
+                        <div className="text-xs text-muted-foreground mt-2 uppercase tracking-widest">{score.label}</div>
                       </div>
                     ))}
                   </div>
 
-                  {/* 4 Pillars - Vertical Stack */}
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-lg font-bold text-foreground mb-1">Empat Pilar Budaya</h4>
-                      <p className="text-sm text-muted-foreground">Pemahaman mendalam tentang tradisi {selectedCard.name}</p>
-                    </div>
-                    <div className="space-y-4">
-                      <StoryBlock icon={<BookOpen className="h-5 w-5" />} title="Asal-Usul & Sejarah" text={selectedCard.history} />
-                      <StoryBlock icon={<Leaf className="h-5 w-5" />} title="Kearifan Ekologis" text={selectedStory.ecoWisdom} />
-                      <StoryBlock icon={<Sparkles className="h-5 w-5" />} title="Seni & Simbolisme" text={selectedStory.artIdentity} />
-                      <StoryBlock icon={<Brain className="h-5 w-5" />} title="Pengetahuan Tradisional" text={selectedStory.trivia} />
-                    </div>
-                  </div>
+                  {/* Article-style content */}
+                  <article className="space-y-10 text-foreground">
+                    {/* Asal-Usul & Sejarah */}
+                    <section>
+                      <h3 className="text-lg font-bold mb-4">Asal-Usul & Sejarah</h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedCard.history}</p>
+                    </section>
 
-                  {/* Timeline */}
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-lg font-bold text-foreground flex items-center gap-2">
-                        <Clock className="h-5 w-5 text-primary" />
-                        Perjalanan Sejarah
-                      </h4>
-                    </div>
-                    <div className="space-y-4 ml-4 border-l-2 border-primary/30 pl-6">
-                      {selectedStory.timeline.map((item) => (
-                        <div key={`${selectedCard.id}-${item.era}`}>
-                          <div className="text-xs uppercase tracking-widest font-semibold text-primary mb-1">{item.era}</div>
-                          <p className="text-sm leading-relaxed text-muted-foreground">{item.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    {/* Kearifan Ekologis */}
+                    <section>
+                      <h3 className="text-lg font-bold mb-4">Kearifan Ekologis</h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.ecoWisdom}</p>
+                    </section>
 
-                  {/* Kamus Mini */}
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-bold text-foreground">Istilah Penting</h4>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {selectedStory.glossary.map((item) => (
-                        <div key={`${selectedCard.id}-${item.term}`} className="rounded-lg border border-border bg-muted/30 p-4">
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <p className="font-semibold text-foreground text-sm">{item.term}</p>
-                              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.meaning}</p>
-                            </div>
+                    {/* Seni & Simbolisme */}
+                    <section>
+                      <h3 className="text-lg font-bold mb-4">Seni & Simbolisme</h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.artIdentity}</p>
+                    </section>
+
+                    {/* Pengetahuan Tradisional */}
+                    <section>
+                      <h3 className="text-lg font-bold mb-4">Pengetahuan Tradisional</h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.trivia}</p>
+                    </section>
+
+                    {/* Timeline */}
+                    <section className="border-t border-border pt-8">
+                      <h3 className="text-lg font-bold mb-6">Perjalanan Sejarah</h3>
+                      <div className="space-y-5">
+                        {selectedStory.timeline.map((item) => (
+                          <div key={`${selectedCard.id}-${item.era}`}>
+                            <p className="text-xs font-bold text-primary uppercase tracking-widest mb-2">{item.era}</p>
+                            <p className="text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Istilah Penting */}
+                    <section>
+                      <h3 className="text-lg font-bold mb-4">Istilah Penting</h3>
+                      <div className="space-y-4">
+                        {selectedStory.glossary.map((item) => (
+                          <div key={`${selectedCard.id}-${item.term}`}>
+                            <p className="font-semibold text-sm text-foreground">{item.term}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{item.meaning}</p>
                             {item.pronunciation && (
-                              <span className="text-[10px] font-semibold text-primary whitespace-nowrap pt-0.5">{item.pronunciation}</span>
+                              <p className="text-[10px] text-primary mt-1">Diucapkan: <span className="italic">{item.pronunciation}</span></p>
                             )}
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Fun Fact & Challenge */}
-                  <div className="grid gap-6 sm:grid-cols-2">
-                    <div className="rounded-lg border border-border bg-muted/30 p-6">
-                      <h4 className="text-sm font-semibold text-foreground mb-3">Fakta Menarik</h4>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedCard.funFact}</p>
-                    </div>
-
-                    <div className="rounded-lg border border-primary/25 bg-primary/5 p-6">
-                      <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                        <Target className="h-4 w-4 text-primary" />
-                        Tantangan Ekologi
-                      </h4>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.challenge}</p>
-                    </div>
-                  </div>
-
-                  {/* Quiz */}
-                  <div className="rounded-lg border border-border bg-muted/30 p-6 space-y-4">
-                    <h4 className="text-sm font-semibold text-foreground">{tx.quiz}</h4>
-                    <p className="text-sm text-muted-foreground">Suku {selectedCard.name} berasal dari wilayah mana?</p>
-                    <div className="grid gap-2">
-                      {[selectedCard.region, 'Sumatera', 'Papua']
-                        .filter((value, index, array) => array.indexOf(value) === index)
-                        .slice(0, 3)
-                        .map((answer) => (
-                          <button
-                            key={answer}
-                            onClick={() => setQuizAnswer(answer)}
-                            className={`rounded-lg border px-4 py-3 text-left text-sm font-semibold transition ${
-                              quizAnswer === answer
-                                ? answer === selectedCard.region
-                                  ? 'border-primary bg-primary/10 text-primary'
-                                  : 'border-destructive/40 bg-destructive/10 text-destructive'
-                                : 'border-border bg-card text-foreground hover:border-primary/40'
-                            }`}
-                          >
-                            {answer}
-                          </button>
                         ))}
-                    </div>
-                    {quizAnswer && (
-                      <p className="text-xs text-muted-foreground">
-                        {quizAnswer === selectedCard.region ? tx.correct : tx.wrong}
-                      </p>
-                    )}
-                  </div>
+                      </div>
+                    </section>
+
+                    {/* Fakta & Challenge */}
+                    <section className="border-t border-border pt-8 space-y-8">
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-2">Fakta Menarik</h4>
+                        <p className="text-sm leading-relaxed text-muted-foreground">{selectedCard.funFact}</p>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-2">Tantangan Ekologi</h4>
+                        <p className="text-sm leading-relaxed text-muted-foreground">{selectedStory.challenge}</p>
+                      </div>
+                    </section>
+                  </article>
                 </div>
-                {vrOpen && selectedCard.id === 'aceh' && (
-                  <AcehVrSimulator onClose={() => setVrOpen(false)} />
-                )}
+
               </div>
             </motion.div>
           </motion.div>
@@ -1452,131 +1585,8 @@ export function HistoryCultureSection({ lang }: Props) {
   );
 }
 
-function AcehLivingCanvas({
-  card,
-  story,
-  ecoSlider,
-  setEcoSlider,
-  rhythmScore,
-  setRhythmScore,
-  onLaunchVr,
-}: {
-  card: CultureCard;
-  story: CultureStoryContent;
-  ecoSlider: number;
-  setEcoSlider: Dispatch<SetStateAction<number>>;
-  rhythmScore: number;
-  setRhythmScore: Dispatch<SetStateAction<number>>;
-  onLaunchVr: () => void;
-}) {
-  return (
-    <div className="rounded-3xl border border-border bg-slate-950/95 p-6 text-white shadow-2xl mb-6">
-      <div className="mb-5">
-        <p className="text-xs uppercase tracking-[0.2em] text-primary">Aceh Story Mode</p>
-        <h3 className="mt-3 text-2xl font-bold">Ritme Saman & Kearifan Pesisir</h3>
-        <p className="mt-3 text-sm leading-relaxed text-white/70">
-          {story.ecoWisdom}
-        </p>
-      </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm font-semibold text-white">Tari Saman</p>
-          <p className="mt-2 text-xs leading-relaxed text-white/70">
-            Tari Saman adalah bahasa tubuh kolektif: tepuk tangan, dada, dan paha bergerak cepat seperti gelombang. Busana hitam-emas dan pola Gayo menegaskan disiplin, doa, dan kebersamaan yang ritmis.
-          </p>
-          <div className="mt-4 rounded-2xl bg-background/5 p-3">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-primary">Rhythm meter</div>
-            <div className="mt-2 flex items-center justify-between text-sm text-white">
-              <span>Score</span>
-              <span className="font-semibold">{rhythmScore}</span>
-            </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-primary" style={{ width: `${rhythmScore}%` }} />
-            </div>
-            <p className="mt-2 text-xs text-white/60">Tekan A, S, D, F untuk tambah ritme ketika Aceh aktif.</p>
-          </div>
-        </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-          <p className="text-sm font-semibold text-white">Eco Slider</p>
-          <p className="mt-2 text-xs leading-relaxed text-white/70">
-            Geser untuk membandingkan ruang hidup terjaga dengan tekanan modern.
-          </p>
-          <input
-            type="range"
-            min="25"
-            max="82"
-            value={ecoSlider}
-            onChange={(event) => setEcoSlider(Number(event.target.value))}
-            className="mt-4 w-full accent-primary"
-            aria-label="Aceh eco slider"
-          />
-          <div className="mt-3 flex items-center justify-between text-xs text-white/70">
-            <span>Tradisi</span>
-            <span>{ecoSlider}%</span>
-          </div>
-          <button
-            type="button"
-            onClick={onLaunchVr}
-            className="mt-4 inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-          >
-            Masuk Aceh VR
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AcehVrSimulator({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 px-4 py-10">
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-6 shadow-2xl">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-full border border-white/15 bg-slate-800/90 p-2 text-white transition hover:bg-slate-700"
-          aria-label="Close VR simulator"
-        >
-          <X className="h-4 w-4" />
-        </button>
-        <div className="space-y-4 text-white">
-          <div className="rounded-3xl bg-white/5 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-primary">Aceh VR Simulator</p>
-            <h4 className="mt-2 text-2xl font-bold">Jelajah Aceh Virtual</h4>
-            <p className="mt-3 text-sm leading-relaxed text-white/70">
-              Kamu berada di dalam dunia Aceh digital: pantai, meunasah, dan ritme Saman yang bergerak seirama dengan komunitas.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-sm font-semibold text-white">Ritme</p>
-              <p className="mt-2 text-xs text-white/70">Rasakan kekompakan gerak dan nuansa musik tradisional.</p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-sm font-semibold text-white">Hutan Pesisir</p>
-              <p className="mt-2 text-xs text-white/70">Pelajari etika laut dan tanggung jawab terhadap ekosistem setempat.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StoryBlock({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-6 hover:border-primary/40 transition">
-      <div className="flex items-start gap-4">
-        <div className="text-primary mt-1">{icon}</div>
-        <div className="flex-1 min-w-0">
-          <h5 className="font-semibold text-foreground text-sm">{title}</h5>
-          <p className="text-sm leading-relaxed text-muted-foreground mt-2">{text}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function EcoScoreWheel({ label, value, color }: { label: string; value: number; color: string }) {
   return (
