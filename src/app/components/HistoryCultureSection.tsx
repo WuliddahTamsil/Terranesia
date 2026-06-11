@@ -1005,7 +1005,7 @@ const cultureStoryOverrides: Record<string, Partial<CultureStoryContent>> = {
     timeline: [
       { era: 'Pepadun & Saibatin', text: 'Lampung terbagi menjadi dua kelompok adat utama dengan sistem kehidupan dan hierarki yang berbeda namun saling menghormati.' },
       { era: 'Tapis & tenun', text: 'Kerajinan tapis menjadi kebanggaan dan sumber ekonomi keluarga Lampung.' },
-      { era: 'Siger', meaning: 'Mahkota adat perempuan Lampung yang dikenakan pada acara adat besar.' },
+      { era: 'Siger', text: 'Mahkota adat perempuan Lampung yang dikenakan pada acara adat besar.' },
       { era: 'Kini', text: 'Piil Pesenggiri (harga diri) tetap menjadi nilai utama dalam kehidupan sosial Lampung.' },
     ],
     glossary: [
