@@ -10,12 +10,20 @@ interface LogoProps {
   className?: string;
 }
 
-// Size mapping in pixels
+// Size mapping in pixels (logomark height)
 const sizeMap: Record<LogoSize, number> = {
-  sm: 32,
-  md: 48,
-  lg: 64,
-  xl: 96,
+  sm: 36,
+  md: 52,
+  lg: 72,
+  xl: 108,
+};
+
+// Full logo height (taller than logomark to be readable)
+const fullLogoHeightMap: Record<LogoSize, number> = {
+  sm: 36,
+  md: 52,
+  lg: 72,
+  xl: 108,
 };
 
 const logoPathMap: Record<LogoVariant, Record<'full' | 'mark' | 'typeface', string>> = {
@@ -63,8 +71,8 @@ export function Logo({
       <img
         src={paths.full}
         alt="Terranesia Logo"
-        style={{ height: sizePixels * 0.6 }} // Adjust height for full logo
-        className={`h-auto ${className}`}
+        style={{ height: fullLogoHeightMap[size] }}
+        className={`w-auto ${className}`}
       />
     );
   }

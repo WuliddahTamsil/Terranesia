@@ -5,6 +5,10 @@ import { HeroSection } from './components/HeroSection';
 import { JelajahSection } from './components/JelajahSection';
 import { HistoryCultureSection } from './components/HistoryCultureSection';
 import { LabPage } from './components/LabPage';
+import { ArsipHidupPage } from './components/ArsipHidupPage';
+import { EcoQuizPage } from './components/EcoQuizPage';
+import { CarbonCalculatorPage } from './components/CarbonCalculatorPage';
+import { StoryScrollPage } from './components/StoryScrollPage';
 import { EdukasiSection } from './components/EdukasiSection';
 import { DonasiSection } from './components/DonasiSection';
 import { Footer } from './components/Footer';
@@ -65,8 +69,12 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<HomePage lang={lang} isDark={isDark} />} />
             <Route path="/lab" element={<LabPage lang={lang} isDark={isDark} />} />
+            <Route path="/lab/arsip-hidup" element={<ArsipHidupPage lang={lang} isDark={isDark} />} />
+            <Route path="/lab/eco-quiz" element={<EcoQuizPage lang={lang} isDark={isDark} />} />
+            <Route path="/lab/carbon-calculator" element={<CarbonCalculatorPage lang={lang} isDark={isDark} />} />
+            <Route path="/lab/story-scroll" element={<StoryScrollPage lang={lang} isDark={isDark} />} />
           </Routes>
-          <Footer lang={lang} />
+          <Footer lang={lang} isDark={isDark} />
         </div>
       </div>
     </Router>

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Logo } from './Logo';
 import { Mail, Instagram, Twitter, Youtube, Github, CheckCircle, MapPin, Phone } from 'lucide-react';
 
-interface Props { lang: 'id' | 'en' }
+interface Props { lang: 'id' | 'en'; isDark?: boolean }
 
 const t = {
   id: {
@@ -50,7 +50,7 @@ const t = {
   },
 };
 
-export function Footer({ lang }: Props) {
+export function Footer({ lang, isDark }: Props) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const tx = t[lang];
@@ -109,14 +109,12 @@ export function Footer({ lang }: Props) {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <Logo 
-                variant="alternative-white" 
-                size="md" 
+            <Logo 
+                variant={isDark ? 'alternative-green' : 'alternative-white'} 
+                size="lg" 
                 showTypeface={true}
-                className="h-10"
+                className="mb-4"
               />
-            </div>
             <p className="text-background/60 text-sm leading-relaxed mb-5 max-w-xs">{tx.tagline}</p>
             {/* Social */}
             <div className="flex gap-3">

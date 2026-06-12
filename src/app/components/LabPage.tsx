@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ExternalLink } from 'lucide-react';
 import { TheLabSection } from './TheLabSection';
+import { useNavigate } from 'react-router';
 
 interface LabProps {
   lang: 'id' | 'en';
@@ -21,31 +22,41 @@ interface LabExperiment {
 
 const labExperiments: LabExperiment[] = [
   {
-    id: 'experiment_1',
-    titleId: 'Penjelajah Adat Nusantara',
-    titleEn: 'Nusantara Custom Explorer',
-    descriptionId: 'Jelajahi keragaman komunitas adat Indonesia dengan teknologi VR interaktif',
-    descriptionEn: 'Explore the diversity of Indonesian indigenous communities with interactive VR technology',
+    id: 'arsip_hidup',
+    titleId: 'Arsip Hidup Nusantara',
+    titleEn: 'Living Archives of Nusantara',
+    descriptionId: 'Hidupkan foto arsip hitam-putih dengan AI visual & audio ambient — rasakan vibes nyata kehidupan harmonis leluhur Nusantara',
+    descriptionEn: 'Bring archival black-and-white photos to life with AI visuals & ambient audio — feel the real vibes of ancestral Nusantara harmony',
+    category: 'heritage',
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
+    color: 'from-emerald-600 to-cyan-600',
+  },
+  {
+    id: 'eco_quiz',
+    titleId: 'Kuis Pelestari Alam',
+    titleEn: 'Eco-Warrior Quiz',
+    descriptionId: 'Uji wawasan Anda tentang kearifan lokal Nusantara dalam menjaga kelestarian lingkungan dan SDGs.',
+    descriptionEn: 'Test your knowledge on Nusantara local wisdom in preserving the environment and SDGs.',
     category: 'culture',
     image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
     color: 'from-green-600 to-emerald-600',
   },
   {
-    id: 'experiment_2',
-    titleId: 'Arsitektur Tradisional 3D',
-    titleEn: 'Traditional Architecture 3D',
-    descriptionId: 'Desain dan interaksi dengan rumah adat dari berbagai region Indonesia',
-    descriptionEn: 'Design and interact with traditional houses from various Indonesian regions',
-    category: 'heritage',
+    id: 'carbon_calculator',
+    titleId: 'Kalkulator Jejak Karbon',
+    titleEn: 'Carbon Footprint Calculator',
+    descriptionId: 'Bandingkan gaya hidup modern Anda dengan "Rawatan Hidup" masyarakat adat yang minim emisi.',
+    descriptionEn: 'Compare your modern lifestyle with the low-emission "Rawatan Hidup" of indigenous communities.',
+    category: 'technology',
     image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
     color: 'from-amber-600 to-orange-600',
   },
   {
-    id: 'experiment_3',
-    titleId: 'Peta Konservasi Hutan',
-    titleEn: 'Forest Conservation Map',
-    descriptionId: 'Visualisasi upaya pelestarian hutan dan kawasan adat di Nusantara',
-    descriptionEn: 'Visualize forest and customary land conservation efforts across Nusantara',
+    id: 'story_scroll',
+    titleId: 'Kisah Hutan (Scroll)',
+    titleEn: 'Forest Story (Scroll)',
+    descriptionId: 'Jelajahi kisah interaktif tentang ancaman deforestasi dan bagaimana hukum adat Tana Ulen menawarkan solusi.',
+    descriptionEn: 'Explore an interactive story about the threat of deforestation and how Tana Ulen customary law offers solutions.',
     category: 'nature',
     image: 'https://images.unsplash.com/photo-1511497584788-876760111969?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80',
     color: 'from-teal-600 to-cyan-600',
@@ -81,6 +92,7 @@ const categories: ('all' | 'culture' | 'technology' | 'nature' | 'heritage' | 't
 ];
 
 export function LabPage({ lang, isDark }: LabProps) {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'culture' | 'technology' | 'nature' | 'heritage' | 'tradition'>('all');
 
   const filteredExperiments = useMemo(() => {
@@ -164,8 +176,14 @@ export function LabPage({ lang, isDark }: LabProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="group cursor-pointer"
+                      onClick={() => {
+                        if (experiment.id === 'arsip_hidup') navigate('/lab/arsip-hidup');
+                        if (experiment.id === 'eco_quiz') navigate('/lab/eco-quiz');
+                        if (experiment.id === 'carbon_calculator') navigate('/lab/carbon-calculator');
+                        if (experiment.id === 'story_scroll') navigate('/lab/story-scroll');
+                      }}
                     >
-                      <div className="relative overflow-hidden rounded-2xl bg-card border-[0.5px] border-border/40 hover:border-primary/50 hover:bg-card/90 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col h-full">
+                      <div className={`relative overflow-hidden rounded-2xl bg-card border-[0.5px] hover:bg-card/90 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col h-full ${experiment.id === 'arsip_hidup' ? 'border-primary/30 hover:border-primary/70 ring-1 ring-primary/10' : 'border-border/40 hover:border-primary/50'}`}>
                         {/* Image Container with Editorial Frame */}
                         <div className="relative h-56 overflow-hidden m-3 rounded-xl border-[0.5px] border-border/30">
                           <img
@@ -174,6 +192,9 @@ export function LabPage({ lang, isDark }: LabProps) {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-750"
                           />
                           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                          <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            {lang === 'id' ? '✨ Bisa Dicoba!' : '✨ Try Now!'}
+                          </div>
                         </div>
 
                         {/* Content */}
@@ -196,8 +217,10 @@ export function LabPage({ lang, isDark }: LabProps) {
                               {categoryTx[experiment.category as keyof typeof categoryTx]}
                             </span>
                             <div className="flex items-center gap-1 text-primary text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <span>{lang === 'id' ? 'Masuk' : 'Enter'}</span>
-                              <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-all" />
+                                <>
+                                  <span>{lang === 'id' ? 'Buka' : 'Open'}</span>
+                                  <ExternalLink className="w-3.5 h-3.5" />
+                                </>
                             </div>
                           </div>
                         </div>
