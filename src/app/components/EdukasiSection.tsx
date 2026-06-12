@@ -13,70 +13,70 @@ const WEAVING = 'https://images.unsplash.com/photo-1661144050353-1d2566cbdf03?cr
 const philosophies = [
   {
     icon: Leaf, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/30',
-    title: 'Hidup Sederhana', titleEn: 'Simple Living',
-    desc: 'Banyak komunitas adat Nusantara menjaga kesederhanaan, batas konsumsi, dan kedekatan dengan alam sebagai sumber kebahagiaan.',
-    descEn: 'Many Nusantara indigenous communities preserve simplicity, mindful consumption, and closeness to nature as a source of happiness.',
-    quote: '"Lain ti kahayang, tapi ti kaperluan"',
-    quoteEn: '"Not from desire, but from necessity"',
+    title: 'Kamase-masea (Kajang)', titleEn: 'Kamase-masea (Kajang)',
+    desc: 'Filosofi hidup bersahaja Suku Kajang di Sulawesi Selatan yang menolak kemewahan material demi menjaga kemurnian batin dan kelestarian hutan adat Ammatoa.',
+    descEn: 'The simple living philosophy of the Kajang tribe in South Sulawesi, rejecting material luxury to maintain spiritual purity and preserve the Ammatoa customary forest.',
+    quote: '"Amenteng ko kamase-masea, accule ko kamase-masea"',
+    quoteEn: '"Stand in simplicity, play in simplicity"',
   },
   {
     icon: Droplets, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-950/30',
-    title: 'Harmoni dengan Alam', titleEn: 'Harmony with Nature',
-    desc: 'Setiap pohon, sungai, dan hewan dianggap memiliki roh yang harus dihormati. Sistem pertanian mereka mengandalkan rotasi alami tanpa pupuk kimia.',
-    descEn: 'Every tree, river, and animal is considered to have a spirit that must be respected. Their farming system relies on natural rotation without chemical fertilizers.',
-    quote: '"Gunung ulah dilebur, lebak ulah dirusak"',
-    quoteEn: '"Mountains must not be destroyed, valleys must not be damaged"',
+    title: 'Tri Hita Karana (Bali)', titleEn: 'Tri Hita Karana (Bali)',
+    desc: 'Konsep hidup harmonis masyarakat Bali yang membagi hubungan kebahagiaan menjadi tiga aspek: harmoni dengan sesama manusia, alam lingkungan (Palemahan), dan Sang Pencipta.',
+    descEn: 'The harmonious living concept of Balinese society dividing the relationships of happiness into three aspects: harmony with fellow humans, nature (Palemahan), and the Creator.',
+    quote: '"Palemahan: Merawat tanah, menjaga kehidupan"',
+    quoteEn: '"Palemahan: Caring for the land, preserving life"',
   },
   {
     icon: Wind, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/30',
-    title: 'Pikukuh (Hukum Adat)', titleEn: 'Pikukuh (Customary Law)',
-    desc: 'Seperangkat aturan tak tertulis yang mengatur seluruh aspek kehidupan. Pikukuh melarang pembukaan lahan hutan, penggunaan alat modern, dan bepergian dengan kendaraan.',
-    descEn: 'A set of unwritten rules governing all aspects of life. Pikukuh prohibits clearing forestland, using modern tools, and traveling by vehicle.',
-    quote: '"Buyut teu meunang dirobah"',
-    quoteEn: '"Ancestral heritage must not be changed"',
+    title: 'Pikukuh Adat (Baduy)', titleEn: 'Pikukuh Adat (Baduy)',
+    desc: 'Ketentuan adat mutlak Suku Baduy di Banten yang menolak modernisasi luar demi menjaga keseimbangan ekologi pegunungan Kendeng dan keaslian titipan leluhur.',
+    descEn: 'The absolute customary code of the Baduy tribe in Banten, rejecting external modernization to preserve the ecological balance of the Kendeng mountains and ancestral heritage.',
+    quote: '"Lojor teu meunang dipotong, pondok teu meunang disambung"',
+    quoteEn: '"Long must not be cut, short must not be spliced"',
   },
   {
     icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/30',
-    title: 'Rawatan Hidup', titleEn: 'Life Stewardship',
-    desc: 'Konsep merawat kehidupan yang mencakup menjaga hubungan antara manusia, alam, dan roh leluhur. Setiap tindakan harus mempertimbangkan dampaknya pada generasi mendatang.',
-    descEn: 'The concept of caring for life, encompassing maintaining the relationship between humans, nature, and ancestral spirits. Every action must consider its impact on future generations.',
-    quote: '"Hirup kudu sing bener, lain sing pinter"',
-    quoteEn: '"Life must be righteous, not just clever"',
+    title: 'Hukum Sasi (Maluku-Papua)', titleEn: 'Sasi Law (Maluku-Papua)',
+    desc: 'Sistem konservasi tradisional masyarakat Maluku dan Papua yang melarang pengambilan hasil laut atau darat pada periode tertentu agar ekosistem pulih secara alami.',
+    descEn: 'The traditional conservation system of Maluku and Papua societies prohibiting the harvest of land or marine resources for a specific period to let ecosystems recover.',
+    quote: '"Menjaga laut hari ini untuk kehidupan esok hari"',
+    quoteEn: '"Guarding the sea today for tomorrow\'s life"',
   },
 ];
 
 const philosophiesDetail = [
   {
-    historyId: 'Di Baduy, kesederhanaan bukan sekadar pilihan gaya hidup, melainkan hukum adat yang disebut Pikukuh. Mereka menghindari barang modern berlebihan untuk menjaga kedamaian batin dan kelestarian alam sekitar.',
-    historyEn: 'In Baduy, simplicity is not just a lifestyle choice, but a customary law called Pikukuh. They avoid excessive modern goods to maintain inner peace and the preservation of the surrounding environment.',
-    modernId: 'Di era konsumerisme modern, filosofi ini memandu kita untuk mengurangi sampah (zero waste), mempraktikkan gaya hidup minimalis, dan membatasi emisi karbon yang dihasilkan dari rantai produksi barang yang tidak perlu.',
-    modernEn: 'In the era of modern consumerism, this philosophy guides us to reduce waste (zero waste), practice a minimalist lifestyle, and limit carbon emissions generated from unnecessary supply chains.',
-    actionId: 'Terapkan prinsip "beli karena butuh, bukan karena ingin". Cobalah kurangi membeli pakaian atau gadget baru jika yang lama masih berfungsi dengan baik.',
-    actionEn: 'Apply the principle of "buy by need, not by want". Try to reduce buying new clothes or gadgets if the old ones still function well.'
+    historyId: 'Bagi Suku Kajang Ammatoa di Sulawesi Selatan, gaya hidup bersahaja ("kamase-masea") adalah aturan adat utama. Mereka berpakaian serba hitam tanpa alas kaki untuk menunjukkan kesetaraan mutlak di hadapan alam, serta melarang teknologi modern di dalam kawasan hutan adat mereka.',
+    historyEn: 'For the Kajang Ammatoa tribe in South Sulawesi, a modest lifestyle ("kamase-masea") is the primary customary rule. They dress entirely in black without footwear to demonstrate absolute equality before nature, and reject modern technology within their customary forest.',
+    modernId: 'Di tengah krisis iklim global yang dipicu oleh konsumerisme berlebihan, filosofi ini memotivasi kita untuk beralih ke konsumsi secukupnya (slow consumption), mengurangi limbah fesyen (fast fashion), serta mengurangi ketergantungan pada barang-barang instan yang merusak lingkungan.',
+    modernEn: 'Amidst the global climate crisis driven by overconsumption, this philosophy motivates us to shift to mindful consumption (slow consumption), reduce fast fashion waste, and minimize reliance on single-use convenience goods that harm the environment.',
+    actionId: 'Terapkan konsep "pembelian sadar": sebelum membeli sesuatu, tanyakan apakah barang tersebut esensial atau sekadar gengsi. Kurangi membeli pakaian baru secara impulsif dan rawatlah barang yang Anda miliki agar berumur panjang.',
+    actionEn: 'Apply the concept of "mindful purchasing": before buying, ask if the item is essential or just for prestige. Reduce impulsive purchases of new clothing and care for what you already own to maximize its lifespan.'
   },
   {
-    historyId: 'Prinsip konservasi adat Sunda Wiwitan dan Sasi di Maluku mengajarkan bahwa alam adalah ibu pelindung. Pemanfaatan sumber daya alam dibatasi oleh zona larangan (seperti leuweung titipan/kolot dan kawasan sasi tutup) agar ekosistem memiliki waktu untuk memulihkan diri secara alami.',
-    historyEn: 'The customary conservation principles of Sunda Wiwitan and Sasi in Maluku teach that nature is a protecting mother. The utilization of natural resources is limited by prohibition zones (such as sacred forests and closed sasi areas) so that ecosystems have time to regenerate naturally.',
-    modernId: 'Krisis iklim global dipicu oleh eksploitasi alam tanpa batas. Menghormati daya dukung lingkungan berarti menghentikan deforestasi dan beralih ke energi ramah lingkungan yang tidak merusak alam.',
-    modernEn: 'The global climate crisis is triggered by unlimited exploitation of nature. Respecting environmental carrying capacity means stopping deforestation and transitioning to eco-friendly energy that does not harm nature.',
-    actionId: 'Kurangi penggunaan plastik sekali pakai, mulailah memilah sampah organik dan anorganik di rumah, dan tanam setidaknya satu pohon atau tanaman hijau di lingkungan tempat tinggal Anda.',
-    actionEn: 'Reduce single-use plastic, start separating organic and inorganic waste at home, and plant at least one tree or green plant in your neighborhood.'
+    historyId: 'Di Bali, sistem irigasi tradisional subak menerapkan prinsip Tri Hita Karana, khususnya aspek Palemahan (hubungan harmonis dengan alam). Distribusi air dibagi secara adil tanpa monopoli, disertai ritual syukur di pura subak sebelum pembukaan pintu air sawah.',
+    historyEn: 'In Bali, the traditional subak irrigation system applies Tri Hita Karana, particularly the Palemahan aspect (harmonious relation with nature). Water is shared equitably without monopoly, accompanied by gratitude rituals at the subak temple before opening canals.',
+    modernId: 'Pembangunan masif sering kali mengabaikan keadilan ekologis dan kelestarian sumber daya bersama. Menghormati daya dukung alam berlandaskan Palemahan berarti melindungi daerah resapan air, mencegah alih fungsi sawah, dan melestarikan hutan lindung.',
+    modernEn: 'Massive developments often ignore ecological justice and the preservation of shared resources. Respecting nature\'s carrying capacity based on Palemahan means protecting water catchment areas, preventing paddy field conversion, and conserving protected forests.',
+    actionId: 'Hemat penggunaan air di rumah dengan menutup keran saat menyikat gigi atau mencuci sabun. Kumpulkan air bekas mencuci sayuran atau buah untuk menyiram tanaman halaman Anda.',
+    actionEn: 'Conserve water at home by turning off faucets while brushing teeth or soaping dishes. Collect wastewater from washing fruits or vegetables to water your garden plants.'
   },
   {
-    historyId: 'Pikukuh Baduy adalah aturan mutlak titipan leluhur yang menjaga agar masyarakat adat Baduy tidak terpengaruh oleh industrialisasi yang merusak. Melarang penggunaan semen, sabun kimia di sungai, dan mesin untuk menjaga tanah air tetap murni.',
-    historyEn: 'Pikukuh Baduy is an absolute ancestral rule that prevents Baduy indigenous people from being influenced by destructive industrialization. It prohibits the use of cement, chemical soaps in rivers, and machinery to keep the land pure.',
-    modernId: 'Mengingatkan kita akan pentingnya menetapkan batasan atau regulasi ketat terhadap penggunaan teknologi yang merusak. Tidak semua kemajuan teknologi bernilai positif jika harus mengorbankan keseimbangan bumi.',
-    modernEn: 'Reminds us of the importance of establishing strict boundaries or regulations on the use of destructive technologies. Not all technological advancements are positive if they compromise the earth\'s balance.',
-    actionId: 'Pilihlah berjalan kaki atau naik sepeda untuk jarak dekat. Gunakan detergen atau produk pembersih rumah tangga yang ramah lingkungan (eco-friendly) yang mudah terurai oleh tanah dan air.',
-    actionEn: 'Choose walking or cycling for short distances. Use eco-friendly household detergents or cleaning products that biodegrade easily in soil and water.'
+    historyId: 'Pikukuh Baduy adalah komitmen mutlak menjaga keaslian titipan leluhur di Banten. Mereka melarang pengaspalan jalan, penggunaan semen, sabun kimia di sungai, dan mesin bermotor untuk menjaga tanah air pegunungan Kendeng tetap murni dan bebas pencemaran.',
+    historyEn: 'Pikukuh Baduy is an absolute commitment to protect ancestral heritage in Banten. They prohibit road paving, cement use, chemical soaps in rivers, and motorized machinery to keep the Kendeng mountain soil and water pure and unpolluted.',
+    modernId: 'Pikukuh mengingatkan kita bahwa tidak semua inovasi teknologi menguntungkan bumi. Kita perlu menetapkan regulasi ketat terhadap industri yang membuang limbah berbahaya dan membatasi penggunaan teknologi ekstraktif yang merusak tanah.',
+    modernEn: 'Pikukuh reminds us that not all technological innovations benefit the earth. We need strict regulations on industries dumping hazardous waste and limits on extractive technologies that damage the soil.',
+    actionId: 'Pilihlah detergen dan pembersih rumah tangga ramah lingkungan (biodegradable) yang aman bagi mikroorganisme tanah. Kurangi berkendara motor untuk jarak dekat dengan berjalan kaki atau bersepeda.',
+    actionEn: 'Choose biodegradable, eco-friendly detergents and household cleaners that are safe for soil microorganisms. Reduce driving for short distances by walking or cycling instead.'
   },
   {
-    historyId: 'Konsep kearifan lokal Dayak dan Jawa yang mengajarkan tanggung jawab moral manusia sebagai penjaga bumi. Setiap pohon yang ditebang untuk keperluan rumah tangga harus diganti, dan ritual syukur diadakan untuk menghargai hasil bumi.',
-    historyEn: 'The concept of Dayak and Javanese local wisdom that teaches the moral responsibility of humans as earth guardians. Every tree cut down for household needs must be replaced, and gratitude rituals are held to appreciate earth\'s harvest.',
-    modernId: 'Keberlanjutan (sustainability) adalah kunci kelangsungan hidup anak cucu kita. Eksploitasi hari ini tidak boleh mengorbankan hak hidup generasi masa depan.',
-    modernEn: 'Sustainability is the key to the survival of our descendants. Exploitation today must not sacrifice the living rights of future generations.',
-    actionId: 'Hemat konsumsi energi listrik dan air bersih di rumah. Dukung produk-produk lokal berkelanjutan yang diproduksi secara etis dan bertanggung jawab terhadap kelestarian lingkungan.',
-    actionEn: 'Conserve electricity and clean water at home. Support sustainable local products produced ethically and responsibly toward environmental preservation.'
+    historyId: 'Sasi di Maluku dan Papua adalah pelarangan adat sementara untuk mengambil komoditas tertentu (seperti teripang, lobster, atau buah kenari) selama kurun waktu beberapa bulan hingga tahun. Ketika sasi dibuka ("buka sasi"), masyarakat memanen bersama dengan bijak.',
+    historyEn: 'Sasi in Maluku and Papua is a temporary customary ban on harvesting specific resources (such as sea cucumber, lobster, or nutmeg) for months or years. When sasi is lifted ("buka sasi"), the community harvests collectively and wisely.',
+    modernId: 'Eksploitasi laut yang berlebihan (overfishing) telah merusak terumbu karang dan mengancam pasokan pangan global. Sasi memberikan inspirasi bagi penetapan zona perlindungan laut dinamis di mana aktivitas penangkapan ikan dihentikan agar stok ikan dapat pemulihan.',
+    modernEn: 'Overexploitation of the seas (overfishing) has damaged coral reefs and threatened global food security. Sasi inspires dynamic marine protected areas (MPAs) where fishing is temporarily paused to allow fish stocks to recover.',
+    actionId: 'Beli hasil laut dari nelayan lokal berskala kecil yang menangkap ikan secara tradisional tanpa pukat harimau atau racun. Hindari mengonsumsi anak ikan atau spesies laut yang dilindungi.',
+    actionEn: 'Purchase seafood from small-scale local fishers using traditional methods instead of trawls or chemicals. Avoid consuming juvenile fish or protected marine species.'
   }
 ];
 
@@ -564,12 +564,12 @@ export function EdukasiSection({ lang }: Props) {
     let communityCount = 0;
 
     completedDays.forEach(dayIndex => {
-      if (dayIndex === 0) plasticSaved += 0.5; // kg
-      if (dayIndex === 1) co2Saved += 1.2;     // kg
-      if (dayIndex === 2) waterSaved += 50;     // liters
-      if (dayIndex === 3) co2Saved += 0.1;     // kg
-      if (dayIndex === 4) co2Saved += 0.8;     // kg
-      if (dayIndex === 5) plasticSaved += 1.0; // kg
+      if (dayIndex === 0) plasticSaved += 0.08; // kg (average daily plastic bag use per person)
+      if (dayIndex === 1) co2Saved += 0.4;     // kg (walking 2 km instead of driving)
+      if (dayIndex === 2) waterSaved += 50;     // liters (reducing shower time & faucet leaks)
+      if (dayIndex === 3) co2Saved += 0.05;     // kg (daily carbon absorption of a young tree)
+      if (dayIndex === 4) co2Saved += 0.3;     // kg (saving emissions by eating local/organic)
+      if (dayIndex === 5) plasticSaved += 0.6; // kg (composting food waste and diverting recyclables)
       if (dayIndex === 6) communityCount += 1;
     });
 
@@ -826,6 +826,15 @@ export function EdukasiSection({ lang }: Props) {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {philosophies.map((p, i) => {
               const Icon = p.icon;
+              // Dynamic color themes for glassmorphism
+              const themes = [
+                { border: 'hover:border-emerald-500/35 hover:shadow-emerald-500/5', iconBg: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.02)]' },
+                { border: 'hover:border-blue-500/35 hover:shadow-blue-500/5', iconBg: 'bg-blue-500/10 border-blue-500/20 text-blue-500', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.02)]' },
+                { border: 'hover:border-purple-500/35 hover:shadow-purple-500/5', iconBg: 'bg-purple-500/10 border-purple-500/20 text-purple-500', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.02)]' },
+                { border: 'hover:border-amber-500/35 hover:shadow-amber-500/5', iconBg: 'bg-amber-500/10 border-amber-500/20 text-amber-500', glow: 'shadow-[0_0_15px_rgba(245,158,11,0.02)]' }
+              ];
+              const theme = themes[i % themes.length];
+
               return (
                 <motion.div
                   key={i}
@@ -841,20 +850,20 @@ export function EdukasiSection({ lang }: Props) {
                       setHasInteractedPhilosophy(true);
                     }
                   }}
-                  className={`rounded-2xl p-6 border border-border bg-card/60 backdrop-blur-md transition-all cursor-pointer hover:shadow-xl hover:border-primary/30 flex flex-col justify-between`}
+                  className={`rounded-2xl p-6 border border-border/80 bg-gradient-to-br from-card/85 to-card/45 backdrop-blur-md transition-all duration-300 cursor-pointer flex flex-col justify-between hover:shadow-xl ${theme.border} ${theme.glow}`}
                 >
                   <div>
-                    <div className={`w-12 h-12 rounded-xl bg-background flex items-center justify-center mb-5 shadow-sm border border-border`}>
-                      <Icon className={`w-6 h-6 ${p.color}`} />
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border shadow-inner ${theme.iconBg}`}>
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <h4 className="text-foreground font-bold text-sm mb-2">{lang === 'id' ? p.title : p.titleEn}</h4>
-                    <p className="text-muted-foreground text-xs leading-relaxed mb-4 line-clamp-3">{lang === 'id' ? p.desc : p.descEn}</p>
+                    <h4 className="text-foreground font-extrabold text-sm mb-2">{lang === 'id' ? p.title : p.titleEn}</h4>
+                    <p className="text-muted-foreground text-xs leading-relaxed mb-5 line-clamp-3">{lang === 'id' ? p.desc : p.descEn}</p>
                   </div>
                   <div className="mt-auto">
-                    <blockquote className={`text-xs italic ${p.color} border-l-2 pl-2 leading-relaxed mb-4`} style={{ borderColor: 'currentColor' }}>
+                    <blockquote className={`text-xs italic border-l-2 pl-2.5 leading-relaxed mb-4 ${p.color}`} style={{ borderColor: 'currentColor' }}>
                       {lang === 'id' ? p.quote : p.quoteEn}
                     </blockquote>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors">
                       {tx.readMore} <ChevronRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
@@ -902,60 +911,60 @@ export function EdukasiSection({ lang }: Props) {
               {/* State: Idle / Choose Category */}
               {quizState === 'idle' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-6">
-                  <h4 className="text-sm font-bold text-foreground mb-4 text-center">{tx.chooseCategory}</h4>
+                  <h4 className="text-sm font-extrabold text-foreground mb-5 text-center tracking-tight">{tx.chooseCategory}</h4>
                   
                   <div className="grid md:grid-cols-3 gap-4">
                     {/* Category 1 */}
                     <div 
                       onClick={() => startQuiz('tradition')}
-                      className="p-5 rounded-2xl border border-border bg-muted/20 hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all flex flex-col justify-between"
+                      className="p-5.5 rounded-2xl border border-cyan-500/25 bg-cyan-500/5 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
                     >
                       <div>
-                        <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 flex items-center justify-center mb-3">
+                        <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 shadow-sm">
                           <BookOpen className="w-5 h-5" />
                         </div>
-                        <h5 className="text-sm font-bold text-foreground mb-1">{tx.catTradition}</h5>
+                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catTradition}</h5>
                         <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catTraditionDesc}</p>
                       </div>
-                      <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                      <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
                         <span className="text-[11px] text-muted-foreground">High Score: <strong className="text-foreground">{quizHighScoreTradition}/4</strong></span>
-                        <span className="text-[11px] font-bold text-primary inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[11px] font-bold text-cyan-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
                       </div>
                     </div>
 
                     {/* Category 2 */}
                     <div 
                       onClick={() => startQuiz('ecology')}
-                      className="p-5 rounded-2xl border border-border bg-muted/20 hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all flex flex-col justify-between"
+                      className="p-5.5 rounded-2xl border border-green-500/25 bg-green-500/5 hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
                     >
                       <div>
-                        <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/20 text-green-600 flex items-center justify-center mb-3">
+                        <div className="w-11 h-11 rounded-xl bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 shadow-sm">
                           <Leaf className="w-5 h-5" />
                         </div>
-                        <h5 className="text-sm font-bold text-foreground mb-1">{tx.catEcology}</h5>
+                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catEcology}</h5>
                         <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catEcologyDesc}</p>
                       </div>
-                      <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                      <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
                         <span className="text-[11px] text-muted-foreground">High Score: <strong className="text-foreground">{quizHighScoreEcology}/4</strong></span>
-                        <span className="text-[11px] font-bold text-primary inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[11px] font-bold text-green-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
                       </div>
                     </div>
 
                     {/* Category 3 */}
                     <div 
                       onClick={() => startQuiz('daily')}
-                      className="p-5 rounded-2xl border border-border bg-muted/20 hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all flex flex-col justify-between"
+                      className="p-5.5 rounded-2xl border border-rose-500/25 bg-rose-500/5 hover:border-rose-500/50 hover:shadow-[0_0_20px_rgba(244,63,94,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
                     >
                       <div>
-                        <div className="w-10 h-10 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 flex items-center justify-center mb-3">
+                        <div className="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4 shadow-sm">
                           <Flame className="w-5 h-5" />
                         </div>
-                        <h5 className="text-sm font-bold text-foreground mb-1">{tx.catDaily}</h5>
+                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catDaily}</h5>
                         <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catDailyDesc}</p>
                       </div>
-                      <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                      <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
                         <span className="text-[11px] text-muted-foreground">{tx.dailyHighScore}: <strong className="text-foreground">{quizHighScoreDaily}/4</strong></span>
-                        <span className="text-[11px] font-bold text-primary inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[11px] font-bold text-rose-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
                       </div>
                     </div>
                   </div>
@@ -967,9 +976,9 @@ export function EdukasiSection({ lang }: Props) {
                 <motion.div key={currentQ} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
                   {/* Progress bar */}
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                    <div className="flex-1 h-2.5 rounded-full bg-muted/60 overflow-hidden border border-border/40">
                       <motion.div
-                        className="h-full rounded-full bg-primary"
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_8px_rgba(16,185,129,0.3)]"
                         animate={{ width: `${((currentQ + 1) / activeQuestions.length) * 100}%` }}
                         transition={{ duration: 0.3 }}
                       />
@@ -977,23 +986,23 @@ export function EdukasiSection({ lang }: Props) {
                     <span className="text-xs font-bold text-muted-foreground">{currentQ + 1}/{activeQuestions.length}</span>
                   </div>
 
-                  <div className="mb-6 p-5 rounded-2xl bg-primary/5 border border-primary/15">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold uppercase text-primary mb-2">
+                  <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-card/65 border border-primary/20 shadow-inner">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-extrabold uppercase tracking-widest text-primary mb-2.5">
                       {quizCategory === 'tradition' ? tx.catTradition : quizCategory === 'ecology' ? tx.catEcology : tx.catDaily}
                     </span>
-                    <p className="text-foreground text-sm font-semibold leading-relaxed">{lang === 'id' ? q.q : q.qEn}</p>
+                    <p className="text-foreground text-sm font-bold leading-relaxed">{lang === 'id' ? q.q : q.qEn}</p>
                   </div>
 
                   <div className="grid gap-3 mb-6">
                     {(lang === 'id' ? q.opts : q.optsEn).map((opt, idx) => {
-                      let style = 'border-border bg-card text-foreground hover:border-primary/50 hover:bg-primary/5';
+                      let style = 'border-border/60 bg-card/65 text-foreground hover:border-primary/45 hover:bg-primary/5 hover:translate-x-1';
                       if (answered) {
                         if (idx === q.correct) {
-                          style = 'border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300';
+                          style = 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-300 shadow-[0_0_12px_rgba(34,197,94,0.1)]';
                         } else if (idx === selected) {
-                          style = 'border-red-400 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400';
+                          style = 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.1)]';
                         } else {
-                          style = 'border-border bg-card text-muted-foreground opacity-50';
+                          style = 'border-border bg-muted/20 text-muted-foreground/60 opacity-50';
                         }
                       }
 
@@ -1002,18 +1011,18 @@ export function EdukasiSection({ lang }: Props) {
                           key={idx}
                           disabled={answered}
                           onClick={() => handleAnswer(idx)}
-                          className={`flex items-center gap-3 p-4 rounded-xl border-2 text-left text-xs font-medium transition-all ${style} ${!answered ? 'cursor-pointer hover:translate-x-1' : 'cursor-default'}`}
+                          className={`flex items-center gap-3.5 p-4 rounded-xl border-2 text-left text-xs font-semibold transition-all duration-300 ${style} ${!answered ? 'cursor-pointer' : 'cursor-default'}`}
                         >
-                          <div className={`w-6 h-6 rounded-full border flex items-center justify-center flex-shrink-0 text-xs font-bold ${
-                            answered && idx === q.correct ? 'border-green-500 bg-green-500 text-white' :
-                            answered && idx === selected ? 'border-red-400 bg-red-400 text-white' :
-                            'border-border'
+                          <div className={`w-6.5 h-6.5 rounded-full border flex items-center justify-center flex-shrink-0 text-xs font-bold transition-all duration-300 ${
+                            answered && idx === q.correct ? 'border-green-500 bg-green-500 text-white shadow-sm' :
+                            answered && idx === selected ? 'border-red-500 bg-red-500 text-white shadow-sm' :
+                            'border-border/80 bg-background/50'
                           }`}>
                             {answered && idx === q.correct ? <CheckCircle className="w-3.5 h-3.5" /> :
                              answered && idx === selected ? <XCircle className="w-3.5 h-3.5" /> :
                              String.fromCharCode(65 + idx)}
                           </div>
-                          <span className="flex-1">{opt}</span>
+                          <span className="flex-1 leading-normal">{opt}</span>
                         </button>
                       );
                     })}
@@ -1025,11 +1034,11 @@ export function EdukasiSection({ lang }: Props) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-muted border border-border text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5"
+                        className="mb-6 p-4 rounded-xl bg-muted/60 border border-border/70 text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5 shadow-sm"
                       >
                         <Info className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                         <div>
-                          <strong>{tx.explain}:</strong> {lang === 'id' ? q.explanation : q.explanationEn}
+                          <strong className="text-foreground">{tx.explain}:</strong> {lang === 'id' ? q.explanation : q.explanationEn}
                         </div>
                       </motion.div>
                     )}
@@ -1038,7 +1047,7 @@ export function EdukasiSection({ lang }: Props) {
                   {answered && (
                     <button
                       onClick={handleNext}
-                      className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold text-xs hover:opacity-95 transition-all shadow-md shadow-primary/25 active:scale-[0.99] flex items-center justify-center gap-1.5"
+                      className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-95 transition-all shadow-md shadow-primary/25 active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       {currentQ < activeQuestions.length - 1 ? tx.next : (lang === 'id' ? 'Lihat Hasil' : 'See Results')} 
                       <ChevronRight className="w-4 h-4" />
@@ -1050,7 +1059,7 @@ export function EdukasiSection({ lang }: Props) {
               {/* State: Quiz Failed */}
               {quizState === 'failed' && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-                  <div className="text-5xl mb-4">💔</div>
+                  <div className="text-5xl mb-4 animate-bounce">💔</div>
                   <h3 className="text-red-500 font-extrabold text-xl mb-2">{tx.failedTitle}</h3>
                   <p className="text-muted-foreground text-xs max-w-sm mx-auto mb-6 leading-relaxed">
                     {tx.failedDesc}
@@ -1059,13 +1068,13 @@ export function EdukasiSection({ lang }: Props) {
                   <div className="flex justify-center gap-3 mb-8">
                     <button 
                       onClick={() => startQuiz(quizCategory)} 
-                      className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-xs hover:opacity-90 shadow-md shadow-primary/25 transition-all flex items-center gap-1.5"
+                      className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-90 shadow-md shadow-primary/25 transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <RefreshCw className="w-3.5 h-3.5" /> {lang === 'id' ? 'Ulangi Kuis' : 'Retry Quiz'}
                     </button>
                     <button 
                       onClick={restartQuiz} 
-                      className="px-6 py-2.5 rounded-xl border border-border text-muted-foreground font-semibold text-xs hover:bg-muted transition-all"
+                      className="px-6 py-2.5 rounded-xl border border-border text-muted-foreground font-bold text-xs hover:bg-muted transition-all cursor-pointer"
                     >
                       {lang === 'id' ? 'Kategori Lain' : 'Other Category'}
                     </button>
@@ -1084,14 +1093,14 @@ export function EdukasiSection({ lang }: Props) {
                           const correctOpt = lang === 'id' ? question.opts[question.correct] : question.optsEn[question.correct];
                           
                           return (
-                            <div key={i} className="p-3.5 rounded-xl bg-muted/40 border border-border text-xs">
-                              <p className="font-bold text-foreground mb-2">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
-                              <div className="space-y-1 mb-2">
-                                <p className="text-red-500">❌ {tx.yourAnswer}: <span className="font-semibold">{selectedOpt}</span></p>
-                                <p className="text-green-600 dark:text-green-400">✅ {tx.correctAnswer}: <span className="font-semibold">{correctOpt}</span></p>
+                            <div key={i} className="p-4 rounded-2xl bg-card border border-border/80 text-xs shadow-md">
+                              <p className="font-extrabold text-foreground mb-2.5">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
+                              <div className="space-y-1.5 mb-3">
+                                <p className="text-red-500 font-semibold flex items-center gap-1.5"><span>❌ {tx.yourAnswer}:</span> <span className="font-bold">{selectedOpt}</span></p>
+                                <p className="text-green-600 dark:text-green-400 font-semibold flex items-center gap-1.5"><span>✅ {tx.correctAnswer}:</span> <span className="font-bold">{correctOpt}</span></p>
                               </div>
                               <p className="text-muted-foreground leading-normal mt-2 border-t border-border/40 pt-2 italic">
-                                💡 {lang === 'id' ? question.explanation : question.explanationEn}
+                                💡 <strong>{tx.explain}:</strong> {lang === 'id' ? question.explanation : question.explanationEn}
                               </p>
                             </div>
                           );
@@ -1109,7 +1118,7 @@ export function EdukasiSection({ lang }: Props) {
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-6"
                 >
-                  <div className="text-5xl mb-4">🏆</div>
+                  <div className="text-5xl mb-4 animate-bounce">🏆</div>
                   <h3 className="text-foreground mb-2 text-xl font-bold">{tx.result}</h3>
                   <div className="text-5xl font-extrabold text-primary mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     {score}/{activeQuestions.length}
@@ -1130,13 +1139,13 @@ export function EdukasiSection({ lang }: Props) {
                   <div className="flex justify-center gap-3 mb-8">
                     <button 
                       onClick={() => startQuiz(quizCategory)} 
-                      className="px-5 py-2.5 rounded-xl border border-border text-muted-foreground text-xs hover:border-primary hover:text-primary transition-all font-semibold flex items-center gap-1.5"
+                      className="px-5 py-2.5 rounded-xl border border-border text-muted-foreground text-xs hover:border-primary hover:text-primary transition-all font-bold flex items-center gap-1.5 cursor-pointer"
                     >
                       <RefreshCw className="w-3.5 h-3.5" /> {tx.restart}
                     </button>
                     <button 
                       onClick={restartQuiz} 
-                      className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs hover:opacity-90 transition-all font-semibold shadow-md shadow-primary/20"
+                      className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs hover:opacity-90 transition-all font-bold shadow-md shadow-primary/20 cursor-pointer"
                     >
                       {lang === 'id' ? 'Pilih Kuis Lain' : 'Other Quizzes'}
                     </button>
@@ -1163,7 +1172,7 @@ export function EdukasiSection({ lang }: Props) {
                         />
                         <button
                           type="submit"
-                          className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-semibold text-[11px] hover:opacity-90 transition-all shadow-sm"
+                          className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-[11px] hover:opacity-90 transition-all shadow-sm cursor-pointer"
                         >
                           Submit
                         </button>
@@ -1186,20 +1195,20 @@ export function EdukasiSection({ lang }: Props) {
                         const correctOpt = lang === 'id' ? question.opts[question.correct] : question.optsEn[question.correct];
                         
                         return (
-                          <div key={i} className={`p-4 rounded-2xl border text-xs bg-muted/15 ${isCorrect ? 'border-green-500/30' : 'border-red-400/30'}`}>
-                            <p className="font-bold text-foreground mb-2">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
-                            <div className="space-y-1 mb-2">
-                              <p className={isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-500'}>
-                                {isCorrect ? '✅' : '❌'} {tx.yourAnswer}: <span className="font-semibold">{selectedOpt}</span>
+                          <div key={i} className={`p-4 rounded-2xl border text-xs bg-card shadow-md ${isCorrect ? 'border-green-500/30' : 'border-red-400/30'}`}>
+                            <p className="font-extrabold text-foreground mb-2.5">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
+                            <div className="space-y-1.5 mb-3">
+                              <p className={`${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-500'} font-semibold flex items-center gap-1.5`}>
+                                <span>{isCorrect ? '✅' : '❌'} {tx.yourAnswer}:</span> <span className="font-bold">{selectedOpt}</span>
                               </p>
                               {!isCorrect && (
-                                <p className="text-green-600 dark:text-green-400">
-                                  ✅ {tx.correctAnswer}: <span className="font-semibold">{correctOpt}</span>
+                                <p className="text-green-600 dark:text-green-400 font-semibold flex items-center gap-1.5">
+                                  <span>✅ {tx.correctAnswer}:</span> <span className="font-bold">{correctOpt}</span>
                                 </p>
                               )}
                             </div>
                             <p className="text-muted-foreground leading-normal mt-2 border-t border-border/40 pt-2 italic">
-                              💡 {lang === 'id' ? question.explanation : question.explanationEn}
+                              💡 <strong>{tx.explain}:</strong> {lang === 'id' ? question.explanation : question.explanationEn}
                             </p>
                           </div>
                         );
@@ -1235,26 +1244,30 @@ export function EdukasiSection({ lang }: Props) {
                     <motion.div
                       key={badge.id}
                       whileHover={{ x: 4 }}
-                      className={`flex items-center gap-3.5 p-3.5 rounded-2xl border-2 transition-all shadow-sm ${
+                      className={`flex items-center gap-3.5 p-3 rounded-2xl border-2 transition-all shadow-sm ${
                         badge.earned 
-                          ? `${badge.color} border-current/20` 
+                          ? `${badge.color} border-current/15` 
                           : 'border-border bg-muted/20 opacity-45'
                       }`}
                     >
-                      <div className={`text-3xl filter transition-transform ${badge.earned ? 'drop-shadow-md scale-110' : 'grayscale'}`}>
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-2xl filter transition-transform duration-300 flex-shrink-0 ${
+                        badge.earned 
+                          ? 'bg-background/80 shadow-inner scale-110 drop-shadow-md' 
+                          : 'bg-muted/50 grayscale'
+                      }`}>
                         {badge.icon}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className={`text-xs font-bold truncate ${badge.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        <div className={`text-xs font-extrabold truncate ${badge.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
                           {lang === 'id' ? badge.name : badge.nameEn}
                         </div>
-                        <div className="text-[11px] text-muted-foreground truncate">{lang === 'id' ? badge.desc : badge.descEn}</div>
+                        <div className="text-[10px] text-muted-foreground truncate">{lang === 'id' ? badge.desc : badge.descEn}</div>
                       </div>
-                      <div>
+                      <div className="flex-shrink-0">
                         {badge.earned ? (
                           <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
                         ) : (
-                          <div className="w-4.5 h-4.5 rounded-full border border-border/80 flex items-center justify-center text-[10px] text-muted-foreground/50">🔒</div>
+                          <div className="w-4.5 h-4.5 rounded-full border border-border/85 flex items-center justify-center text-[10px] text-muted-foreground/50 bg-background/30">🔒</div>
                         )}
                       </div>
                     </motion.div>
@@ -1283,34 +1296,34 @@ export function EdukasiSection({ lang }: Props) {
                 <div className="space-y-2.5 mt-5">
                   {leaderboard.map((entry, idx) => {
                     const placeColor = 
-                      idx === 0 ? 'bg-amber-500 text-white font-extrabold shadow-sm' :
-                      idx === 1 ? 'bg-slate-400 text-white font-extrabold shadow-sm' :
-                      idx === 2 ? 'bg-amber-700 text-white font-extrabold shadow-sm' :
-                      'bg-muted text-muted-foreground font-semibold';
+                      idx === 0 ? 'bg-gradient-to-br from-yellow-300 to-amber-500 text-amber-950 font-black shadow-[0_0_8px_rgba(245,158,11,0.25)] border border-yellow-200/30' :
+                      idx === 1 ? 'bg-gradient-to-br from-slate-200 to-slate-400 text-slate-950 font-black shadow-[0_0_8px_rgba(148,163,184,0.25)] border border-slate-100/30' :
+                      idx === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-amber-50 font-black shadow-[0_0_8px_rgba(180,83,9,0.25)] border border-amber-500/30' :
+                      'bg-muted text-muted-foreground font-semibold border border-border/30';
 
                     return (
                       <motion.div
                         key={idx}
-                        whileHover={{ scale: 1.01 }}
-                        className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                        whileHover={{ scale: 1.02 }}
+                        className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-300 ${
                           entry.isUser 
-                            ? 'border-primary bg-primary/5 shadow-sm ring-1 ring-primary/20' 
-                            : 'border-border bg-card'
+                            ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(16,185,129,0.08)]' 
+                            : 'border-border/60 bg-card/65'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${placeColor}`}>
-                            {idx + 1}
+                          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs shadow-inner flex-shrink-0 ${placeColor}`}>
+                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
                           </div>
                           <div>
-                            <div className={`text-xs ${entry.isUser ? 'font-bold text-primary' : 'font-semibold text-foreground'}`}>
-                              {entry.name} {entry.isUser && <span className="text-[10px] font-normal text-muted-foreground">(Kamu)</span>}
+                            <div className={`text-xs ${entry.isUser ? 'font-extrabold text-primary' : 'font-bold text-foreground'}`}>
+                              {entry.name} {entry.isUser && <span className="text-[9px] font-normal text-muted-foreground bg-primary/10 px-1.5 py-0.5 rounded-md ml-1">(Kamu)</span>}
                             </div>
                             <div className="text-[10px] text-muted-foreground">{entry.badgeCount} Lencana</div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-xs font-bold text-foreground">{entry.score} pts</div>
+                        <div className="text-right flex-shrink-0">
+                          <div className="text-xs font-bold text-foreground bg-background/50 border border-border/60 px-2.5 py-1 rounded-lg">{entry.score} pts</div>
                         </div>
                       </motion.div>
                     );
@@ -1326,7 +1339,7 @@ export function EdukasiSection({ lang }: Props) {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-sm overflow-hidden relative"
+          className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-xl overflow-hidden relative"
         >
           {/* Subtle background decoration */}
           <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-[0.03] bg-primary blur-2xl pointer-events-none" style={{ transform: 'translate(20%, -20%)' }} />
@@ -1335,8 +1348,8 @@ export function EdukasiSection({ lang }: Props) {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-border pb-6 mb-6">
               <div>
                 <div className="flex items-center gap-2.5 mb-1.5">
-                  <Flame className="w-5.5 h-5.5 text-accent" />
-                  <h3 className="text-foreground text-base font-bold">{tx.challenge}</h3>
+                  <Flame className="w-5.5 h-5.5 text-accent animate-pulse" />
+                  <h3 className="text-foreground text-base font-extrabold tracking-tight">{tx.challenge}</h3>
                 </div>
                 <p className="text-muted-foreground text-xs leading-relaxed max-w-xl">{tx.challengeDesc}</p>
               </div>
@@ -1345,12 +1358,12 @@ export function EdukasiSection({ lang }: Props) {
                 {/* Challenge Progress Bar */}
                 {challengeJoined && (
                   <div className="text-right">
-                    <div className="text-[11px] font-bold text-foreground">
-                      {tx.challengeProgress}: <span className="text-primary">{completedDays.length}/7</span> ({Math.round((completedDays.length / 7) * 100)}%)
+                    <div className="text-[11px] font-extrabold text-foreground">
+                      {tx.challengeProgress}: <span className="text-primary font-black">{completedDays.length}/7</span> ({Math.round((completedDays.length / 7) * 100)}%)
                     </div>
-                    <div className="w-28 h-2 bg-muted rounded-full overflow-hidden mt-1 border border-border/50">
+                    <div className="w-28 h-2 bg-muted/65 rounded-full overflow-hidden mt-1.5 border border-border/50">
                       <div 
-                        className="h-full bg-primary rounded-full transition-all duration-500" 
+                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]" 
                         style={{ width: `${(completedDays.length / 7) * 100}%` }}
                       />
                     </div>
@@ -1358,10 +1371,11 @@ export function EdukasiSection({ lang }: Props) {
                 )}
 
                 <button
+                  type="button"
                   onClick={() => setChallengeJoined(true)}
-                  className={`flex-shrink-0 px-5 py-3 rounded-xl font-bold text-xs transition-all active:scale-[0.98] ${
+                  className={`flex-shrink-0 px-5 py-3 rounded-xl font-extrabold text-xs transition-all active:scale-[0.98] cursor-pointer ${
                     challengeJoined
-                      ? 'bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400'
+                      ? 'bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 shadow-[0_0_12px_rgba(34,197,94,0.08)]'
                       : 'bg-accent text-accent-foreground hover:opacity-90 shadow-md shadow-accent/25'
                   }`}
                 >
@@ -1370,53 +1384,88 @@ export function EdukasiSection({ lang }: Props) {
               </div>
             </div>
 
-            {/* Grid Days */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-              {tx.days.map((day, i) => {
-                const isCompleted = completedDays.includes(i);
-                
-                return (
-                  <div 
-                    key={i}
-                    className={`rounded-2xl border transition-all flex flex-col justify-between overflow-hidden p-3.5 bg-muted/10 ${
-                      isCompleted 
-                        ? 'border-green-500 bg-green-500/5 shadow-sm' 
-                        : 'border-border bg-card/45 hover:border-primary/50'
-                    }`}
-                  >
-                    <div>
-                      {/* Checkbox button */}
-                      <div className="flex justify-between items-start mb-3">
-                        <span className="text-2xl filter drop-shadow-sm">
-                          {dayDetails[i].icon}
-                        </span>
-                        
-                        <input
-                          type="checkbox"
-                          checked={isCompleted}
-                          onChange={() => toggleDayCompleted(i)}
-                          className="w-4.5 h-4.5 rounded border-border text-primary focus:ring-primary focus:ring-1 accent-primary cursor-pointer"
-                        />
-                      </div>
-
-                      <div className="text-[11px] font-bold text-foreground leading-tight mb-3">
-                        {day}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => setExpandedDay(expandedDay === i ? null : i)}
-                      className={`w-full py-1.5 rounded-lg border text-[10px] font-semibold transition-all ${
-                        expandedDay === i
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'border-border bg-card text-muted-foreground hover:text-foreground'
+            {/* Grid Days with Connecting Timeline Track */}
+            <div className="relative">
+              {/* Timeline line behind items on larger screens */}
+              <div className="hidden lg:block absolute top-[30px] left-[5%] right-[5%] h-0.5 bg-gradient-to-r from-emerald-500/10 via-primary/30 to-emerald-500/10 -z-0" />
+              
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4.5 relative z-10">
+                {tx.days.map((day, i) => {
+                  const isCompleted = completedDays.includes(i);
+                  const [dayNum, dayTitle] = day.split(': ');
+                  const dayBadge = `D${i + 1}`;
+                  
+                  return (
+                    <motion.div 
+                      key={i}
+                      whileHover={{ y: -4, scale: 1.01 }}
+                      className={`rounded-2xl border-2 transition-all duration-300 flex flex-col justify-between overflow-hidden p-4 relative bg-card/65 backdrop-blur-sm ${
+                        isCompleted 
+                          ? 'border-emerald-500/50 bg-gradient-to-b from-emerald-950/10 to-card shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                          : 'border-border bg-card/45 hover:border-primary/45'
                       }`}
                     >
-                      {expandedDay === i ? (lang === 'id' ? 'Tutup Info' : 'Close Info') : (lang === 'id' ? 'Detail Tips' : 'Tips Info')}
-                    </button>
-                  </div>
-                );
-              })}
+                      <div>
+                        {/* Top Area: Glowing Badge and Checkbox */}
+                        <div className="flex justify-between items-center mb-4">
+                          {/* Circular Day Badge */}
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black tracking-wider transition-all duration-300 ${
+                            isCompleted
+                              ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.5)] border border-emerald-300/20'
+                              : 'bg-muted/70 text-muted-foreground border border-border/80'
+                          }`}>
+                            {dayBadge}
+                          </div>
+                          
+                          {/* Custom Styled Checkbox wrapper */}
+                          <label className="relative flex items-center cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={isCompleted}
+                              onChange={() => toggleDayCompleted(i)}
+                              className="sr-only"
+                            />
+                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
+                              isCompleted 
+                                ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_8px_rgba(16,185,129,0.3)]' 
+                                : 'border-border/80 bg-background hover:border-primary'
+                            }`}>
+                              {isCompleted && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Title and Icon */}
+                        <div className="mb-4">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className={`text-xl transition-transform duration-300 ${isCompleted ? 'scale-110 filter drop-shadow-md' : 'grayscale opacity-50'}`}>
+                              {dayDetails[i].icon}
+                            </span>
+                            <div className="text-[10px] font-extrabold text-primary/80 uppercase tracking-widest">
+                              {dayNum}
+                            </div>
+                          </div>
+                          <div className="text-[11px] font-extrabold text-foreground leading-snug min-h-8">
+                            {dayTitle}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setExpandedDay(expandedDay === i ? null : i)}
+                        className={`w-full py-2 rounded-xl border text-[10px] font-bold transition-all duration-300 cursor-pointer ${
+                          expandedDay === i
+                            ? 'bg-primary text-primary-foreground border-primary shadow-md shadow-primary/15'
+                            : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-border/80'
+                        }`}
+                      >
+                        {expandedDay === i ? (lang === 'id' ? 'Tutup Info' : 'Close Info') : (lang === 'id' ? 'Detail Tips' : 'Tips Info')}
+                      </button>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Expanded Day Details Panel */}
@@ -1426,9 +1475,9 @@ export function EdukasiSection({ lang }: Props) {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="p-5 rounded-2xl bg-primary/5 border border-primary/20 flex items-start gap-3.5 overflow-hidden"
+                  className="p-5 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 flex items-start gap-3.5 overflow-hidden"
                 >
-                  <div className="text-3xl flex-shrink-0 mt-0.5 filter drop-shadow-sm">
+                  <div className="text-3xl flex-shrink-0 mt-0.5 filter drop-shadow-md">
                     {dayDetails[expandedDay].icon}
                   </div>
                   <div>
@@ -1445,58 +1494,99 @@ export function EdukasiSection({ lang }: Props) {
 
             {/* AI Eco-Coach Panel */}
             <div className="mt-8 border-t border-border pt-6">
-              <div className="flex items-center gap-2.5 mb-4">
-                <Sparkles className="w-5.5 h-5.5 text-primary animate-pulse" />
-                <div>
-                  <h4 className="text-foreground text-sm font-bold leading-tight">{tx.aiCoachTitle}</h4>
-                  <p className="text-muted-foreground text-xs">{tx.aiCoachSub}</p>
+              <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <Sparkles className="w-5.5 h-5.5 text-primary animate-pulse" />
+                  <div>
+                    <h4 className="text-foreground text-sm font-extrabold leading-tight">{tx.aiCoachTitle}</h4>
+                    <p className="text-muted-foreground text-xs">{tx.aiCoachSub}</p>
+                  </div>
                 </div>
+                
+                {completedDays.length > 0 && (
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.05)] animate-pulse">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    AI Coach Active
+                  </div>
+                )}
               </div>
 
               {completedDays.length === 0 ? (
-                <div className="p-4 rounded-2xl bg-muted/30 border border-border text-center text-xs text-muted-foreground">
+                <div className="p-5 rounded-2xl bg-muted/20 border border-border text-center text-xs text-muted-foreground font-semibold">
                   {tx.aiCoachEmpty}
                 </div>
               ) : (
                 <div className="grid md:grid-cols-3 gap-6 items-stretch">
-                  {/* Left Impact Statistics */}
-                  <div className="md:col-span-1 p-4 rounded-2xl bg-muted/40 border border-border flex flex-col justify-around gap-2 text-xs">
-                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                      Estimasi Dampak Lingkungan
+                  {/* Left Impact Statistics (Neon Progress Meters) */}
+                  <div className="md:col-span-1 p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between gap-4 text-xs shadow-md">
+                    <div className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">
+                      {lang === 'id' ? 'Estimasi Dampak Lingkungan' : 'Estimated Environmental Impact'}
                     </div>
-                    {ecoCoachImpact.co2Saved > 0 && (
-                      <div className="flex justify-between items-center py-1 border-b border-border/40">
-                        <span className="text-muted-foreground">Emisi CO2 Dikurangi:</span>
-                        <span className="font-bold text-foreground">{ecoCoachImpact.co2Saved} kg</span>
+                    
+                    {/* CO2 Metric */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
+                        <span className="flex items-center gap-1"><Wind className="w-3.5 h-3.5 text-purple-400" /> {lang === 'id' ? 'Emisi CO₂ Dikurangi' : 'CO₂ Reduced'}</span>
+                        <span>{ecoCoachImpact.co2Saved} / 0.8 kg</span>
                       </div>
-                    )}
-                    {ecoCoachImpact.waterSaved > 0 && (
-                      <div className="flex justify-between items-center py-1 border-b border-border/40">
-                        <span className="text-muted-foreground">Air Bersih Dihemat:</span>
-                        <span className="font-bold text-foreground">{ecoCoachImpact.waterSaved} L</span>
+                      <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
+                        <motion.div
+                          className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min((ecoCoachImpact.co2Saved / 0.8) * 100, 100)}%` }}
+                          transition={{ duration: 0.5 }}
+                        />
                       </div>
-                    )}
-                    {ecoCoachImpact.plasticSaved > 0 && (
-                      <div className="flex justify-between items-center py-1 border-b border-border/40">
-                        <span className="text-muted-foreground">Sampah Plastik Dikurangi:</span>
-                        <span className="font-bold text-foreground">{ecoCoachImpact.plasticSaved} kg</span>
+                    </div>
+
+                    {/* Water Metric */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
+                        <span className="flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-400" /> {lang === 'id' ? 'Air Bersih Dihemat' : 'Water Conserved'}</span>
+                        <span>{ecoCoachImpact.waterSaved} / 50 L</span>
                       </div>
-                    )}
-                    {ecoCoachImpact.communityCount > 0 && (
-                      <div className="flex justify-between items-center py-1">
-                        <span className="text-muted-foreground">Aksi Komunitas:</span>
-                        <span className="font-bold text-foreground">Saling Berbagi</span>
+                      <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
+                        <motion.div
+                          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min((ecoCoachImpact.waterSaved / 50) * 100, 100)}%` }}
+                          transition={{ duration: 0.5 }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Plastic Metric */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
+                        <span className="flex items-center gap-1"><Leaf className="w-3.5 h-3.5 text-emerald-400" /> {lang === 'id' ? 'Plastik Dikurangi' : 'Plastic Reduced'}</span>
+                        <span>{ecoCoachImpact.plasticSaved} / 0.7 kg</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
+                        <motion.div
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min((ecoCoachImpact.plasticSaved / 0.7) * 100, 100)}%` }}
+                          transition={{ duration: 0.5 }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Community sharing indicator */}
+                    {completedDays.includes(6) && (
+                      <div className="mt-1 pt-2 border-t border-border/40 flex items-center justify-between text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                        <span className="flex items-center gap-1">🤝 {lang === 'id' ? 'Aksi Sosial' : 'Social Action'}</span>
+                        <span>{lang === 'id' ? 'Saling Berbagi' : 'Sharing Action'}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Right Coach Analysis Feedback */}
-                  <div className="md:col-span-2 p-5 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col justify-between">
+                  <div className="md:col-span-2 p-5 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-card border border-primary/20 shadow-md flex flex-col justify-between">
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary mb-2 uppercase">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-extrabold text-primary mb-3.5 uppercase tracking-wider">
                         {tx.aiCoachFeedback}
                       </div>
-                      <p className="text-xs text-foreground leading-relaxed">
+                      <p className="text-xs text-foreground/90 leading-relaxed font-semibold">
                         {completedDays.length === 7 ? (
                           lang === 'id' 
                             ? 'Luar biasa! Kamu telah menyelesaikan seluruh rangkaian tantangan 7 hari. Kamu tidak hanya mempelajari teori kearifan lokal, melainkan mempraktikkannya langsung. Aksi nyata ini menunjukkan pemahaman mendalam tentang Pikukuh (hukum adat pelestarian) di era modern. Kamu layak menyandang gelar Duta Pelestari!'

@@ -1402,7 +1402,7 @@ export function HistoryCultureSection({ lang }: Props) {
                   <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-primary">{card.region}</span>
                 </div>
                 <div className="flex items-center justify-between gap-3">
-                  <p className="max-w-[13rem] translate-y-2 text-xs leading-relaxed text-muted-foreground opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="max-w-[13rem] text-xs leading-relaxed text-muted-foreground line-clamp-2">
                     {getCultureStory(card).artIdentity}
                   </p>
                   <div className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-foreground transition group-hover:bg-primary group-hover:text-primary-foreground">

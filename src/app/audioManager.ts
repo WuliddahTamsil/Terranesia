@@ -16,15 +16,15 @@ const NOTES: Record<string, number> = {
 // Song Melodies
 export const TRADITIONAL_SONGS: Record<string, { name: string; bpm: number; instrument: string; melody: Note[] }> = {
   general: {
-    name: 'Terranesia Ambient',
-    bpm: 65,
-    instrument: 'suling',
+    name: 'Terranesia Gamelan Ambient',
+    bpm: 55,
+    instrument: 'gamelan',
     melody: [
-      { pitch: 'C4', duration: 2 }, { pitch: 'E4', duration: 2 }, { pitch: 'G4', duration: 4 },
-      { pitch: 'A4', duration: 2 }, { pitch: 'G4', duration: 2 }, { pitch: 'E4', duration: 4 },
-      { pitch: 'D4', duration: 2 }, { pitch: 'E4', duration: 2 }, { pitch: 'C4', duration: 4 },
-      { pitch: 'REST', duration: 2 }, { pitch: 'G4', duration: 2 }, { pitch: 'C5', duration: 4 },
-      { pitch: 'B4', duration: 2 }, { pitch: 'A4', duration: 2 }, { pitch: 'G4', duration: 4 }
+      { pitch: 'E4', duration: 2 }, { pitch: 'G4', duration: 2 }, { pitch: 'A4', duration: 4 },
+      { pitch: 'G4', duration: 2 }, { pitch: 'E4', duration: 2 }, { pitch: 'D4', duration: 4 },
+      { pitch: 'E4', duration: 2 }, { pitch: 'D4', duration: 2 }, { pitch: 'C4', duration: 4 },
+      { pitch: 'REST', duration: 2 }, { pitch: 'D4', duration: 2 }, { pitch: 'E4', duration: 4 },
+      { pitch: 'G4', duration: 2 }, { pitch: 'E4', duration: 2 }, { pitch: 'D4', duration: 4 }
     ]
   },
   jawa: {
@@ -267,7 +267,7 @@ export class AudioManager {
 
     // Define drone chords for each song (warm, low, pleasant pad chords)
     const DRONE_CHORDS: Record<string, number[]> = {
-      general: [130.81, 196.00, 261.63, 329.63], // C3, G3, C4, E4
+      general: [164.81, 246.94, 329.63, 392.00], // E3, B3, E4, G4 (matching warm Javanese scale)
       jawa: [164.81, 246.94, 329.63, 392.00],    // E3, B3, E4, G4
       bali: [110.00, 220.00, 261.63, 329.63],    // A2, A3, C4, E4
       nusatenggara: [130.81, 174.61, 261.63, 349.23], // C3, F3, C4, F4
@@ -615,9 +615,9 @@ export class AudioManager {
     const now = this.audioCtx.currentTime;
 
     if (!coords) {
-      // Reset panning and volume to full
-      this.pannerNode.pan.setTargetAtTime(0.0, now, 0.1);
-      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.8, now, 0.1);
+      // Reset panning and volume to full smoothly
+      this.pannerNode.pan.setTargetAtTime(0.0, now, 0.4);
+      this.masterGain.gain.setTargetAtTime(this.isMuted ? 0.0 : 0.8, now, 0.5);
       return;
     }
 
@@ -627,14 +627,14 @@ export class AudioManager {
     
     // Normalize panning between -1.0 (Left) and 1.0 (Right)
     const panFactor = Math.max(-1.0, Math.min(1.0, dLng * 0.12)); 
-    this.pannerNode.pan.setTargetAtTime(panFactor, now, 0.1);
+    this.pannerNode.pan.setTargetAtTime(panFactor, now, 0.4);
 
     // 2. Calculate Zoom Volume Scaling
     // Faint at zoom 5 (15% volume), Full at zoom 12+ (100% volume)
     const zoomPct = Math.max(0.15, Math.min(1.0, (zoom - 4) / 8.0));
     const targetMasterVolume = this.isMuted ? 0.0 : 0.8 * zoomPct;
 
-    this.masterGain.gain.setTargetAtTime(targetMasterVolume, now, 0.1);
+    this.masterGain.gain.setTargetAtTime(targetMasterVolume, now, 0.45);
   }
 
   public toggleMute() {

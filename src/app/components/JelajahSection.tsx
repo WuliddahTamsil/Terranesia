@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { 
   RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, 
-  AreaChart, Area, XAxis, YAxis, Tooltip, Legend
+  AreaChart, Area, XAxis, YAxis, Tooltip, Legend, CartesianGrid
 } from 'recharts';
 import { MapContainer, TileLayer, Marker, useMap, Polyline, useMapEvents } from 'react-leaflet';
 import * as L from 'leaflet';
@@ -504,6 +504,15 @@ const preservationData = [
   { year: '2025', baduy: 95, toraja: 80, dayak: 92, minang: 78, bali: 90, asmat: 88, naga: 94, sasak: 82, kajang: 96, mentawai: 89, waerebo: 85, sumba: 83, dani: 87, bajo: 93, tengger: 91, nias: 86, dayak_iban: 97 },
 ];
 
+const tribeConfig = [
+  { key: 'baduy', nameId: 'Suku Baduy', nameEn: 'Baduy Tribe', color: '#10B981', dashed: false },
+  { key: 'naga', nameId: 'Kampung Naga', nameEn: 'Naga Village', color: '#059669', dashed: true },
+  { key: 'toraja', nameId: 'Suku Toraja', nameEn: 'Toraja Tribe', color: '#A855F7', dashed: false },
+  { key: 'dayak', nameId: 'Suku Dayak', nameEn: 'Dayak Tribe', color: '#F4A261', dashed: false },
+  { key: 'minang', nameId: 'Minangkabau', nameEn: 'Minangkabau', color: '#3B82F6', dashed: false },
+  { key: 'bali', nameId: 'Subak Bali', nameEn: 'Bali Subak', color: '#06B6D4', dashed: false },
+];
+
 const typeColors: Record<string, string> = {
   tradisi: '#F4A261', // Amber
   ritual: '#A855F7',  // Purple
@@ -567,6 +576,8 @@ const t = {
     ndviForest: 'Kerapatan Hutan (NDVI)',
     humidity: 'Kelembapan',
     temperature: 'Suhu Lokal',
+    windSpeed: 'Kecepatan Angin',
+    weatherDesc: 'Kondisi Cuaca',
   },
   en: {
     title: 'Nusantara Cultural Explorer',
@@ -617,6 +628,8 @@ const t = {
     ndviForest: 'Forest Density (NDVI)',
     humidity: 'Humidity',
     temperature: 'Local Temp',
+    windSpeed: 'Wind Speed',
+    weatherDesc: 'Weather Condition',
   },
 };
 
@@ -633,6 +646,56 @@ const translateSubject = (subject: string, lang: 'id' | 'en') => {
     }
   }
   return subject;
+};
+
+// Weather WMO Code to Description Mapper
+const getWeatherDesc = (code: number, lang: 'id' | 'en'): string => {
+  const mapping: Record<number, { id: string; en: string }> = {
+    0: { id: 'Cerah', en: 'Clear Sky' },
+    1: { id: 'Cerah Berawan', en: 'Partly Cloudy' },
+    2: { id: 'Berawan', en: 'Cloudy' },
+    3: { id: 'Mendung', en: 'Overcast' },
+    45: { id: 'Kabut', en: 'Foggy' },
+    48: { id: 'Kabut Berembun', en: 'Depositing Rime Fog' },
+    51: { id: 'Gerimis Ringan', en: 'Light Drizzle' },
+    53: { id: 'Gerimis Sedang', en: 'Moderate Drizzle' },
+    55: { id: 'Gerimis Lebat', en: 'Dense Drizzle' },
+    61: { id: 'Hujan Ringan', en: 'Slight Rain' },
+    63: { id: 'Hujan Sedang', en: 'Moderate Rain' },
+    65: { id: 'Hujan Lebat', en: 'Heavy Rain' },
+    80: { id: 'Hujan Rintik', en: 'Rain Showers' },
+    81: { id: 'Hujan Sedang', en: 'Moderate Rain Showers' },
+    82: { id: 'Hujan Deras', en: 'Violent Rain Showers' },
+    95: { id: 'Badai Petir', en: 'Thunderstorm' },
+    96: { id: 'Badai Petir Ringan', en: 'Thunderstorm with Hail' },
+    99: { id: 'Badai Petir Berat', en: 'Severe Thunderstorm' },
+  };
+  const match = mapping[code] ?? { id: 'Cerah', en: 'Clear Sky' };
+  return lang === 'id' ? match.id : match.en;
+};
+
+// Weather Emoji Picker
+const getWeatherIcon = (code: number): string => {
+  if (code === 0) return '☀️';
+  if (code >= 1 && code <= 3) return '⛅';
+  if (code >= 45 && code <= 48) return '🌫️';
+  if (code >= 51 && code <= 67) return '🌧️';
+  if (code >= 80 && code <= 82) return '🌦️';
+  if (code >= 95 && code <= 99) return '🌩️';
+  return '🌡️';
+};
+
+// NDVI Classification Helper
+const getNDVIDesc = (ndviVal: number, lang: 'id' | 'en'): string => {
+  if (ndviVal < 0.15) {
+    return lang === 'id' ? 'Zona Bahari / Pesisir' : 'Marine / Coastal Zone';
+  } else if (ndviVal < 0.5) {
+    return lang === 'id' ? 'Savana / Semak Belukar' : 'Savanna / Scrublands';
+  } else if (ndviVal < 0.75) {
+    return lang === 'id' ? 'Agrikultur / Terasering' : 'Agricultural / Terraces';
+  } else {
+    return lang === 'id' ? 'Hutan Hujan Tropis Rapat' : 'Dense Tropical Rainforest';
+  }
 };
 
 // Web Audio Context and Synthesizer sound generator
@@ -1019,6 +1082,30 @@ const storyScenarios: ScenarioStep[] = [
   }
 ];
 
+const getRealisticNDVI = (id: string): string => {
+  const ndviMap: Record<string, number> = {
+    baduy: 0.94,
+    toraja: 0.82,
+    dayak: 0.96,
+    minang: 0.68,
+    bali: 0.72,
+    asmat: 0.88,
+    naga: 0.93,
+    sasak: 0.58,
+    kajang: 0.95,
+    mentawai: 0.92,
+    waerebo: 0.89,
+    sumba: 0.48,
+    dani: 0.74,
+    bajo: 0.12, // Sea nomads, marine environment
+    tengger: 0.78,
+    nias: 0.70,
+    dayak_iban: 0.97,
+  };
+  const val = ndviMap[id] ?? 0.75;
+  return val.toFixed(2);
+};
+
 export function JelajahSection({ lang, isDark }: Props) {
   const { playTribeMusic, stopTribeMusic, updateSpatialAudio, analyserNode, isPlaying, togglePlay } = useAudio();
 
@@ -1028,6 +1115,58 @@ export function JelajahSection({ lang, isDark }: Props) {
   const [sustainabilityMin, setSustainabilityMin] = useState<number>(50);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<CulturePoint | null>(null);
+  const [visibleTribes, setVisibleTribes] = useState<string[]>(['baduy', 'naga', 'toraja', 'dayak', 'minang', 'bali']);
+
+  // Real-time weather states
+  const [weatherData, setWeatherData] = useState<{ temp: number; humidity: number; windSpeed?: number; weatherCode?: number } | null>(null);
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
+
+  // Trigger weather fetch on selection
+  useEffect(() => {
+    if (!selected) {
+      setWeatherData(null);
+      return;
+    }
+    
+    let isMounted = true;
+    setIsWeatherLoading(true);
+    
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${selected.lat}&longitude=${selected.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`)
+      .then(res => {
+        if (!res.ok) throw new Error("Weather API error");
+        return res.json();
+      })
+      .then(data => {
+        if (isMounted && data.current) {
+          setWeatherData({
+            temp: data.current.temperature_2m,
+            humidity: data.current.relative_humidity_2m,
+            windSpeed: data.current.wind_speed_10m,
+            weatherCode: data.current.weather_code,
+          });
+        }
+      })
+      .catch(err => {
+        console.warn("Failed to fetch current weather telemetries:", err);
+        if (isMounted) {
+          setWeatherData({
+            temp: selected.region === 'papua' || selected.region === 'nusatenggara' ? 24.5 : 28.2,
+            humidity: selected.region === 'nusatenggara' ? 72 : 88,
+            windSpeed: 6.8,
+            weatherCode: 1, // Partly Cloudy
+          });
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsWeatherLoading(false);
+        }
+      });
+      
+    return () => {
+      isMounted = false;
+    };
+  }, [selected]);
 
   // Trigger regional music on tribe selection
   useEffect(() => {
@@ -1378,6 +1517,13 @@ export function JelajahSection({ lang, isDark }: Props) {
 
     return matchCategory && matchRegion && matchSustain && matchSearch && matchLayer;
   });
+
+  // Dynamic average sustainability based on filtered cultures
+  const averageSustainability = useMemo(() => {
+    if (filtered.length === 0) return 0;
+    const sum = filtered.reduce((acc, c) => acc + c.sustainability, 0);
+    return sum / filtered.length;
+  }, [filtered]);
 
   // Close details panel when selected item gets filtered out
   useEffect(() => {
@@ -2097,10 +2243,10 @@ export function JelajahSection({ lang, isDark }: Props) {
               </div>
               <div className="flex items-center justify-between text-xs font-semibold">
                 <span className="text-muted-foreground">{lang === 'id' ? 'Pelestarian Nasional:' : 'Nat. Preservation:'}</span>
-                <span className="text-primary font-bold">84.5%</span>
+                <span className="text-primary font-bold">{averageSustainability.toFixed(1)}%</span>
               </div>
               <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-1">
-                <div className="h-full bg-primary" style={{ width: '84.5%' }} />
+                <div className="h-full bg-primary" style={{ width: `${averageSustainability}%` }} />
               </div>
               
               {/* Rotating GIS Live log ticker */}
@@ -2579,7 +2725,10 @@ export function JelajahSection({ lang, isDark }: Props) {
                         <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.ndviForest}</div>
                         <div className="text-[11px] font-bold text-foreground flex items-center gap-1.5 font-mono">
                           <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                          {selected.type === 'lingkungan' ? '0.94 NDVI' : selected.type === 'tradisi' ? '0.78 NDVI' : '0.86 NDVI'}
+                          {getRealisticNDVI(selected.id)} NDVI
+                        </div>
+                        <div className="text-[8px] text-emerald-400 font-extrabold uppercase leading-tight tracking-wide">
+                          {getNDVIDesc(Number(getRealisticNDVI(selected.id)), lang)}
                         </div>
                       </div>
 
@@ -2587,7 +2736,11 @@ export function JelajahSection({ lang, isDark }: Props) {
                       <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
                         <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.temperature}</div>
                         <div className="text-[11px] font-bold text-foreground font-mono">
-                          {selected.region === 'papua' || selected.region === 'nusatenggara' ? '24.5 °C' : '28.2 °C'}
+                          {isWeatherLoading ? (
+                            <span className="animate-pulse opacity-70">Loading...</span>
+                          ) : (
+                            `${weatherData && weatherData.temp !== undefined ? weatherData.temp.toFixed(1) : (selected.region === 'papua' || selected.region === 'nusatenggara' ? 24.5 : 28.2)} °C`
+                          )}
                         </div>
                       </div>
 
@@ -2595,7 +2748,38 @@ export function JelajahSection({ lang, isDark }: Props) {
                       <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
                         <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.humidity}</div>
                         <div className="text-[11px] font-bold text-foreground font-mono">
-                          {selected.region === 'nusatenggara' ? '72%' : '88%'}
+                          {isWeatherLoading ? (
+                            <span className="animate-pulse opacity-70">Loading...</span>
+                          ) : (
+                            `${weatherData && weatherData.humidity !== undefined ? weatherData.humidity : (selected.region === 'nusatenggara' ? 72 : 88)}%`
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Wind Speed */}
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.windSpeed}</div>
+                        <div className="text-[11px] font-bold text-foreground font-mono">
+                          {isWeatherLoading ? (
+                            <span className="animate-pulse opacity-70">Loading...</span>
+                          ) : (
+                            `${weatherData && weatherData.windSpeed !== undefined ? weatherData.windSpeed.toFixed(1) : 6.8} km/h`
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Weather Condition */}
+                      <div className="bg-muted/20 p-3 rounded-xl border border-border/30 space-y-1">
+                        <div className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{tx.weatherDesc}</div>
+                        <div className="text-[10px] font-bold text-foreground truncate flex items-center gap-1 font-mono">
+                          {isWeatherLoading ? (
+                            <span className="animate-pulse opacity-70">Loading...</span>
+                          ) : (
+                            <>
+                              <span>{getWeatherIcon(weatherData && weatherData.weatherCode !== undefined ? weatherData.weatherCode : 1)}</span>
+                              <span className="truncate">{getWeatherDesc(weatherData && weatherData.weatherCode !== undefined ? weatherData.weatherCode : 1, lang)}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2905,9 +3089,45 @@ export function JelajahSection({ lang, isDark }: Props) {
           viewport={{ once: true }}
           className="bg-card border border-border rounded-3xl p-5 sm:p-6 shadow-xl"
         >
-          <div className="flex items-center gap-2 mb-6 border-b border-border pb-3">
-            <TrendingDown className="w-5 h-5 text-accent animate-pulse" />
-            <h3 className="text-foreground text-lg font-bold tracking-tight">{tx.chart}</h3>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 border-b border-border pb-4">
+            <div className="flex items-center gap-2">
+              <TrendingDown className="w-5 h-5 text-accent animate-pulse" />
+              <h3 className="text-foreground text-lg font-bold tracking-tight">{tx.chart}</h3>
+            </div>
+            
+            {/* Custom Interactive Legend / Filters */}
+            <div className="flex flex-wrap gap-2 text-xs">
+              {tribeConfig.map((t) => {
+                const isVisible = visibleTribes.includes(t.key);
+                return (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => {
+                      setVisibleTribes(prev => 
+                        prev.includes(t.key) ? prev.filter(k => k !== t.key) : [...prev, t.key]
+                      );
+                    }}
+                    style={{
+                      borderColor: isVisible ? t.color : 'rgba(128,128,128,0.15)',
+                      backgroundColor: isVisible ? `${t.color}15` : 'rgba(128,128,128,0.02)',
+                      color: isVisible ? 'var(--foreground)' : 'var(--muted-foreground)',
+                      boxShadow: isVisible ? `0 0 10px ${t.color}20` : 'none',
+                    }}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 hover:scale-105 active:scale-95 font-semibold cursor-pointer`}
+                  >
+                    <span 
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0" 
+                      style={{ 
+                        backgroundColor: t.color, 
+                        border: t.dashed ? `1.5px dashed ${t.color}` : 'none' 
+                      }} 
+                    />
+                    <span>{lang === 'id' ? t.nameId : t.nameEn}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
           
           <div className="h-72">
@@ -2915,46 +3135,70 @@ export function JelajahSection({ lang, isDark }: Props) {
               <AreaChart data={preservationData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorBaduy" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#10B981" stopOpacity={0.01} />
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0.00} />
                   </linearGradient>
                   <linearGradient id="colorToraja" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#A855F7" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#A855F7" stopOpacity={0.01} />
+                    <stop offset="5%" stopColor="#A855F7" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#A855F7" stopOpacity={0.00} />
                   </linearGradient>
                   <linearGradient id="colorDayak" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#F4A261" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#F4A261" stopOpacity={0.01} />
+                    <stop offset="5%" stopColor="#F4A261" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#F4A261" stopOpacity={0.00} />
                   </linearGradient>
                   <linearGradient id="colorMinang" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.01} />
+                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0.00} />
                   </linearGradient>
                   <linearGradient id="colorBali" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0.01} />
+                    <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0.00} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="year" tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} />
-                <YAxis domain={[65, 100]} tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128, 128, 128, 0.15)" />
+                <XAxis dataKey="year" tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} dy={8} />
+                <YAxis domain={[65, 100]} tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontWeight: '700' }} axisLine={false} tickLine={false} dx={-8} />
                 <Tooltip
-                  contentStyle={{ 
-                    background: 'rgba(25, 35, 30, 0.75)', 
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)', 
-                    borderRadius: 20, 
-                    color: 'var(--foreground)', 
-                    fontSize: 11, 
-                    fontWeight: '600',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)' 
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="backdrop-blur-md bg-card/90 border border-border/80 p-3 sm:p-4 rounded-2xl shadow-xl space-y-2.5 min-w-[150px]">
+                          <p className="text-xs font-bold text-muted-foreground tracking-wide">{label}</p>
+                          <div className="space-y-1.5">
+                            {payload.map((entry) => (
+                              <div key={entry.name} className="flex items-center justify-between gap-4 text-xs">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color || entry.stroke }} />
+                                  <span className="font-medium text-muted-foreground">{entry.name}</span>
+                                </div>
+                                <span className="font-bold text-foreground text-right">{entry.value}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
                   }}
                 />
-                <Area type="monotone" dataKey="baduy" name="Suku Baduy" stroke="#10B981" strokeWidth={3} fill="url(#colorBaduy)" />
-                <Area type="monotone" dataKey="naga" name="Kampung Naga" stroke="#059669" strokeWidth={2.5} strokeDasharray="4 4" fill="none" />
-                <Area type="monotone" dataKey="toraja" name="Toraja" stroke="#A855F7" strokeWidth={3} fill="url(#colorToraja)" />
-                <Area type="monotone" dataKey="dayak" name="Suku Dayak" stroke="#F4A261" strokeWidth={3} fill="url(#colorDayak)" />
-                <Area type="monotone" dataKey="minang" name="Minangkabau" stroke="#3B82F6" strokeWidth={3} fill="url(#colorMinang)" />
-                <Area type="monotone" dataKey="bali" name="Bali Subak" stroke="#06B6D4" strokeWidth={3} fill="url(#colorBali)" />
+                {visibleTribes.includes('baduy') && (
+                  <Area type="monotone" dataKey="baduy" name={lang === 'id' ? 'Suku Baduy' : 'Baduy Tribe'} stroke="#10B981" strokeWidth={3.5} fill="url(#colorBaduy)" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
+                {visibleTribes.includes('naga') && (
+                  <Area type="monotone" dataKey="naga" name={lang === 'id' ? 'Kampung Naga' : 'Naga Village'} stroke="#059669" strokeWidth={2.5} strokeDasharray="4 4" fill="none" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
+                {visibleTribes.includes('toraja') && (
+                  <Area type="monotone" dataKey="toraja" name={lang === 'id' ? 'Suku Toraja' : 'Toraja Tribe'} stroke="#A855F7" strokeWidth={3.5} fill="url(#colorToraja)" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
+                {visibleTribes.includes('dayak') && (
+                  <Area type="monotone" dataKey="dayak" name={lang === 'id' ? 'Suku Dayak' : 'Dayak Tribe'} stroke="#F4A261" strokeWidth={3.5} fill="url(#colorDayak)" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
+                {visibleTribes.includes('minang') && (
+                  <Area type="monotone" dataKey="minang" name="Minangkabau" stroke="#3B82F6" strokeWidth={3.5} fill="url(#colorMinang)" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
+                {visibleTribes.includes('bali') && (
+                  <Area type="monotone" dataKey="bali" name={lang === 'id' ? 'Subak Bali' : 'Bali Subak'} stroke="#06B6D4" strokeWidth={3.5} fill="url(#colorBali)" activeDot={{ r: 6, strokeWidth: 0 }} />
+                )}
               </AreaChart>
             </ResponsiveContainer>
           </div>

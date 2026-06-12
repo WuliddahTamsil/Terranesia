@@ -30,4 +30,106 @@ html {
   animation: eq-bar-3 0.8s ease-in-out infinite 0.4s;
 }
 
+.scrollbar-custom-donasi::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-custom-donasi::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-custom-donasi::-webkit-scrollbar-thumb {
+  background: rgba(45, 106, 79, 0.2);
+  border-radius: 9999px;
+}
+.scrollbar-custom-donasi::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 106, 79, 0.4);
+}
+
+@media print {
+  @page {
+    size: landscape;
+    margin: 1.5cm;
+  }
+
+  /* Hide all top-level elements of body */
+  body > * {
+    display: none !important;
+  }
+  
+  /* Show only our dynamically created print root container */
+  body > #certificate-print-root {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Force print certificate card inside it to look premium */
+  #certificate-print-root > #donasi-sertifikat-card,
+  #certificate-print-root > #trip-ticket-card {
+    display: block !important;
+    margin: auto !important;
+    width: 100% !important;
+    max-width: 720px !important;
+    background-color: #FAF8F5 !important; /* light cream bg for printed certificate/ticket */
+    border: 6px double #2D6A4F !important;
+    border-radius: 1.5rem !important;
+    padding: 3rem !important;
+    box-shadow: none !important;
+    color: #1C2B1A !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #certificate-print-root > #donasi-sertifikat-card {
+    text-align: center !important;
+  }
+
+  #certificate-print-root > #trip-ticket-card {
+    text-align: left !important;
+  }
+
+  /* Make sure the stamp/icon SVG prints nicely */
+  #certificate-print-root > #donasi-sertifikat-card svg,
+  #certificate-print-root > #trip-ticket-card svg {
+    display: inline-block !important;
+  }
+
+  /* Ensure text is clearly printed in dark colors even in dark mode */
+  #certificate-print-root > #donasi-sertifikat-card *,
+  #certificate-print-root > #trip-ticket-card * {
+    color: #1C2B1A !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #certificate-print-root > #donasi-sertifikat-card .text-primary,
+  #certificate-print-root > #trip-ticket-card .text-primary {
+    color: #2D6A4F !important;
+  }
+
+  #certificate-print-root > #donasi-sertifikat-card .text-muted-foreground,
+  #certificate-print-root > #trip-ticket-card .text-muted-foreground {
+    color: #4A5568 !important;
+  }
+  
+  #certificate-print-root > #donasi-sertifikat-card .border-primary\/20,
+  #certificate-print-root > #trip-ticket-card .border-primary\/20,
+  #certificate-print-root > #trip-ticket-card .border-primary\/15 {
+    border-color: rgba(45, 106, 79, 0.2) !important;
+  }
+
+  #certificate-print-root > #trip-ticket-card .bg-primary\/5 {
+    background-color: rgba(45, 106, 79, 0.05) !important;
+  }
+}
+
 

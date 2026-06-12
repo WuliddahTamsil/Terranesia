@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import { Logo } from './Logo';
 import { Mail, Instagram, Twitter, Youtube, Github, CheckCircle, MapPin, Phone } from 'lucide-react';
@@ -10,7 +11,7 @@ const t = {
     tagline: 'Melestarikan kearifan lokal Nusantara melalui teknologi modern untuk generasi yang mencintai alam.',
     explore: 'Jelajahi',
     links1: ['Beranda', 'Peta Budaya', 'The Lab', 'Edukasi', 'Donasi'],
-    hrefs1: ['#beranda', '#jelajah', '#lab', '#edukasi', '#donasi'],
+    hrefs1: ['#beranda', '#jelajah', '/lab', '#edukasi', '#donasi'],
     about: 'Tentang',
     links2: ['Tentang Kami', 'Tim Pengembang', 'Mitra', 'Blog', 'Kontak'],
     legal: 'Legal',
@@ -21,17 +22,17 @@ const t = {
     subBtn: 'Berlangganan',
     subSuccess: 'Berhasil! Terima kasih telah berlangganan 🌿',
     contact: 'Kontak',
-    address: 'Jl. Pendidikan No. 1, Jakarta Selatan, DKI Jakarta',
+    address: 'Kota Bogor, Jawa Barat',
     email: 'hello@terranesia.id',
-    phone: '+62 21 1234 5678',
-    rights: '� 2026 Terranesia. Hak Cipta Dilindungi.',
+    phone: '+62 87805987309',
+    rights: ' 2026 Terranesia. Hak Cipta Dilindungi.',
     madeWith: 'Dibuat dengan ❤️ untuk Pelestarian Budaya Nusantara',
   },
   en: {
     tagline: 'Preserving Nusantara local wisdom through modern technology for a nature-loving generation.',
     explore: 'Explore',
     links1: ['Home', 'Culture Map', 'The Lab', 'Education', 'Donate'],
-    hrefs1: ['#beranda', '#jelajah', '#lab', '#edukasi', '#donasi'],
+    hrefs1: ['#beranda', '#jelajah', '/lab', '#edukasi', '#donasi'],
     about: 'About',
     links2: ['About Us', 'Dev Team', 'Partners', 'Blog', 'Contact'],
     legal: 'Legal',
@@ -42,10 +43,10 @@ const t = {
     subBtn: 'Subscribe',
     subSuccess: 'Success! Thank you for subscribing 🌿',
     contact: 'Contact',
-    address: 'Jl. Pendidikan No. 1, South Jakarta, DKI Jakarta',
+    address: 'Bogor City, West Java',
     email: 'hello@terranesia.id',
-    phone: '+62 21 1234 5678',
-    rights: '� 2026 Terranesia. All Rights Reserved.',
+    phone: '+62 87805987309',
+    rights: ' 2026 Terranesia. All Rights Reserved.',
     madeWith: 'Made with ❤️ for Nusantara Cultural Preservation',
   },
 };
@@ -54,6 +55,32 @@ export function Footer({ lang }: Props) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const tx = t[lang];
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const smoothScroll = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleLinkClick = (e: React.MouseEvent, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const id = href.substring(1);
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => smoothScroll(id), 100);
+      } else {
+        smoothScroll(id);
+      }
+    } else if (href.startsWith('/')) {
+      e.preventDefault();
+      navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,7 +172,8 @@ export function Footer({ lang }: Props) {
                 <li key={i}>
                   <a
                     href={tx.hrefs1[i]}
-                    className="text-background/55 text-sm hover:text-primary transition-colors"
+                    onClick={(e) => handleLinkClick(e, tx.hrefs1[i])}
+                    className="text-background/55 text-sm hover:text-primary transition-colors cursor-pointer"
                   >
                     {label}
                   </a>
@@ -160,7 +188,9 @@ export function Footer({ lang }: Props) {
             <ul className="space-y-2.5">
               {tx.links2.map((label) => (
                 <li key={label}>
-                  <a href="#" className="text-background/55 text-sm hover:text-primary transition-colors">{label}</a>
+                  <span className="text-background/55 text-sm cursor-default select-none">
+                    {label}
+                  </span>
                 </li>
               ))}
             </ul>

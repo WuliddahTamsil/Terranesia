@@ -29,16 +29,47 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('beranda');
   const tx = t[lang];
   const location = useLocation();
   const navigate = useNavigate();
   const { isPlaying, togglePlay } = useAudio();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+
+      if (location.pathname === '/') {
+        const sectionIds = ['beranda', 'jelajah', 'sejarah-budaya', 'edukasi', 'donasi'];
+        let currentActive = 'beranda';
+
+        // Check if we are near the bottom of the page
+        const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+        if (isAtBottom) {
+          currentActive = 'donasi';
+        } else {
+          for (const id of sectionIds) {
+            const element = document.getElementById(id);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              // A section is active if its top is above the upper-middle viewport threshold (e.g. 200px)
+              // and its bottom is below that threshold.
+              if (rect.top <= 200 && rect.bottom >= 200) {
+                currentActive = id;
+                break;
+              }
+            }
+          }
+        }
+        setActiveSection(currentActive);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once initially
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   const links = [
     { label: tx.home, href: '#beranda', id: 'beranda' },
@@ -63,15 +94,6 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
         smoothScroll(link.id);
       }
     }
-  };
-
-  const isCurrentSection = (id: string) => {
-    if (location.pathname !== '/') return false;
-    // Check if the section is currently in view
-    const element = document.getElementById(id);
-    if (!element) return false;
-    const rect = element.getBoundingClientRect();
-    return rect.top < window.innerHeight * 0.5 && rect.bottom > 0;
   };
 
   return (
@@ -108,7 +130,7 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
             {links.map((link) => {
               const isActive = link.href === '/lab' 
                 ? location.pathname === '/lab'
-                : isCurrentSection(link.id);
+                : location.pathname === '/' && activeSection === link.id;
               
               return (
                 <button
@@ -202,7 +224,7 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
               {links.map((link) => {
                 const isActive = link.href === '/lab' 
                   ? location.pathname === '/lab'
-                  : isCurrentSection(link.id);
+                  : location.pathname === '/' && activeSection === link.id;
                 
                 return (
                   <button

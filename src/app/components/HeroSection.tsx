@@ -1,9 +1,10 @@
-import { motion } from 'motion/react';
-import { MapPin, Brain, Headphones, ChevronDown, Play, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { MapPin, Brain, Headphones, ChevronDown, Play, Sparkles, X } from 'lucide-react';
 
 const HERO_BG = 'https://images.unsplash.com/photo-1672128558402-8e03471c8779?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920&q=80';
 const VILLAGE_IMG = 'https://images.unsplash.com/photo-1776442564181-fd60b00b9afc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80';
-const PERSON_IMG = 'https://images.unsplash.com/photo-1655966976173-4d3822ff9cda?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&q=80';
+const PERSON_IMG = 'https://images.unsplash.com/photo-1741272689174-f7f03b09a0ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&q=80';
 
 interface Props { lang: 'id' | 'en' }
 
@@ -15,13 +16,18 @@ const t = {
     sub: 'Jelajahi kekayaan budaya Nusantara melalui teknologi Web GIS, Kecerdasan Buatan, dan pengalaman AR/VR yang imersif untuk generasi yang mencintai alam.',
     cta1: 'Mulai Jelajah',
     cta2: 'Tonton Demo',
-    stat1: '340+', l1: 'Budaya Terpetakan',
-    stat2: '15K+', l2: 'Pengguna Aktif',
+    stat1: '40+', l1: 'Budaya Terpetakan',
+    stat2: '1.5K+', l2: 'Pengguna Aktif',
     stat3: '98%',  l3: 'Kepuasan Pelajar',
-    stat4: '50+',  l4: 'Wilayah Indonesia',
+    stat4: '38',   l4: 'Provinsi Terpetakan',
     feat1: 'Web GIS Interaktif',
     feat2: 'AI Powered',
     feat3: 'AR / VR Experience',
+    cardVillageTitle: 'Kampung Adat Ratenggaro',
+    cardVillageSub: 'Sumba Barat Daya, NTT',
+    cardDancerTitle: 'Tari Legong, Bali',
+    cardIndexTitle: 'Indeks Kebudayaan (IPK)',
+    cardIndexVal: '76.2%',
   },
   en: {
     badge: '',
@@ -30,13 +36,18 @@ const t = {
     sub: 'Explore Nusantara cultural heritage through immersive Web GIS, Artificial Intelligence, and AR/VR technology for a generation that loves nature.',
     cta1: 'Start Exploring',
     cta2: 'Watch Demo',
-    stat1: '340+', l1: 'Mapped Cultures',
-    stat2: '15K+', l2: 'Active Users',
+    stat1: '40+', l1: 'Mapped Cultures',
+    stat2: '1.5K+', l2: 'Active Users',
     stat3: '98%',  l3: 'Student Satisfaction',
-    stat4: '50+',  l4: 'Indonesian Regions',
+    stat4: '38',   l4: 'Mapped Provinces',
     feat1: 'Interactive Web GIS',
     feat2: 'AI Powered',
     feat3: 'AR / VR Experience',
+    cardVillageTitle: 'Ratenggaro Customary Village',
+    cardVillageSub: 'Southwest Sumba, NTT',
+    cardDancerTitle: 'Legong Dance, Bali',
+    cardIndexTitle: 'Culture Index (IPK)',
+    cardIndexVal: '76.2%',
   },
 };
 
@@ -51,6 +62,7 @@ const FloatingParticle = ({ delay, x, y, size }: { delay: number; x: string; y: 
 
 export function HeroSection({ lang }: Props) {
   const tx = t[lang];
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const stats = [
     { value: tx.stat1, label: tx.l1 },
@@ -167,8 +179,11 @@ export function HeroSection({ lang }: Props) {
                 <MapPin className="w-4 h-4" />
                 {tx.cta1}
               </a>
-              <button className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold bg-white/10 backdrop-blur border border-white/20 text-white hover:bg-white/20 transition-all duration-300">
-                <Play className="w-4 h-4 fill-current" />
+              <button 
+                onClick={() => setShowVideoModal(true)}
+                className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold bg-white/10 backdrop-blur border border-white/20 text-white hover:bg-white/20 transition-all duration-300 cursor-pointer animate-pulse"
+              >
+                <Play className="w-4 h-4 fill-current animate-bounce" />
                 {tx.cta2}
               </button>
             </motion.div>
@@ -188,8 +203,8 @@ export function HeroSection({ lang }: Props) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <div className="bg-white/15 backdrop-blur rounded-xl p-3 border border-white/20">
-                    <p className="text-white text-xs font-semibold">Desa Budaya Nusantara</p>
-                    <p className="text-white/70 text-xs">Indonesia - Wilayah Adat</p>
+                    <p className="text-white text-xs font-semibold">{tx.cardVillageTitle}</p>
+                    <p className="text-white/70 text-[10px]">{tx.cardVillageSub}</p>
                   </div>
                 </div>
               </div>
@@ -199,9 +214,11 @@ export function HeroSection({ lang }: Props) {
                 <img src={PERSON_IMG} alt="Terranesia culture guide" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-white text-xs">Live Virtual Tour</span>
+                  <div className="bg-white/15 backdrop-blur rounded-xl p-3 border border-white/20">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                      <span className="text-white text-xs font-semibold">{tx.cardDancerTitle}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -213,10 +230,10 @@ export function HeroSection({ lang }: Props) {
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
               >
                 <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-4 border border-white/25 shadow-2xl text-center min-w-[140px]">
-                  <div className="text-2xl font-bold text-white">97%</div>
-                  <div className="text-white/70 text-xs mt-1">Kearifan Terjaga</div>
+                  <div className="text-2xl font-bold text-white">{tx.cardIndexVal}</div>
+                  <div className="text-white/70 text-[10px] mt-1 leading-tight">{tx.cardIndexTitle}</div>
                   <div className="mt-2 h-1 rounded-full bg-white/20 overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-green-300" style={{ width: '97%' }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-green-300" style={{ width: tx.cardIndexVal }} />
                   </div>
                 </div>
               </motion.div>
@@ -256,6 +273,45 @@ export function HeroSection({ lang }: Props) {
           <ChevronDown className="w-5 h-5" />
         </a>
       </motion.div>
+
+      {/* Lightbox Video Modal */}
+      <AnimatePresence>
+        {showVideoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+          >
+            {/* Backdrop click to close */}
+            <div className="absolute inset-0" onClick={() => setShowVideoModal(false)} />
+            
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="relative w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden border border-white/10 shadow-2xl z-10"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowVideoModal(false)}
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors border border-white/10 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <iframe
+                src="https://www.youtube.com/embed/aKtb7Y3qOck?autoplay=1"
+                title="Wonderful Indonesia"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
