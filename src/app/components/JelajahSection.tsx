@@ -26,7 +26,7 @@ const PAPUA_IMG = 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?cro
 const NAGA_IMG = 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80';
 const SASAK_IMG = 'https://images.unsplash.com/photo-1626028986575-f7eb42dfd8ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80';
 
-interface CulturePoint {
+export interface CulturePoint {
   id: string;
   name: string;
   nameEn: string;
@@ -50,7 +50,7 @@ interface CulturePoint {
   philosophyEn: string;
 }
 
-const cultures: CulturePoint[] = [
+export const initialCultures: CulturePoint[] = [
   {
     id: 'baduy',
     name: 'Suku Baduy',
@@ -1108,6 +1108,44 @@ const getRealisticNDVI = (id: string): string => {
 
 export function JelajahSection({ lang, isDark }: Props) {
   const { playTribeMusic, stopTribeMusic, updateSpatialAudio, analyserNode, isPlaying, togglePlay } = useAudio();
+
+  const [culturesState, setCulturesState] = useState<CulturePoint[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecotwin_webgis_cultures');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    try {
+      localStorage.setItem('ecotwin_webgis_cultures', JSON.stringify(initialCultures));
+    } catch (e) {
+      console.error(e);
+    }
+    return initialCultures;
+  });
+
+  const cultures = culturesState;
+
+  useEffect(() => {
+    const handleSync = () => {
+      try {
+        const saved = localStorage.getItem('ecotwin_webgis_cultures');
+        if (saved) {
+          setCulturesState(JSON.parse(saved));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    window.addEventListener('storage', handleSync);
+    window.addEventListener('ecotwin_webgis_cultures_updated', handleSync);
+    return () => {
+      window.removeEventListener('storage', handleSync);
+      window.removeEventListener('ecotwin_webgis_cultures_updated', handleSync);
+    };
+  }, []);
 
   // Filters & State
   const [activeFilter, setActiveFilter] = useState<string>('all');

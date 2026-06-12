@@ -13,7 +13,7 @@ interface Props { lang: 'id' | 'en' }
 type Region = 'Sumatera' | 'Pulau Jawa' | 'Kalimantan' | 'Sulawesi' | 'Bali & Nusa Tenggara' | 'Maluku' | 'Papua';
 type Category = 'Tradisional' | 'Maritim' | 'Pegunungan' | 'Ritual' | 'Urban / Akulturasi';
 
-interface CultureCard {
+export interface CultureCard {
   id: string;
   name: string;
   region: Region;
@@ -97,7 +97,7 @@ function getCultureImage(card: CultureCard) {
   return imageByRegion[card.region];
 }
 
-const cultureCards: CultureCard[] = [
+export const cultureCards: CultureCard[] = [
   {
     id: 'aceh',
     name: 'Aceh',
@@ -1221,27 +1221,68 @@ function resetCardTilt(event: React.MouseEvent<HTMLButtonElement>) {
 const ITEMS_PER_PAGE = 6;
 
 function getCultureOfTheDay() {
-  const dayIndex = Math.floor(Date.now() / 86_400_000) % cultureCards.length;
-  return cultureCards[dayIndex];
+  let list = cultureCards;
+  try {
+    const saved = localStorage.getItem('ecotwin_cultures');
+    if (saved) {
+      list = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  const dayIndex = Math.floor(Date.now() / 86_400_000) % (list.length || 1);
+  return list[dayIndex];
 }
 
 export function HistoryCultureSection({ lang }: Props) {
   const tx = translations[lang];
+  const [cultures, setCultures] = useState<CultureCard[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecotwin_cultures');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    try {
+      localStorage.setItem('ecotwin_cultures', JSON.stringify(cultureCards));
+    } catch (e) {
+      console.error(e);
+    }
+    return cultureCards;
+  });
+
   const [activeRegion, setActiveRegion] = useState<(typeof regions)[number]>('Semua Pulau');
   const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>('Semua Kategori');
   const [search, setSearch] = useState('');
   const [selectedCard, setSelectedCard] = useState<CultureCard | null>(null);
   const [viewedIds, setViewedIds] = useState<string[]>([]);
-
-
   const [currentPage, setCurrentPage] = useState(1);
 
-
+  useEffect(() => {
+    const handleSync = () => {
+      try {
+        const saved = localStorage.getItem('ecotwin_cultures');
+        if (saved) {
+          setCultures(JSON.parse(saved));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    window.addEventListener('storage', handleSync);
+    window.addEventListener('ecotwin_cultures_updated', handleSync);
+    return () => {
+      window.removeEventListener('storage', handleSync);
+      window.removeEventListener('ecotwin_cultures_updated', handleSync);
+    };
+  }, []);
 
   const filteredCards = useMemo(() => {
     const normalizedSearch = search.toLowerCase().trim();
 
-    return cultureCards.filter((card) => {
+    return cultures.filter((card) => {
       const regionMatch = activeRegion === 'Semua Pulau' || card.region === activeRegion;
       const categoryMatch = activeCategory === 'Semua Kategori' || card.category === activeCategory;
       const searchMatch = !normalizedSearch || [

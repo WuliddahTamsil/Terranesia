@@ -14,6 +14,8 @@ import { DonasiSection } from './components/DonasiSection';
 import { Footer } from './components/Footer';
 import { AudioProvider, useAudio } from './audio/AudioContext';
 
+import { AdminDashboardPage } from './components/AdminDashboardPage';
+
 function HomePage({ lang, isDark }: { lang: 'id' | 'en'; isDark: boolean }) {
   return (
     <main>
@@ -73,6 +75,7 @@ function AppContent() {
             <Route path="/lab/eco-quiz" element={<EcoQuizPage lang={lang} isDark={isDark} />} />
             <Route path="/lab/carbon-calculator" element={<CarbonCalculatorPage lang={lang} isDark={isDark} />} />
             <Route path="/lab/story-scroll" element={<StoryScrollPage lang={lang} isDark={isDark} />} />
+            <Route path="/admin" element={<AdminDashboardPage lang={lang} isDark={isDark} />} />
           </Routes>
           <Footer lang={lang} isDark={isDark} />
         </div>

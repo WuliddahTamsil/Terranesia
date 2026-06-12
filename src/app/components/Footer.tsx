@@ -222,6 +222,13 @@ export function Footer({ lang, isDark }: Props) {
             {tx.links3.map(label => (
               <a key={label} href="#" className="text-background/40 text-xs hover:text-background/70 transition-colors">{label}</a>
             ))}
+            <a 
+              href="/admin" 
+              onClick={(e) => handleLinkClick(e, '/admin')} 
+              className="text-background/40 text-[10px] sm:text-xs hover:text-primary transition-colors font-semibold border-l border-background/20 pl-4"
+            >
+              Admin Portal
+            </a>
           </div>
         </div>
       </div>

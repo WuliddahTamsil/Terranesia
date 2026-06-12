@@ -108,6 +108,22 @@ export function SubscribeModal({ isOpen, onClose, lang }: SubscribeModalProps) {
       };
 
       localStorage.setItem('terranesia_subscription', JSON.stringify(subData));
+      
+      try {
+        const existing = localStorage.getItem('ecotwin_subscribers');
+        let list = existing ? JSON.parse(existing) : [];
+        const existingIdx = list.findIndex((s: any) => s.email === subData.email);
+        if (existingIdx !== -1) {
+          list[existingIdx] = subData;
+        } else {
+          list.unshift(subData);
+        }
+        localStorage.setItem('ecotwin_subscribers', JSON.stringify(list));
+        window.dispatchEvent(new Event('ecotwin_subscribers_updated'));
+      } catch (e) {
+        console.error("Failed to update subscribers list", e);
+      }
+
       setExistingSub(subData);
       setIsSubmitting(false);
       setShowSuccess(true);

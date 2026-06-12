@@ -393,7 +393,8 @@ export function DonasiSection({ lang }: Props) {
     const amount = getPaymentAmount();
     
     if (activeTab === 'trip') {
-      setBookingId(`EXP-${TRIP_PACKAGES[selectedTripIndex].id.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`);
+      const newBookingId = `EXP-${TRIP_PACKAGES[selectedTripIndex].id.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+      setBookingId(newBookingId);
       const dateObj = new Date();
       const formattedDate = dateObj.toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US', {
         year: 'numeric',
@@ -404,6 +405,27 @@ export function DonasiSection({ lang }: Props) {
       });
       setBookingDate(formattedDate);
       setBookingTotal(amount);
+
+      // Save to localStorage list of trip bookings
+      try {
+        const existing = localStorage.getItem('ecotwin_trip_bookings');
+        const list = existing ? JSON.parse(existing) : [];
+        const newBooking = {
+          id: newBookingId,
+          leadName: leadName.trim(),
+          contactPhone: contactPhone.trim(),
+          departureDate: departureDate,
+          participantsCount: participantsCount,
+          packageName: lang === 'id' ? TRIP_PACKAGES[selectedTripIndex].titleId : TRIP_PACKAGES[selectedTripIndex].titleEn,
+          totalAmount: amount,
+          bookedAt: dateObj.toISOString()
+        };
+        list.unshift(newBooking);
+        localStorage.setItem('ecotwin_trip_bookings', JSON.stringify(list));
+        window.dispatchEvent(new Event('ecotwin_bookings_updated'));
+      } catch (e) {
+        console.error("Failed to save trip booking", e);
+      }
       
       setShowQris(false);
       setIsBookingSuccess(true);
