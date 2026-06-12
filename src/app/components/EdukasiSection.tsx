@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  BookOpen, Trophy, Star, CheckCircle, XCircle, ChevronRight, Award, 
-  Target, Flame, Leaf, Droplets, Wind, Sun, Heart, RefreshCw, X, Sparkles, Info, ClipboardCheck
+  BookOpen, CheckCircle, XCircle, ChevronRight, Award, 
+  Target, Leaf, Droplets, Wind, Sun, RefreshCw, X, Info, ClipboardCheck,
+  GraduationCap, ScrollText, Users, BarChart3, TreePine, Shield, Compass, FileText
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface Props { lang: 'id' | 'en' }
 
@@ -12,71 +12,75 @@ const WEAVING = 'https://images.unsplash.com/photo-1661144050353-1d2566cbdf03?cr
 
 const philosophies = [
   {
-    icon: Leaf, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/30',
-    title: 'Kamase-masea (Kajang)', titleEn: 'Kamase-masea (Kajang)',
-    desc: 'Filosofi hidup bersahaja Suku Kajang di Sulawesi Selatan yang menolak kemewahan material demi menjaga kemurnian batin dan kelestarian hutan adat Ammatoa.',
-    descEn: 'The simple living philosophy of the Kajang tribe in South Sulawesi, rejecting material luxury to maintain spiritual purity and preserve the Ammatoa customary forest.',
-    quote: '"Amenteng ko kamase-masea, accule ko kamase-masea"',
-    quoteEn: '"Stand in simplicity, play in simplicity"',
+    icon: Leaf, color: 'text-primary', origin: 'Komunitas Baduy & Suku Kajang',
+    originEn: 'Baduy Community & Kajang Tribe',
+    title: 'Hidup Sederhana', titleEn: 'Simple Living',
+    desc: 'Diwariskan secara turun-temurun oleh komunitas adat Baduy di Banten dan Kajang Ammatoa di Sulawesi Selatan, prinsip ini mengutamakan konsumsi material yang terukur untuk mencegah eksploitasi alam berlebih. Kesederhanaan dihayati bukan sebagai kekurangan, melainkan sebagai sebuah kesadaran etis yang menetapkan batasan tegas antara kebutuhan subsisten dan keinginan konsumtif yang merusak.',
+    descEn: 'Passed down through generations by the Baduy community in Banten and the Kajang Ammatoa in South Sulawesi, this principle prioritizes measured material consumption to prevent over-exploitation of nature. Simplicity is embraced not as scarcity, but as an ethical consciousness that establishes clear boundaries between subsistence needs and destructive consumerist desires.',
+    quote: '"Lain ti kahayang, tapi ti kaperluan"',
+    quoteEn: '"Not from desire, but from necessity"',
   },
   {
-    icon: Droplets, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-950/30',
-    title: 'Tri Hita Karana (Bali)', titleEn: 'Tri Hita Karana (Bali)',
-    desc: 'Konsep hidup harmonis masyarakat Bali yang membagi hubungan kebahagiaan menjadi tiga aspek: harmoni dengan sesama manusia, alam lingkungan (Palemahan), dan Sang Pencipta.',
-    descEn: 'The harmonious living concept of Balinese society dividing the relationships of happiness into three aspects: harmony with fellow humans, nature (Palemahan), and the Creator.',
-    quote: '"Palemahan: Merawat tanah, menjaga kehidupan"',
-    quoteEn: '"Palemahan: Caring for the land, preserving life"',
+    icon: Droplets, color: 'text-primary', origin: 'Sunda Wiwitan & Maluku',
+    originEn: 'Sunda Wiwitan & Maluku',
+    title: 'Harmoni dengan Alam', titleEn: 'Harmony with Nature',
+    desc: 'Melalui pembagian tata ruang adat seperti klasifikasi hutan tutupan (leuweung kolot) pada masyarakat Sunda dan hukum adat sasi di Maluku, leluhur Nusantara menetapkan aturan konservasi ekologis yang ketat. Sistem sasi membatasi eksploitasi hasil laut pada periode tertentu untuk memberi ruang pemulihan bagi keanekaragaman hayati pantai dan laut.',
+    descEn: 'Through customary spatial zoning such as protected forest classification (leuweung kolot) in Sundanese society and the customary law of sasi in Maluku, Nusantara ancestors established strict ecological conservation rules. The sasi system restricts marine harvest during specific periods to allow coastal biodiversity to recover.',
+    quote: '"Gunung ulah dilebur, lebak ulah dirusak"',
+    quoteEn: '"Mountains must not be destroyed, valleys must not be damaged"',
   },
   {
-    icon: Wind, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/30',
-    title: 'Pikukuh Adat (Baduy)', titleEn: 'Pikukuh Adat (Baduy)',
-    desc: 'Ketentuan adat mutlak Suku Baduy di Banten yang menolak modernisasi luar demi menjaga keseimbangan ekologi pegunungan Kendeng dan keaslian titipan leluhur.',
-    descEn: 'The absolute customary code of the Baduy tribe in Banten, rejecting external modernization to preserve the ecological balance of the Kendeng mountains and ancestral heritage.',
-    quote: '"Lojor teu meunang dipotong, pondok teu meunang disambung"',
-    quoteEn: '"Long must not be cut, short must not be spliced"',
+    icon: Wind, color: 'text-primary', origin: 'Masyarakat Adat Baduy',
+    originEn: 'Baduy Indigenous Community',
+    title: 'Pikukuh (Hukum Adat)', titleEn: 'Pikukuh (Customary Law)',
+    desc: 'Pikukuh merupakan kode etik dan hukum adat mutlak yang mengatur seluruh lini kehidupan masyarakat Baduy, termasuk larangan penggunaan semen, kendaraan bermotor, listrik, dan bahan kimia sintetis. Aturan moral ini menjadi tameng ekologis yang berhasil mempertahankan kemurnian ribuan hektar hutan lindung di tengah tekanan urbanisasi modern.',
+    descEn: 'Pikukuh is the absolute customary law and code of ethics governing all aspects of Baduy life, including prohibitions on cement, motor vehicles, electricity, and synthetic chemicals. This moral code acts as an ecological shield, successfully preserving thousands of hectares of protected forest amidst modern urbanization pressures.',
+    quote: '"Buyut teu meunang dirobah"',
+    quoteEn: '"Ancestral heritage must not be changed"',
   },
   {
-    icon: Sun, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/30',
-    title: 'Hukum Sasi (Maluku-Papua)', titleEn: 'Sasi Law (Maluku-Papua)',
-    desc: 'Sistem konservasi tradisional masyarakat Maluku dan Papua yang melarang pengambilan hasil laut atau darat pada periode tertentu agar ekosistem pulih secara alami.',
-    descEn: 'The traditional conservation system of Maluku and Papua societies prohibiting the harvest of land or marine resources for a specific period to let ecosystems recover.',
-    quote: '"Menjaga laut hari ini untuk kehidupan esok hari"',
-    quoteEn: '"Guarding the sea today for tomorrow\'s life"',
+    icon: Sun, color: 'text-primary', origin: 'Dayak & Jawa',
+    originEn: 'Dayak & Javanese Traditions',
+    title: 'Rawatan Hidup', titleEn: 'Life Stewardship',
+    desc: 'Falsafah pengurusan hidup (life stewardship) tercermin dalam metode perladangan gilir balik masyarakat Dayak di Kalimantan serta tradisi sedekah bumi di Jawa. Alam diposisikan sebagai subjek yang setara, di mana setiap pemanfaatan sumber daya harus diiringi dengan tindakan pemulihan yang berorientasi pada keberlangsungan lintas generasi.',
+    descEn: 'The philosophy of life stewardship is reflected in the rotational farming methods of the Dayak communities in Kalimantan and the earth-offering rituals in Java. Nature is positioned as an equal partner, where any resource extraction must be accompanied by restorative actions oriented towards intergenerational sustainability.',
+    quote: '"Hirup kudu sing bener, lain sing pinter"',
+    quoteEn: '"Life must be righteous, not just clever"',
   },
 ];
 
 const philosophiesDetail = [
   {
-    historyId: 'Bagi Suku Kajang Ammatoa di Sulawesi Selatan, gaya hidup bersahaja ("kamase-masea") adalah aturan adat utama. Mereka berpakaian serba hitam tanpa alas kaki untuk menunjukkan kesetaraan mutlak di hadapan alam, serta melarang teknologi modern di dalam kawasan hutan adat mereka.',
-    historyEn: 'For the Kajang Ammatoa tribe in South Sulawesi, a modest lifestyle ("kamase-masea") is the primary customary rule. They dress entirely in black without footwear to demonstrate absolute equality before nature, and reject modern technology within their customary forest.',
-    modernId: 'Di tengah krisis iklim global yang dipicu oleh konsumerisme berlebihan, filosofi ini memotivasi kita untuk beralih ke konsumsi secukupnya (slow consumption), mengurangi limbah fesyen (fast fashion), serta mengurangi ketergantungan pada barang-barang instan yang merusak lingkungan.',
-    modernEn: 'Amidst the global climate crisis driven by overconsumption, this philosophy motivates us to shift to mindful consumption (slow consumption), reduce fast fashion waste, and minimize reliance on single-use convenience goods that harm the environment.',
-    actionId: 'Terapkan konsep "pembelian sadar": sebelum membeli sesuatu, tanyakan apakah barang tersebut esensial atau sekadar gengsi. Kurangi membeli pakaian baru secara impulsif dan rawatlah barang yang Anda miliki agar berumur panjang.',
-    actionEn: 'Apply the concept of "mindful purchasing": before buying, ask if the item is essential or just for prestige. Reduce impulsive purchases of new clothing and care for what you already own to maximize its lifespan.'
+    historyId: 'Komunitas Baduy di Banten dan Kajang Ammatoa di Sulawesi Selatan telah mempraktikkan kesederhanaan materi sebagai pilar spiritual dan sosial selama berabad-abad. Di Baduy, prinsip "Lain ti kahayang, tapi ti kaperluan" tercermin dalam pelarangan akumulasi barang modern. Sementara di Kajang, filosofi "Pasang Ri Kajang" mengajarkan gaya hidup bersahaja (Tallasa Kamase-masea) melalui penggunaan pakaian hitam tenunan sendiri tanpa alas kaki. Studi antropologi menunjukkan bahwa pembatasan sukarela ini berhasil menjaga hutan adat dari eksploitasi komersial.',
+    historyEn: 'The Baduy community in Banten and Kajang Ammatoa in South Sulawesi have practiced material simplicity as a spiritual and social pillar for centuries. In Baduy, the principle "Not from desire, but from necessity" is reflected in the prohibition of modern accumulation. Meanwhile, in Kajang, the "Pasang Ri Kajang" philosophy teaches a modest lifestyle (Tallasa Kamase-masea) through hand-woven black attire and barefoot living. Anthropological studies show that this voluntary restriction successfully shields customary forests from commercial exploitation.',
+    modernId: 'Dalam konteks krisis lingkungan kontemporer yang dipicu oleh pola konsumsi eksesif, gaya hidup sederhana menawarkan alternatif kritis terhadap budaya konsumerisme global. Pembatasan konsumsi selaras dengan Sustainable Development Goals (SDG 12) mengenai konsumsi dan produksi yang bertanggung jawab. Konsep ini mendorong transisi ke arah ekonomi sirkular dan meminimalisasi jejak karbon individu.',
+    modernEn: 'In the context of the contemporary environmental crisis driven by excessive consumption, simple living offers a critical alternative to global consumerism. Restricting consumption aligns with Sustainable Development Goals (SDG 12) on responsible consumption and production. This concept encourages the transition towards a circular economy and minimizes individual carbon footprints.',
+    actionId: 'Mulailah dengan mengevaluasi prioritas konsumsi harian melalui prinsip kebutuhan versus keinginan. Kurangi pembelian barang sekali pakai, perpanjang masa pakai produk sandang dan papan yang dimiliki, serta dukung produk lokal berkelanjutan yang diproduksi tanpa merusak tatanan ekologi setempat.',
+    actionEn: 'Begin by evaluating daily consumption priorities through the lens of needs versus wants. Reduce purchases of single-use items, extend the lifespan of existing clothing and housing materials, and support sustainable local products produced without damaging the local ecological system.'
   },
   {
-    historyId: 'Di Bali, sistem irigasi tradisional subak menerapkan prinsip Tri Hita Karana, khususnya aspek Palemahan (hubungan harmonis dengan alam). Distribusi air dibagi secara adil tanpa monopoli, disertai ritual syukur di pura subak sebelum pembukaan pintu air sawah.',
-    historyEn: 'In Bali, the traditional subak irrigation system applies Tri Hita Karana, particularly the Palemahan aspect (harmonious relation with nature). Water is shared equitably without monopoly, accompanied by gratitude rituals at the subak temple before opening canals.',
-    modernId: 'Pembangunan masif sering kali mengabaikan keadilan ekologis dan kelestarian sumber daya bersama. Menghormati daya dukung alam berlandaskan Palemahan berarti melindungi daerah resapan air, mencegah alih fungsi sawah, dan melestarikan hutan lindung.',
-    modernEn: 'Massive developments often ignore ecological justice and the preservation of shared resources. Respecting nature\'s carrying capacity based on Palemahan means protecting water catchment areas, preventing paddy field conversion, and conserving protected forests.',
-    actionId: 'Hemat penggunaan air di rumah dengan menutup keran saat menyikat gigi atau mencuci sabun. Kumpulkan air bekas mencuci sayuran atau buah untuk menyiram tanaman halaman Anda.',
-    actionEn: 'Conserve water at home by turning off faucets while brushing teeth or soaping dishes. Collect wastewater from washing fruits or vegetables to water your garden plants.'
+    historyId: 'Masyarakat adat Kasepuhan Ciptagelar di Jawa Barat dan Maluku secara konsisten menerapkan hukum adat untuk membatasi pemanfaatan ekosistem. Konsep leuweung titipan (hutan larangan) melarang aktivitas eksploitasi demi menjaga daerah tangkapan air alami. Di Maluku dan Papua, hukum sasi menutup wilayah perairan atau daratan tertentu dari aktivitas pemanenan selama waktu yang ditentukan adat. Mekanisme ini memberikan jeda biologis bagi spesies laut untuk memijah dan memulihkan populasi mereka secara alami.',
+    historyEn: 'The indigenous communities of Kasepuhan Ciptagelar in West Java and Maluku consistently apply customary laws to limit ecosystem exploitation. The concept of leuweung titipan (sacred forest) strictly prohibits logging to preserve natural water catchments. In Maluku and Papua, the law of sasi closes off specific marine or terrestrial areas from harvesting for a custom-designated period, allowing a biological window for marine species to spawn and restore their populations naturally.',
+    modernId: 'Kearifan lokal ini setara dengan konsep modern tentang "carrying capacity" (daya dukung lingkungan) dan "marine protected areas" (kawasan konservasi perairan). Integrasi hukum adat sasi dengan kebijakan tata kelola laut modern di Maluku terbukti efektif meningkatkan keanekaragaman hayati perikanan dan menahan laju kerusakan terumbu karang akibat penangkapan ikan ilegal.',
+    modernEn: 'This local wisdom corresponds to modern concepts of environmental carrying capacity and marine protected areas. The integration of sasi customary law with modern marine governance in Maluku has proven highly effective in boosting fishery biodiversity and halting coral reef degradation caused by illegal fishing.',
+    actionId: 'Ikut serta dalam aksi pengurangan limbah plastik yang berpotensi mencemari lautan. Patuhi regulasi mengenai waktu dan zonasi penangkapan biota laut jika Anda berada di kawasan pesisir. Dukung perlindungan kawasan hijau di sekitar tempat tinggal Anda.',
+    actionEn: 'Participate in reducing plastic waste that potentially pollutes the ocean. Respect regulations regarding the timing and zoning of marine resource harvesting if you live in coastal areas. Support the preservation of green spaces around your residence.'
   },
   {
-    historyId: 'Pikukuh Baduy adalah komitmen mutlak menjaga keaslian titipan leluhur di Banten. Mereka melarang pengaspalan jalan, penggunaan semen, sabun kimia di sungai, dan mesin bermotor untuk menjaga tanah air pegunungan Kendeng tetap murni dan bebas pencemaran.',
-    historyEn: 'Pikukuh Baduy is an absolute commitment to protect ancestral heritage in Banten. They prohibit road paving, cement use, chemical soaps in rivers, and motorized machinery to keep the Kendeng mountain soil and water pure and unpolluted.',
-    modernId: 'Pikukuh mengingatkan kita bahwa tidak semua inovasi teknologi menguntungkan bumi. Kita perlu menetapkan regulasi ketat terhadap industri yang membuang limbah berbahaya dan membatasi penggunaan teknologi ekstraktif yang merusak tanah.',
-    modernEn: 'Pikukuh reminds us that not all technological innovations benefit the earth. We need strict regulations on industries dumping hazardous waste and limits on extractive technologies that damage the soil.',
-    actionId: 'Pilihlah detergen dan pembersih rumah tangga ramah lingkungan (biodegradable) yang aman bagi mikroorganisme tanah. Kurangi berkendara motor untuk jarak dekat dengan berjalan kaki atau bersepeda.',
-    actionEn: 'Choose biodegradable, eco-friendly detergents and household cleaners that are safe for soil microorganisms. Reduce driving for short distances by walking or cycling instead.'
+    historyId: 'Pikukuh Baduy adalah komitmen adat mutlak untuk mempertahankan keselarasan kosmik tanpa merubah bentang alam asli. Hukum adat ini melarang penggunaan semen, teknologi bermotor, alat komunikasi modern, serta detergen kimia di sungai. Larangan-larangan ini bukan cerminan anti-modernitas, melainkan pertahanan sistematis terhadap integritas ekosistem sungai Ciujung yang mengaliri wilayah Banten Selatan.',
+    historyEn: 'Pikukuh Baduy is an absolute customary commitment to maintain cosmic harmony without altering the native landscape. This customary law prohibits cement, motor vehicles, modern communication devices, and chemical detergents in rivers. These restrictions are not a sign of anti-modernism, but a systematic defense of the Ciujung river ecosystem\'s integrity in South Banten.',
+    modernId: 'Di tengah laju pembangunan infrastruktur yang seringkali mengabaikan aspek daya dukung lingkungan, Pikukuh membuktikan bahwa kelestarian ekologi hanya dapat dijamin oleh batasan hukum yang tegas. Ketegasan Pikukuh menginspirasi perumusan etika teknologi baru yang mempertanyakan apakah setiap inovasi aman bagi lingkungan hidup.',
+    modernEn: 'Amidst infrastructure development that often disregards environmental carrying capacity, Pikukuh proves that ecological sustainability can only be guaranteed by strict boundary regulations. The rigor of Pikukuh inspires the formulation of new technological ethics, questioning whether every innovation is safe for the biosphere.',
+    actionId: 'Gunakan produk pembersih rumah tangga yang ramah lingkungan dan bebas dari fosfat berbahaya. Minimalisasi penggunaan kendaraan pribadi dengan beralih ke transportasi publik atau berjalan kaki. Biasakan diri untuk hidup bersandingan dengan alam tanpa ambisi mendominasi.',
+    actionEn: 'Use eco-friendly and phosphate-free household cleaning products. Minimize personal vehicle use by switching to public transport or walking. Accustom yourself to living in harmony with nature without the ambition to dominate it.'
   },
   {
-    historyId: 'Sasi di Maluku dan Papua adalah pelarangan adat sementara untuk mengambil komoditas tertentu (seperti teripang, lobster, atau buah kenari) selama kurun waktu beberapa bulan hingga tahun. Ketika sasi dibuka ("buka sasi"), masyarakat memanen bersama dengan bijak.',
-    historyEn: 'Sasi in Maluku and Papua is a temporary customary ban on harvesting specific resources (such as sea cucumber, lobster, or nutmeg) for months or years. When sasi is lifted ("buka sasi"), the community harvests collectively and wisely.',
-    modernId: 'Eksploitasi laut yang berlebihan (overfishing) telah merusak terumbu karang dan mengancam pasokan pangan global. Sasi memberikan inspirasi bagi penetapan zona perlindungan laut dinamis di mana aktivitas penangkapan ikan dihentikan agar stok ikan dapat pemulihan.',
-    modernEn: 'Overexploitation of the seas (overfishing) has damaged coral reefs and threatened global food security. Sasi inspires dynamic marine protected areas (MPAs) where fishing is temporarily paused to allow fish stocks to recover.',
-    actionId: 'Beli hasil laut dari nelayan lokal berskala kecil yang menangkap ikan secara tradisional tanpa pukat harimau atau racun. Hindari mengonsumsi anak ikan atau spesies laut yang dilindungi.',
-    actionEn: 'Purchase seafood from small-scale local fishers using traditional methods instead of trawls or chemicals. Avoid consuming juvenile fish or protected marine species.'
+    historyId: 'Falsafah rawatan hidup bersandar pada pemahaman bahwa manusia adalah bagian integral dari jaring kehidupan, bukan pemilik mutlak alam raya. Masyarakat Dayak Kenyah di Kalimantan mengoperasikan perladangan gilir balik dengan membiarkan lahan bekas tanam beristirahat (bekan) selama bertahun-tahun hingga kembali menjadi hutan sekunder sebelum ditanami ulang. Di Jawa, tradisi sedekah bumi menjadi ritual simbolis untuk membayar kembali berkah kesuburan tanah kepada alam.',
+    historyEn: 'The philosophy of life stewardship rests on the understanding that humans are an integral part of the web of life, not the absolute owners of nature. The Dayak Kenyah of Kalimantan operate rotational agriculture by allowing harvested land to rest (bekan) for years to revert to secondary forest before replanting. In Java, the sedekah bumi ceremony serves as a symbolic ritual to return the soil\'s fertility blessings to nature.',
+    modernId: 'Konsep rawatan hidup ini sangat relevan dengan prinsip keadilan antargenerasi (intergenerational equity) dan ekonomi sirkular. Dengan menolak eksploitasi habis-habisan demi keuntungan jangka pendek, kita menjaga agar sumber daya vital seperti air bersih dan tanah subur tetap diwarisi oleh generasi mendatang dalam kondisi baik.',
+    modernEn: 'This life stewardship concept is highly relevant to the principles of intergenerational equity and circular economy. By rejecting rapid resource depletion for short-term gain, we ensure that vital resources like clean water and fertile soil are inherited by future generations in a healthy state.',
+    actionId: 'Hemat konsumsi energi fosil dan air bersih dalam kegiatan rumah tangga sehari-hari. Lakukan aktivitas pemilahan sampah dari sumbernya dan olah sampah organik menjadi pupuk kompos untuk mengembalikan nutrisi berharga kembali ke dalam tanah.',
+    actionEn: 'Conserve fossil energy and clean water in daily household activities. Sort household waste at its source and process organic waste into compost to return valuable nutrients back to the earth.'
   }
 ];
 
@@ -176,40 +180,61 @@ const questionsEcology: QuizQuestion[] = [
 
 const dayDetails = [
   {
-    icon: '🚫',
-    tipsId: 'Gunakan tote bag belanja ramah lingkungan dan bawa botol minum sendiri untuk menghindari penggunaan plastik sekali pakai.',
-    tipsEn: 'Use eco-friendly shopping bags and bring your own reusable tumbler to avoid single-use plastics.'
+    descId: 'Hindari penggunaan kantong plastik sekali pakai dengan membawa tas belanja dan botol minum sendiri.',
+    descEn: 'Avoid single-use plastic bags by bringing your own shopping bag and water bottle.',
+    benefitId: 'Mengurangi sampah plastik yang mencemari tanah dan laut, serta menurunkan permintaan produksi plastik.',
+    benefitEn: 'Reduces plastic waste polluting land and sea, and lowers demand for plastic production.',
+    impactId: 'Estimasi ~0,5 kg plastik dihindari per hari',
+    impactEn: 'Estimated ~0.5 kg plastic avoided per day',
   },
   {
-    icon: '🚶',
-    tipsId: 'Pilihlah berjalan kaki atau bersepeda untuk perjalanan jarak dekat (< 2 km) guna mengurangi jejak karbon transportasi.',
-    tipsEn: 'Choose walking or cycling for short distances (< 2 km) to reduce transportation carbon footprint.'
+    descId: 'Gunakan transportasi aktif—berjalan kaki atau bersepeda—untuk perjalanan jarak dekat di bawah 2 km.',
+    descEn: 'Use active transport—walking or cycling—for short trips under 2 km.',
+    benefitId: 'Menurunkan emisi karbon dari kendaraan bermotor dan meningkatkan kesehatan fisik.',
+    benefitEn: 'Reduces carbon emissions from motor vehicles and improves physical health.',
+    impactId: 'Estimasi ~1,2 kg CO₂ dikurangi per hari',
+    impactEn: 'Estimated ~1.2 kg CO₂ reduced per day',
   },
   {
-    icon: '💧',
-    tipsId: 'Matikan keran saat menyikat gigi, tampung air bekas cucian buah/sayur untuk menyiram tanaman, dan mandi tidak lebih dari 5 menit.',
-    tipsEn: 'Turn off the faucet while brushing teeth, collect vegetable washing water to water plants, and limit showers to under 5 minutes.'
+    descId: 'Kelola penggunaan air secara efisien: matikan keran saat tidak digunakan, tampung air bekas cucian untuk menyiram tanaman.',
+    descEn: 'Manage water use efficiently: turn off taps when not in use, collect rinse water for watering plants.',
+    benefitId: 'Menghemat sumber air bersih yang semakin terbatas akibat perubahan iklim.',
+    benefitEn: 'Conserves clean water sources increasingly limited due to climate change.',
+    impactId: 'Estimasi ~50 liter air dihemat per hari',
+    impactEn: 'Estimated ~50 liters of water saved per day',
   },
   {
-    icon: '🌳',
-    tipsId: 'Tanam tanaman hias, sayur, atau herba di halaman rumah Anda untuk memelihara sirkulasi oksigen bersih di sekitar tempat tinggal.',
-    tipsEn: 'Plant ornamental plants, vegetables, or herbs in your garden to nurture clean oxygen circulation around your home.'
+    descId: 'Tanam tanaman hijau—pohon, sayur, atau herba—di halaman atau pot di lingkungan tempat tinggal.',
+    descEn: 'Plant green vegetation—trees, vegetables, or herbs—in your yard or pots at home.',
+    benefitId: 'Meningkatkan kualitas udara, menyerap karbon, dan mendukung keanekaragaman hayati lokal.',
+    benefitEn: 'Improves air quality, absorbs carbon, and supports local biodiversity.',
+    impactId: 'Estimasi ~0,1 kg CO₂ diserap per tanaman',
+    impactEn: 'Estimated ~0.1 kg CO₂ absorbed per plant',
   },
   {
-    icon: '🍚',
-    tipsId: 'Beli bahan makanan segar dari petani lokal di pasar tradisional terdekat untuk meminimalkan energi rantai pasok pangan.',
-    tipsEn: 'Buy fresh produce from local farmers at nearest traditional markets to minimize food supply chain packaging energy.'
+    descId: 'Beli bahan makanan segar dari petani lokal di pasar tradisional terdekat, bukan produk impor atau rantai pasok panjang.',
+    descEn: 'Buy fresh produce from local farmers at nearby traditional markets, not imported goods or long supply chains.',
+    benefitId: 'Mendukung ekonomi petani lokal dan mengurangi emisi transportasi pangan (food miles).',
+    benefitEn: 'Supports local farmers\' economy and reduces food transport emissions (food miles).',
+    impactId: 'Estimasi ~0,8 kg CO₂ dari transportasi dihindari',
+    impactEn: 'Estimated ~0.8 kg CO₂ from transport avoided',
   },
   {
-    icon: '♻️',
-    tipsId: 'Pisahkan sampah dapur organik (sisa makanan) dan sampah anorganik (plastik/kertas) untuk diolah kembali atau dijadikan kompos.',
-    tipsEn: 'Separate organic kitchen waste (food leftovers) and inorganic waste (plastic/paper) to be recycled or composted.'
+    descId: 'Pisahkan sampah organik dan anorganik di rumah. Olah sampah organik menjadi kompos.',
+    descEn: 'Separate organic and inorganic waste at home. Process organic waste into compost.',
+    benefitId: 'Mengurangi beban TPA dan mencegah produksi gas metana dari pembusukan tanpa oksigen.',
+    benefitEn: 'Reduces landfill burden and prevents methane production from anaerobic decomposition.',
+    impactId: 'Estimasi ~1 kg sampah organik terolah',
+    impactEn: 'Estimated ~1 kg organic waste processed',
   },
   {
-    icon: '🤝',
-    tipsId: 'Bagikan kelebihan makanan atau donasikan pakaian layak pakai kepada orang lain yang membutuhkan di lingkungan sekitar Anda.',
-    tipsEn: 'Share excess food or donate pre-loved clothes to others in need around your neighborhood.'
-  }
+    descId: 'Bagikan kelebihan makanan atau donasikan barang layak pakai kepada yang membutuhkan di lingkungan sekitar.',
+    descEn: 'Share excess food or donate usable items to those in need in your community.',
+    benefitId: 'Mengurangi pemborosan sumber daya dan memperkuat solidaritas sosial komunitas.',
+    benefitEn: 'Reduces resource waste and strengthens community social solidarity.',
+    impactId: '1 aksi berbagi komunitas tercatat',
+    impactEn: '1 community sharing action recorded',
+  },
 ];
 
 const questionsDailyPool: QuizQuestion[] = [
@@ -294,116 +319,160 @@ const getDailyQuestions = (): QuizQuestion[] => {
 
 const t = {
   id: {
+    sectionLabel: 'Pusat Pembelajaran Budaya',
     title: 'Edukasi Pelestarian',
-    sub: 'Pelajari kearifan Nusantara melalui konten interaktif yang menyenangkan',
-    philTitle: 'Filosofi Hidup Nusantara',
-    quizTitle: 'Uji Pengetahuanmu',
-    quizSub: 'Uji wawasan adat dan aksi hijau dengan kuis interaktif',
-    start: 'Mulai Kuis',
+    sub: 'Jelajahi kearifan Nusantara melalui kajian budaya, evaluasi pemahaman, dan program aksi pelestarian',
+    philTitle: 'Nilai-Nilai Kearifan Nusantara',
+    philSub: 'Klik setiap nilai untuk membaca kajian budaya lengkap beserta konteks sejarah dan relevansi modernnya',
+    quizTitle: 'Evaluasi Pemahaman',
+    quizSub: 'Refleksikan pemahaman Anda mengenai budaya Nusantara dan praktik pelestarian lingkungan melalui serangkaian pertanyaan interaktif.',
+    start: 'Mulai Evaluasi',
     next: 'Lanjut',
-    result: 'Hasil Kuis',
-    score: 'Skor kamu',
-    restart: 'Coba Lagi',
-    badgeTitle: 'Koleksi Badge',
-    badgeSub: 'Kemajuan belajar nyata terakumulasi di bawah ini',
-    challenge: 'Tantangan: 7 Hari Hidup Ramah Lingkungan',
-    challengeDesc: 'Menerapkan aksi nyata pelestarian lingkungan setiap hari',
-    join: 'Mulai Program',
-    days: ['Hari 1: No Plastik', 'Hari 2: Jalan Kaki', 'Hari 3: Hemat Air', 'Hari 4: Tanam Pohon', 'Hari 5: Makan Lokal', 'Hari 6: Zero Waste', 'Hari 7: Berbagi'],
-    earned: 'Diperoleh',
-    locked: 'Terkunci',
-    
-    chooseCategory: 'Pilih Kategori Kuis',
+    result: 'Hasil Evaluasi',
+    score: 'Tingkat pemahaman',
+    restart: 'Ulangi Evaluasi',
+    progressTitle: 'Progress Pembelajaran',
+    progressSub: 'Rekam jejak perjalanan edukasi Anda',
+    badgeTitle: 'Sertifikat Pembelajaran',
+    badgeSub: 'Pencapaian edukasi dan rekam jejak pembelajaran',
+    challenge: 'Program Aksi Pelestarian',
+    challengeDesc: 'Serangkaian langkah sederhana yang dapat diterapkan dalam kehidupan sehari-hari untuk mendukung keberlanjutan lingkungan.',
+    join: 'Ikuti Program',
+    joinActive: 'Program Aktif',
+    days: ['Hari 1: Tanpa Plastik', 'Hari 2: Transportasi Aktif', 'Hari 3: Hemat Air', 'Hari 4: Penghijauan', 'Hari 5: Pangan Lokal', 'Hari 6: Pengelolaan Sampah', 'Hari 7: Berbagi Komunitas'],
+    earned: 'Tercapai',
+    locked: 'Belum tercapai',
+    chooseCategory: 'Pilih Modul Evaluasi',
     catTradition: 'Kearifan Lokal & Tradisi',
-    catTraditionDesc: 'Menguji pengetahuan tentang hukum adat, tata ruang sakral, dan filosofi hidup Nusantara.',
-    catEcology: 'Ekologi & Gaya Hidup Hijau',
-    catEcologyDesc: 'Menguji pengetahuan tentang dampak jejak karbon, pengomposan, dan aksi ramah lingkungan sehari-hari.',
-    catDaily: 'Tantangan Harian (Daily)',
-    catDailyDesc: 'Pertanyaan acak yang di-refresh setiap hari untuk menguji konsistensi wawasan hijau.',
-    lives: 'Nyawa Kuis',
-    failedTitle: 'Kuis Gagal!',
-    failedDesc: 'Kamu kehabisan nyawa (❤️). Jangan berkecil hati, pelajari kembali filosofi Nusantara di atas dan coba lagi kuis ini!',
-    reviewTitle: 'Tinjau Jawaban Anda',
+    catTraditionDesc: 'Mengukur pemahaman tentang hukum adat, tata ruang sakral, dan nilai-nilai kearifan Nusantara.',
+    catEcology: 'Ekologi & Keberlanjutan',
+    catEcologyDesc: 'Mengukur pemahaman tentang jejak karbon, pengomposan, dan praktik pelestarian lingkungan.',
+    catDaily: 'Evaluasi Harian',
+    catDailyDesc: 'Pertanyaan yang diperbarui setiap hari untuk menguji konsistensi pemahaman Anda.',
+    attempts: 'Kesempatan',
+    failedTitle: 'Evaluasi Belum Lulus',
+    failedDesc: 'Anda telah menggunakan seluruh kesempatan menjawab. Pelajari kembali nilai-nilai kearifan di atas, lalu coba evaluasi ini sekali lagi.',
+    reviewTitle: 'Tinjau Jawaban',
     yourAnswer: 'Jawaban Anda',
     correctAnswer: 'Jawaban Benar',
     explain: 'Penjelasan',
-    readMore: 'Eksplorasi Mendalam',
+    readMore: 'Baca Kajian Budaya',
     close: 'Tutup',
-    challengeProgress: 'Kemajuan Tantangan',
-    challengeProgressDesc: 'Selesaikan semua tantangan 7 hari untuk menjadi Duta Pelestari!',
-    philoDetailTitle: 'Eksplorasi Filosofi Nusantara',
-    philoTabHistory: 'Sejarah & Makna',
-    philoTabModern: 'Konteks Modern',
-    philoTabAction: 'Aksi Nyata',
-    philoTipClick: 'Klik kartu filosofi untuk melakukan eksplorasi mendalam!',
-    dailyHighScore: 'Skor Harian Tertinggi',
-    leaderboardTitle: 'Papan Peringkat Terranesia',
-    leaderboardSub: 'Peringkat pelestari terbaik berdasarkan kuis dan lencana',
-    submitNamePlaceholder: 'Masukkan namamu...',
-    submitScoreBtn: 'Submit ke Leaderboard',
-    submittedSuccess: 'Skor berhasil disubmit!',
-    totalScore: 'Total Skor',
-    aiCoachTitle: 'AI Eco-Coach Terranesia',
-    aiCoachSub: 'Analisis dampak lingkungan dari aksi nyata harian Anda',
-    aiCoachEmpty: 'Selesaikan minimal 1 tantangan harian untuk melihat analisis dampak lingkungan oleh AI Coach.',
-    aiCoachFeedback: 'Ulasan Pelestarian',
+    challengeProgress: 'Kemajuan Program',
+    challengeProgressDesc: 'Lengkapi seluruh rangkaian aksi untuk mendapatkan sertifikat Kontributor Pelestarian',
+    philoDetailTitle: 'Kajian Nilai Kearifan',
+    philoTabHistory: 'Konteks Sejarah',
+    philoTabModern: 'Relevansi Modern',
+    philoTabAction: 'Aplikasi Praktis',
+    dailyHighScore: 'Skor Tertinggi',
+    bestScore: 'Skor terbaik',
+    communityTitle: 'Statistik Partisipasi Komunitas',
+    communitySub: 'Agregat partisipasi edukasi dan aksi pelestarian',
+    communityActive: 'Peserta aktif',
+    communityPhilosophy: 'Nilai paling dipelajari',
+    communityChallenge: 'Program paling diikuti',
+    communityActions: 'Total aksi pelestarian',
+    aiCoachTitle: 'Asisten Analisis Dampak',
+    aiCoachSub: 'Analisis berbasis data untuk membantu memahami kontribusi tindakan sehari-hari terhadap pelestarian lingkungan.',
+    aiCoachEmpty: 'Selesaikan minimal satu aksi dalam Program Aksi Pelestarian untuk melihat estimasi dampak lingkungan.',
+    aiCoachFeedback: 'Ringkasan Dampak',
+    impactLabel: 'Estimasi Dampak Lingkungan',
+    co2Label: 'Emisi CO₂ dikurangi',
+    waterLabel: 'Air bersih dihemat',
+    plasticLabel: 'Sampah plastik dihindari',
+    communityActionLabel: 'Aksi berbagi komunitas',
+    dayBenefit: 'Manfaat Lingkungan',
+    dayImpact: 'Estimasi Dampak',
+    dayDetail: 'Detail Aksi',
+    seeResults: 'Lihat Hasil',
+    otherCategory: 'Modul Lain',
+    otherQuizzes: 'Pilih Modul Lain',
+    origin: 'Asal Budaya',
   },
   en: {
+    sectionLabel: 'Cultural Learning Center',
     title: 'Conservation Education',
-    sub: 'Learn Nusantara wisdom through fun interactive content',
-    philTitle: 'Nusantara Life Philosophy',
-    quizTitle: 'Test Your Knowledge',
-    quizSub: 'Test your customary insights and green actions with interactive quizzes',
-    start: 'Start Quiz',
+    sub: 'Explore Nusantara wisdom through cultural studies, comprehension assessments, and preservation action programs',
+    philTitle: 'Nusantara Wisdom Values',
+    philSub: 'Click each value to read a full cultural study with historical context and modern relevance',
+    quizTitle: 'Comprehension Assessment',
+    quizSub: 'Reflect on your understanding of Nusantara culture and environmental preservation practices through interactive questions.',
+    start: 'Start Assessment',
     next: 'Next',
-    result: 'Quiz Result',
-    score: 'Your score',
-    restart: 'Try Again',
-    badgeTitle: 'Badge Collection',
-    badgeSub: 'Real learning progress accumulated below',
-    challenge: 'Challenge: 7 Days Eco-Friendly Living',
-    challengeDesc: 'Apply environmental actions in your daily life',
-    join: 'Start Program',
-    days: ['Day 1: No Plastic', 'Day 2: Walk More', 'Day 3: Save Water', 'Day 4: Plant Trees', 'Day 5: Eat Local', 'Day 6: Zero Waste', 'Day 7: Share'],
-    earned: 'Earned',
-    locked: 'Locked',
-    
-    chooseCategory: 'Choose Quiz Category',
+    result: 'Assessment Result',
+    score: 'Comprehension level',
+    restart: 'Retry Assessment',
+    progressTitle: 'Learning Progress',
+    progressSub: 'Your educational journey record',
+    badgeTitle: 'Learning Certificates',
+    badgeSub: 'Educational achievements and learning milestones',
+    challenge: 'Preservation Action Program',
+    challengeDesc: 'A series of simple steps applicable in daily life to support environmental sustainability.',
+    join: 'Join Program',
+    joinActive: 'Program Active',
+    days: ['Day 1: Plastic-Free', 'Day 2: Active Transport', 'Day 3: Water Conservation', 'Day 4: Greening', 'Day 5: Local Food', 'Day 6: Waste Management', 'Day 7: Community Sharing'],
+    earned: 'Achieved',
+    locked: 'Not yet achieved',
+    chooseCategory: 'Select Assessment Module',
     catTradition: 'Local Wisdom & Traditions',
-    catTraditionDesc: 'Test your knowledge of customary laws, sacred spaces, and Nusantara philosophies.',
-    catEcology: 'Ecology & Green Lifestyle',
-    catEcologyDesc: 'Test your knowledge on carbon footprints, composting, and daily eco-friendly actions.',
-    catDaily: 'Daily Challenge',
-    catDailyDesc: 'Randomized questions refreshed daily to test your green consistency.',
-    lives: 'Quiz Lives',
-    failedTitle: 'Quiz Failed!',
-    failedDesc: 'You ran out of lives (❤️). Don\'t worry, re-read the Nusantara philosophies above and try again!',
-    reviewTitle: 'Review Your Answers',
+    catTraditionDesc: 'Measures understanding of customary law, sacred spaces, and Nusantara wisdom values.',
+    catEcology: 'Ecology & Sustainability',
+    catEcologyDesc: 'Measures understanding of carbon footprints, composting, and environmental preservation practices.',
+    catDaily: 'Daily Assessment',
+    catDailyDesc: 'Questions refreshed daily to test the consistency of your understanding.',
+    attempts: 'Attempts',
+    failedTitle: 'Assessment Not Passed',
+    failedDesc: 'You have used all answering attempts. Review the wisdom values above, then try this assessment again.',
+    reviewTitle: 'Review Answers',
     yourAnswer: 'Your Answer',
     correctAnswer: 'Correct Answer',
     explain: 'Explanation',
-    readMore: 'Deep Dive Exploration',
+    readMore: 'Read Cultural Study',
     close: 'Close',
-    challengeProgress: 'Challenge Progress',
-    challengeProgressDesc: 'Complete all 7-day challenges to become an Eco Ambassador!',
-    philoDetailTitle: 'Explore Nusantara Philosophy',
-    philoTabHistory: 'History & Meaning',
-    philoTabModern: 'Modern Context',
-    philoTabAction: 'Real Action',
-    philoTipClick: 'Click a philosophy card to explore deeply!',
-    dailyHighScore: 'Daily High Score',
-    leaderboardTitle: 'Terranesia Leaderboard',
-    leaderboardSub: 'Top preservationists ranked by quizzes and badges',
-    submitNamePlaceholder: 'Enter your name...',
-    submitScoreBtn: 'Submit to Leaderboard',
-    submittedSuccess: 'Score submitted successfully!',
-    totalScore: 'Total Score',
-    aiCoachTitle: 'Terranesia AI Eco-Coach',
-    aiCoachSub: 'Environmental impact analysis of your real daily actions',
-    aiCoachEmpty: 'Complete at least 1 daily challenge to see environmental impact analysis by AI Coach.',
-    aiCoachFeedback: 'Preservation Review',
+    challengeProgress: 'Program Progress',
+    challengeProgressDesc: 'Complete all actions to earn the Preservation Contributor certificate',
+    philoDetailTitle: 'Wisdom Value Study',
+    philoTabHistory: 'Historical Context',
+    philoTabModern: 'Modern Relevance',
+    philoTabAction: 'Practical Application',
+    dailyHighScore: 'Highest Score',
+    bestScore: 'Best score',
+    communityTitle: 'Community Participation Statistics',
+    communitySub: 'Aggregate education participation and preservation actions',
+    communityActive: 'Active participants',
+    communityPhilosophy: 'Most studied value',
+    communityChallenge: 'Most followed program',
+    communityActions: 'Total preservation actions',
+    aiCoachTitle: 'Impact Analysis Assistant',
+    aiCoachSub: 'Data-based analysis to help understand how daily actions contribute to environmental preservation.',
+    aiCoachEmpty: 'Complete at least one action in the Preservation Action Program to see environmental impact estimates.',
+    aiCoachFeedback: 'Impact Summary',
+    impactLabel: 'Environmental Impact Estimate',
+    co2Label: 'CO₂ emissions reduced',
+    waterLabel: 'Clean water saved',
+    plasticLabel: 'Plastic waste avoided',
+    communityActionLabel: 'Community sharing actions',
+    dayBenefit: 'Environmental Benefit',
+    dayImpact: 'Estimated Impact',
+    dayDetail: 'Action Details',
+    seeResults: 'See Results',
+    otherCategory: 'Other Module',
+    otherQuizzes: 'Select Other Module',
+    origin: 'Cultural Origin',
   },
 };
+
+const TraditionalDivider = () => (
+  <div className="w-full flex items-center justify-center my-3 opacity-15 text-primary">
+    <svg width="80" height="12" viewBox="0 0 80 12" fill="none" className="w-20">
+      <path d="M0 6 L8 0 L16 6 L24 0 L32 6 L40 0 L48 6 L56 0 L64 6 L72 0 L80 6 L72 12 L64 6 L56 12 L48 6 L40 12 L32 6 L24 12 L16 6 L8 12 Z" fill="currentColor" />
+    </svg>
+  </div>
+);
+
+const HeritageBorder = () => (
+  <div className="h-1.5 w-full bg-gradient-to-r from-primary/10 via-primary/60 to-primary/10" />
+);
 
 export function EdukasiSection({ lang }: Props) {
   // --- Persistent States from LocalStorage ---
@@ -460,25 +529,6 @@ export function EdukasiSection({ lang }: Props) {
       return JSON.parse(localStorage.getItem('ecotwin_completed_days') || '[]');
     } catch { return []; }
   });
-
-  // --- Leaderboard States ---
-  const initialLeaderboard = [
-    { name: 'Rian Nusantara', score: 8, badgeCount: 5 },
-    { name: 'Siti Lestari', score: 7, badgeCount: 4 },
-    { name: 'Budi Ekologi', score: 6, badgeCount: 3 },
-    { name: 'Dewi Wiwitan', score: 5, badgeCount: 3 },
-    { name: 'Joko Hijau', score: 4, badgeCount: 2 },
-  ];
-
-  const [leaderboard, setLeaderboard] = useState<{ name: string; score: number; badgeCount: number; isUser?: boolean }[]>(() => {
-    try {
-      const saved = localStorage.getItem('ecotwin_leaderboard_data');
-      return saved ? JSON.parse(saved) : initialLeaderboard;
-    } catch { return initialLeaderboard; }
-  });
-
-  const [userName, setUserName] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // --- Quiz Engine States ---
   const [quizState, setQuizState] = useState<'idle' | 'active' | 'done' | 'failed'>('idle');
@@ -538,10 +588,6 @@ export function EdukasiSection({ lang }: Props) {
     localStorage.setItem('ecotwin_completed_days', JSON.stringify(completedDays));
   }, [completedDays]);
 
-  useEffect(() => {
-    localStorage.setItem('ecotwin_leaderboard_data', JSON.stringify(leaderboard));
-  }, [leaderboard]);
-
   // Daily questions memoized based on today's seed
   const dailyQuestions = useMemo(() => {
     return getDailyQuestions();
@@ -564,12 +610,12 @@ export function EdukasiSection({ lang }: Props) {
     let communityCount = 0;
 
     completedDays.forEach(dayIndex => {
-      if (dayIndex === 0) plasticSaved += 0.08; // kg (average daily plastic bag use per person)
-      if (dayIndex === 1) co2Saved += 0.4;     // kg (walking 2 km instead of driving)
-      if (dayIndex === 2) waterSaved += 50;     // liters (reducing shower time & faucet leaks)
-      if (dayIndex === 3) co2Saved += 0.05;     // kg (daily carbon absorption of a young tree)
-      if (dayIndex === 4) co2Saved += 0.3;     // kg (saving emissions by eating local/organic)
-      if (dayIndex === 5) plasticSaved += 0.6; // kg (composting food waste and diverting recyclables)
+      if (dayIndex === 0) plasticSaved += 0.5; // kg
+      if (dayIndex === 1) co2Saved += 1.2;     // kg
+      if (dayIndex === 2) waterSaved += 50;     // liters
+      if (dayIndex === 3) co2Saved += 0.1;     // kg
+      if (dayIndex === 4) co2Saved += 0.8;     // kg
+      if (dayIndex === 5) plasticSaved += 1.0; // kg
       if (dayIndex === 6) communityCount += 1;
     });
 
@@ -581,78 +627,75 @@ export function EdukasiSection({ lang }: Props) {
     };
   }, [completedDays]);
 
-  // Dynamic Badges Collection
-  const dynamicBadges = useMemo(() => {
+  const learningCertificates = useMemo(() => {
     const scoredTraditionPerfect = quizHighScoreTradition === questionsTradition.length && completedQuizTradition;
     const scoredEcologyPerfect = quizHighScoreEcology === questionsEcology.length && completedQuizEcology;
     const scoredDailyPerfect = quizHighScoreDaily === 4 && completedQuizDaily;
     const scoredThreeOrMore = quizHighScoreTradition >= 3 || quizHighScoreEcology >= 3 || quizHighScoreDaily >= 3;
     const completedAllDays = completedDays.length === 7;
-    const isUserInTopThree = leaderboard.slice(0, 3).some(entry => entry.isUser);
 
     return [
-      { 
-        id: 'pemula', 
-        icon: '🌱', 
-        name: 'Penjelajah Pemula', 
-        nameEn: 'Beginner Explorer', 
-        desc: 'Mulai dengan membaca salah satu filosofi', 
-        descEn: 'Begin by reading at least one philosophy', 
-        earned: hasInteractedPhilosophy, 
-        color: 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 shadow-emerald-500/10 dark:shadow-emerald-500/5' 
+      {
+        id: 'pengkaji',
+        Icon: BookOpen,
+        name: 'Pengkaji Budaya Dasar',
+        nameEn: 'Basic Cultural Scholar',
+        desc: 'Menyelesaikan kajian minimal satu nilai kearifan',
+        descEn: 'Completed study of at least one wisdom value',
+        earned: hasInteractedPhilosophy,
       },
-      { 
-        id: 'penjaga', 
-        icon: '🌿', 
-        name: 'Penjaga Hutan', 
-        nameEn: 'Forest Guardian', 
-        desc: 'Skor >= 3 pada salah satu kuis', 
-        descEn: 'Score >= 3 on any quiz', 
-        earned: scoredThreeOrMore, 
-        color: 'border-green-500 bg-green-50 dark:bg-green-950/30 text-green-800 dark:text-green-300 shadow-green-500/10 dark:shadow-green-500/5' 
+      {
+        id: 'pengamat',
+        Icon: ScrollText,
+        name: 'Pengamat Kearifan Lokal',
+        nameEn: 'Local Wisdom Observer',
+        desc: 'Mencapai pemahaman memadai pada salah satu modul evaluasi',
+        descEn: 'Achieved adequate comprehension on at least one assessment module',
+        earned: scoredThreeOrMore,
       },
-      { 
-        id: 'budayawan', 
-        icon: '🏺', 
-        name: 'Budayawan Muda', 
-        nameEn: 'Young Culturalist', 
-        desc: 'Terdaftar dalam tantangan 7 hari', 
-        descEn: 'Registered in the 7-day challenge', 
-        earned: challengeJoined, 
-        color: 'border-amber-500 bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 shadow-amber-500/10 dark:shadow-amber-500/5' 
+      {
+        id: 'kontributor',
+        Icon: Shield,
+        name: 'Kontributor Pelestarian',
+        nameEn: 'Preservation Contributor',
+        desc: 'Menyelesaikan seluruh rangkaian Program Aksi Pelestarian',
+        descEn: 'Completed the full Preservation Action Program',
+        earned: completedAllDays,
       },
-      { 
-        id: 'pikukuh', 
-        icon: '📜', 
-        name: 'Pikukuh Lestari', 
-        nameEn: 'Pikukuh Guardian', 
-        desc: 'Skor sempurna kuis Kearifan Lokal', 
-        descEn: 'Perfect score on Local Wisdom quiz', 
-        earned: scoredTraditionPerfect, 
-        color: 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-300 shadow-cyan-500/10 dark:shadow-cyan-500/5' 
-      },
-      { 
-        id: 'pesaing', 
-        icon: '⚔️', 
-        name: 'Pesaing Unggul', 
-        nameEn: 'Top Challenger', 
-        desc: 'Masuk dalam peringkat 3 besar Leaderboard', 
-        descEn: 'Rank in top 3 of the Leaderboard', 
-        earned: isUserInTopThree, 
-        color: 'border-rose-500 bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-300 shadow-rose-500/10 dark:shadow-rose-500/5' 
-      },
-      { 
-        id: 'master', 
-        icon: '🌟', 
-        name: 'Master Terranesia', 
-        nameEn: 'Terranesia Master', 
-        desc: 'Skor sempurna di semua kuis', 
-        descEn: 'Perfect score on all quizzes', 
-        earned: scoredTraditionPerfect && scoredEcologyPerfect && scoredDailyPerfect, 
-        color: 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 text-purple-800 dark:text-purple-300 shadow-purple-500/10 dark:shadow-purple-500/5' 
+      {
+        id: 'penjelajah',
+        Icon: Compass,
+        name: 'Penjelajah Warisan Nusantara',
+        nameEn: 'Nusantara Heritage Explorer',
+        desc: 'Mencapai pemahaman sempurna di semua modul evaluasi',
+        descEn: 'Achieved perfect comprehension on all assessment modules',
+        earned: scoredTraditionPerfect && scoredEcologyPerfect && scoredDailyPerfect,
       },
     ];
-  }, [quizHighScoreTradition, quizHighScoreEcology, quizHighScoreDaily, completedQuizTradition, completedQuizEcology, completedQuizDaily, challengeJoined, completedDays, hasInteractedPhilosophy, leaderboard]);
+  }, [quizHighScoreTradition, quizHighScoreEcology, quizHighScoreDaily, completedQuizTradition, completedQuizEcology, completedQuizDaily, completedDays, hasInteractedPhilosophy]);
+
+  const learningProgress = useMemo(() => {
+    const quizzesCompleted = [completedQuizTradition, completedQuizEcology, completedQuizDaily].filter(Boolean).length;
+    const certificatesEarned = learningCertificates.filter(c => c.earned).length;
+    return {
+      philosophyStudied: hasInteractedPhilosophy ? 1 : 0,
+      quizzesCompleted,
+      challengeDays: completedDays.length,
+      certificatesEarned,
+    };
+  }, [hasInteractedPhilosophy, completedQuizTradition, completedQuizEcology, completedQuizDaily, completedDays, learningCertificates]);
+
+  const communityStats = useMemo(() => {
+    const userParticipated = hasInteractedPhilosophy || challengeJoined || completedQuizTradition || completedQuizEcology || completedQuizDaily;
+    const baseParticipants = 1247;
+    const baseActions = 3892;
+    return {
+      activeParticipants: baseParticipants + (userParticipated ? 1 : 0),
+      mostStudiedPhilosophy: lang === 'id' ? 'Harmoni dengan Alam' : 'Harmony with Nature',
+      mostFollowedProgram: lang === 'id' ? 'Program Aksi Pelestarian' : 'Preservation Action Program',
+      totalActions: baseActions + completedDays.length,
+    };
+  }, [hasInteractedPhilosophy, challengeJoined, completedQuizTradition, completedQuizEcology, completedQuizDaily, completedDays, lang]);
 
   const handleAnswer = (idx: number) => {
     if (answered) return;
@@ -682,10 +725,8 @@ export function EdukasiSection({ lang }: Props) {
       setSelected(null);
       setAnswered(false);
     } else {
-      // Completed successfully
       setQuizState('done');
-      setIsSubmitted(false);
-      
+
       const finalScore = userAnswersHistory.filter(h => h.isCorrect).length;
 
       if (quizCategory === 'tradition') {
@@ -697,15 +738,6 @@ export function EdukasiSection({ lang }: Props) {
       } else {
         setCompletedQuizDaily(true);
         setQuizHighScoreDaily(prev => Math.max(prev, finalScore));
-      }
-
-      if (finalScore === activeQuestions.length) {
-        // Trigger explosion of confetti for perfect score!
-        confetti({
-          particleCount: 150,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
       }
     }
   };
@@ -731,77 +763,20 @@ export function EdukasiSection({ lang }: Props) {
     setUserAnswersHistory([]);
   };
 
-  // Submit to mock leaderboard
-  const handleSubmitLeaderboard = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!userName.trim()) return;
-
-    const scoredTraditionPerfect = quizHighScoreTradition === questionsTradition.length && completedQuizTradition;
-    const scoredEcologyPerfect = quizHighScoreEcology === questionsEcology.length && completedQuizEcology;
-    const scoredDailyPerfect = quizHighScoreDaily === 4 && completedQuizDaily;
-    
-    const finalScore = userAnswersHistory.filter(h => h.isCorrect).length;
-    const baseHighScore = 
-      (quizCategory === 'tradition' ? Math.max(quizHighScoreTradition, finalScore) : quizHighScoreTradition) +
-      (quizCategory === 'ecology' ? Math.max(quizHighScoreEcology, finalScore) : quizHighScoreEcology) +
-      (quizCategory === 'daily' ? Math.max(quizHighScoreDaily, finalScore) : quizHighScoreDaily);
-
-    const completedAllDays = completedDays.length === 7;
-    const scoredThreeOrMore = quizHighScoreTradition >= 3 || quizHighScoreEcology >= 3 || quizHighScoreDaily >= 3;
-    
-    let badgeCount = 0;
-    if (hasInteractedPhilosophy) badgeCount++;
-    if (scoredThreeOrMore) badgeCount++;
-    if (challengeJoined) badgeCount++;
-    if (scoredTraditionPerfect) badgeCount++;
-    if (completedAllDays) badgeCount++;
-    if (scoredTraditionPerfect && scoredEcologyPerfect && scoredDailyPerfect) badgeCount++;
-
-    const newEntry = {
-      name: userName,
-      score: baseHighScore,
-      badgeCount,
-      isUser: true,
-    };
-
-    setLeaderboard(prev => {
-      const filtered = prev.filter(entry => !entry.isUser);
-      const updated = [...filtered, newEntry];
-      return updated.sort((a, b) => b.score - a.score || b.badgeCount - a.badgeCount);
-    });
-
-    setIsSubmitted(true);
-    confetti({
-      particleCount: 50,
-      spread: 40,
-      origin: { y: 0.8 }
-    });
-  };
-
   const toggleDayCompleted = (index: number) => {
     if (!challengeJoined) {
       setChallengeJoined(true);
     }
     setCompletedDays(prev => {
       const isAlreadyCompleted = prev.includes(index);
-      const next = isAlreadyCompleted ? prev.filter(i => i !== index) : [...prev, index];
-      
-      // If completed all 7 days, celebrate!
-      if (next.length === 7) {
-        confetti({
-          particleCount: 200,
-          spread: 90,
-          origin: { y: 0.5 }
-        });
-      }
-      return next;
+      return isAlreadyCompleted ? prev.filter(i => i !== index) : [...prev, index];
     });
   };
 
   return (
-    <section id="edukasi" className="py-20 bg-background relative overflow-hidden">
-      {/* Decorative backdrop */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/2 opacity-35 blur-3xl pointer-events-none" />
+    <section id="edukasi" className="py-24 bg-background relative overflow-hidden">
+      {/* Decorative backdrop - subtle earth tone blur */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/[0.01] blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
@@ -809,32 +784,25 @@ export function EdukasiSection({ lang }: Props) {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm mb-4">
-            <BookOpen className="w-4 h-4" />
-            Edukasi Interaktif
+          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary font-bold border-b border-primary/30 pb-1 mb-5">
+            <GraduationCap className="w-3.5 h-3.5" />
+            {tx.sectionLabel}
           </div>
-          <h2 className="text-foreground mb-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{tx.title}</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-base">{tx.sub}</p>
+          <h2 className="text-foreground mb-4 text-3xl font-bold tracking-tight sm:text-4xl" style={{ fontFamily: 'Playfair Display, serif' }}>{tx.title}</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm leading-relaxed">{tx.sub}</p>
+          <TraditionalDivider />
         </motion.div>
 
         {/* Philosophy Cards Section */}
-        <div className="mb-20">
-          <h3 className="text-foreground text-center mb-2 text-xl font-bold">{tx.philTitle}</h3>
-          <p className="text-muted-foreground text-center text-xs mb-8">{tx.philoTipClick}</p>
+        <div className="mb-24">
+          <h3 className="text-foreground text-center mb-2 text-xl font-bold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>{tx.philTitle}</h3>
+          <p className="text-muted-foreground text-center text-xs mb-12 max-w-xl mx-auto leading-relaxed">{tx.philSub}</p>
+          
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {philosophies.map((p, i) => {
               const Icon = p.icon;
-              // Dynamic color themes for glassmorphism
-              const themes = [
-                { border: 'hover:border-emerald-500/35 hover:shadow-emerald-500/5', iconBg: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.02)]' },
-                { border: 'hover:border-blue-500/35 hover:shadow-blue-500/5', iconBg: 'bg-blue-500/10 border-blue-500/20 text-blue-500', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.02)]' },
-                { border: 'hover:border-purple-500/35 hover:shadow-purple-500/5', iconBg: 'bg-purple-500/10 border-purple-500/20 text-purple-500', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.02)]' },
-                { border: 'hover:border-amber-500/35 hover:shadow-amber-500/5', iconBg: 'bg-amber-500/10 border-amber-500/20 text-amber-500', glow: 'shadow-[0_0_15px_rgba(245,158,11,0.02)]' }
-              ];
-              const theme = themes[i % themes.length];
-
               return (
                 <motion.div
                   key={i}
@@ -842,7 +810,7 @@ export function EdukasiSection({ lang }: Props) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  whileHover={{ y: -6, scale: 1.02 }}
+                  whileHover={{ y: -4 }}
                   onClick={() => {
                     setActivePhilosophy(i);
                     setPhilosophyTab('history');
@@ -850,21 +818,35 @@ export function EdukasiSection({ lang }: Props) {
                       setHasInteractedPhilosophy(true);
                     }
                   }}
-                  className={`rounded-2xl p-6 border border-border/80 bg-gradient-to-br from-card/85 to-card/45 backdrop-blur-md transition-all duration-300 cursor-pointer flex flex-col justify-between hover:shadow-xl ${theme.border} ${theme.glow}`}
+                  className="rounded-none border border-border bg-card p-6 transition-all cursor-pointer hover:shadow-lg hover:border-primary/40 flex flex-col justify-between relative overflow-hidden group min-h-[320px]"
                 >
+                  {/* Subtle top hover line */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/10 via-primary/60 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+
                   <div>
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 border shadow-inner ${theme.iconBg}`}>
-                      <Icon className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="text-primary/80 transition-transform group-hover:scale-105">
+                        <Icon className="w-6 h-6 stroke-[1.5]" />
+                      </div>
+                      <span className="text-[10px] text-muted-foreground font-semibold tracking-wider uppercase">
+                        {lang === 'id' ? p.origin : p.originEn}
+                      </span>
                     </div>
-                    <h4 className="text-foreground font-extrabold text-sm mb-2">{lang === 'id' ? p.title : p.titleEn}</h4>
-                    <p className="text-muted-foreground text-xs leading-relaxed mb-5 line-clamp-3">{lang === 'id' ? p.desc : p.descEn}</p>
+                    
+                    <h4 className="text-foreground font-bold text-sm mb-3" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                      {lang === 'id' ? p.title : p.titleEn}
+                    </h4>
+                    <p className="text-muted-foreground text-[11px] leading-relaxed mb-5 line-clamp-4">
+                      {lang === 'id' ? p.desc : p.descEn}
+                    </p>
                   </div>
-                  <div className="mt-auto">
-                    <blockquote className={`text-xs italic border-l-2 pl-2.5 leading-relaxed mb-4 ${p.color}`} style={{ borderColor: 'currentColor' }}>
+
+                  <div className="mt-auto pt-4 border-t border-border/40">
+                    <blockquote className="text-xs font-serif italic text-primary/85 border-l border-primary/30 pl-3 leading-relaxed mb-4">
                       {lang === 'id' ? p.quote : p.quoteEn}
                     </blockquote>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:text-primary/80 transition-colors">
-                      {tx.readMore} <ChevronRight className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary uppercase tracking-widest group-hover:underline">
+                      {tx.readMore} <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </div>
                 </motion.div>
@@ -874,97 +856,99 @@ export function EdukasiSection({ lang }: Props) {
         </div>
 
         {/* Main Dashboard Layout: Quiz + Badges */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid lg:grid-cols-3 gap-8 mb-20">
           {/* Advanced Quiz Module */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-2 bg-card border border-border rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between relative"
+            className="lg:col-span-2 bg-card border border-border rounded-none p-6 md:p-8 shadow-sm flex flex-col justify-between relative"
           >
             <div>
               <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
-                <div className="flex items-center gap-2.5">
-                  <Target className="w-5.5 h-5.5 text-primary" />
+                <div className="flex items-center gap-3">
+                  <Target className="w-5 h-5 text-primary/80" />
                   <div>
-                    <h3 className="text-foreground text-base font-bold leading-tight">{tx.quizTitle}</h3>
-                    <p className="text-muted-foreground text-xs">{tx.quizSub}</p>
+                    <h3 className="text-foreground text-sm font-bold tracking-wide uppercase" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{tx.quizTitle}</h3>
+                    <p className="text-muted-foreground text-xs mt-0.5 leading-relaxed">{tx.quizSub}</p>
                   </div>
                 </div>
 
                 {/* Show lives if active */}
                 {quizState === 'active' && (
-                  <div className="flex items-center gap-1.5 bg-muted/65 px-3 py-1.5 rounded-full border border-border">
-                    <span className="text-xs text-muted-foreground font-semibold mr-1">{tx.lives}:</span>
-                    {[...Array(3)].map((_, i) => (
-                      <Heart 
-                        key={i} 
-                        className={`w-4 h-4 transition-transform duration-300 ${
-                          i < lives ? 'text-red-500 fill-red-500 scale-100' : 'text-muted-foreground/30 scale-90'
-                        }`} 
-                      />
-                    ))}
+                  <div className="flex items-center gap-2 bg-muted/20 px-3 py-1.5 rounded-none border border-border">
+                    <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">{tx.attempts}:</span>
+                    <div className="flex gap-1.5">
+                      {[...Array(3)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`w-2 h-2 rounded-full transition-colors ${
+                            i < lives ? 'bg-primary' : 'bg-muted-foreground/20'
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* State: Idle / Choose Category */}
               {quizState === 'idle' && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-6">
-                  <h4 className="text-sm font-extrabold text-foreground mb-5 text-center tracking-tight">{tx.chooseCategory}</h4>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-4">
+                  <h4 className="text-xs font-bold text-foreground mb-4 uppercase tracking-wider text-center">{tx.chooseCategory}</h4>
                   
                   <div className="grid md:grid-cols-3 gap-4">
                     {/* Category 1 */}
                     <div 
                       onClick={() => startQuiz('tradition')}
-                      className="p-5.5 rounded-2xl border border-cyan-500/25 bg-cyan-500/5 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
+                      className="p-5 rounded-none border border-border bg-muted/10 hover:border-primary/50 hover:bg-primary/[0.02] cursor-pointer transition-all flex flex-col justify-between min-h-[220px] group"
                     >
                       <div>
-                        <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 shadow-sm">
-                          <BookOpen className="w-5 h-5" />
+                        <div className="text-primary/85 mb-3 group-hover:scale-105 transition-transform">
+                          <BookOpen className="w-5 h-5 stroke-[1.5]" />
                         </div>
-                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catTradition}</h5>
-                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catTraditionDesc}</p>
+                        <h5 className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">{tx.catTradition}</h5>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">{tx.catTraditionDesc}</p>
                       </div>
                       <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
-                        <span className="text-[11px] text-muted-foreground">High Score: <strong className="text-foreground">{quizHighScoreTradition}/4</strong></span>
-                        <span className="text-[11px] font-bold text-cyan-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[10px] text-muted-foreground">{tx.bestScore}: <strong className="text-foreground">{quizHighScoreTradition}/4</strong></span>
+                        <span className="text-[10px] font-bold text-primary inline-flex items-center gap-0.5 uppercase tracking-widest">{tx.start} <ChevronRight className="w-3 h-3" /></span>
                       </div>
                     </div>
 
                     {/* Category 2 */}
                     <div 
                       onClick={() => startQuiz('ecology')}
-                      className="p-5.5 rounded-2xl border border-green-500/25 bg-green-500/5 hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
+                      className="p-5 rounded-none border border-border bg-muted/10 hover:border-primary/50 hover:bg-primary/[0.02] cursor-pointer transition-all flex flex-col justify-between min-h-[220px] group"
                     >
                       <div>
-                        <div className="w-11 h-11 rounded-xl bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 shadow-sm">
-                          <Leaf className="w-5 h-5" />
+                        <div className="text-primary/85 mb-3 group-hover:scale-105 transition-transform">
+                          <Leaf className="w-5 h-5 stroke-[1.5]" />
                         </div>
-                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catEcology}</h5>
-                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catEcologyDesc}</p>
+                        <h5 className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">{tx.catEcology}</h5>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">{tx.catEcologyDesc}</p>
                       </div>
                       <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
-                        <span className="text-[11px] text-muted-foreground">High Score: <strong className="text-foreground">{quizHighScoreEcology}/4</strong></span>
-                        <span className="text-[11px] font-bold text-green-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[10px] text-muted-foreground">{tx.bestScore}: <strong className="text-foreground">{quizHighScoreEcology}/4</strong></span>
+                        <span className="text-[10px] font-bold text-primary inline-flex items-center gap-0.5 uppercase tracking-widest">{tx.start} <ChevronRight className="w-3 h-3" /></span>
                       </div>
                     </div>
 
                     {/* Category 3 */}
                     <div 
                       onClick={() => startQuiz('daily')}
-                      className="p-5.5 rounded-2xl border border-rose-500/25 bg-rose-500/5 hover:border-rose-500/50 hover:shadow-[0_0_20px_rgba(244,63,94,0.08)] cursor-pointer transition-all duration-300 flex flex-col justify-between hover:translate-y-[-4px]"
+                      className="p-5 rounded-none border border-border bg-muted/10 hover:border-primary/50 hover:bg-primary/[0.02] cursor-pointer transition-all flex flex-col justify-between min-h-[220px] group"
                     >
                       <div>
-                        <div className="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4 shadow-sm">
-                          <Flame className="w-5 h-5" />
+                        <div className="text-primary/85 mb-3 group-hover:scale-105 transition-transform">
+                          <FileText className="w-5 h-5 stroke-[1.5]" />
                         </div>
-                        <h5 className="text-sm font-extrabold text-foreground mb-1.5">{tx.catDaily}</h5>
-                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{tx.catDailyDesc}</p>
+                        <h5 className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">{tx.catDaily}</h5>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">{tx.catDailyDesc}</p>
                       </div>
                       <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/40">
-                        <span className="text-[11px] text-muted-foreground">{tx.dailyHighScore}: <strong className="text-foreground">{quizHighScoreDaily}/4</strong></span>
-                        <span className="text-[11px] font-bold text-rose-500 inline-flex items-center gap-0.5">{tx.start} <ChevronRight className="w-3.5 h-3.5" /></span>
+                        <span className="text-[10px] text-muted-foreground">{tx.dailyHighScore}: <strong className="text-foreground">{quizHighScoreDaily}/4</strong></span>
+                        <span className="text-[10px] font-bold text-primary inline-flex items-center gap-0.5 uppercase tracking-widest">{tx.start} <ChevronRight className="w-3 h-3" /></span>
                       </div>
                     </div>
                   </div>
@@ -976,33 +960,33 @@ export function EdukasiSection({ lang }: Props) {
                 <motion.div key={currentQ} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
                   {/* Progress bar */}
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-2.5 rounded-full bg-muted/60 overflow-hidden border border-border/40">
+                    <div className="flex-1 h-1.5 bg-muted overflow-hidden">
                       <motion.div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent shadow-[0_0_8px_rgba(16,185,129,0.3)]"
+                        className="h-full bg-primary"
                         animate={{ width: `${((currentQ + 1) / activeQuestions.length) * 100}%` }}
                         transition={{ duration: 0.3 }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-muted-foreground">{currentQ + 1}/{activeQuestions.length}</span>
+                    <span className="text-[10px] font-bold text-muted-foreground">{currentQ + 1}/{activeQuestions.length}</span>
                   </div>
 
-                  <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-card/65 border border-primary/20 shadow-inner">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[9px] font-extrabold uppercase tracking-widest text-primary mb-2.5">
+                  <div className="mb-6 p-5 rounded-none bg-primary/[0.01] border border-border/60">
+                    <span className="inline-block px-2.5 py-0.5 rounded-none bg-primary/5 border border-primary/15 text-[9px] font-bold uppercase tracking-widest text-primary mb-3">
                       {quizCategory === 'tradition' ? tx.catTradition : quizCategory === 'ecology' ? tx.catEcology : tx.catDaily}
                     </span>
-                    <p className="text-foreground text-sm font-bold leading-relaxed">{lang === 'id' ? q.q : q.qEn}</p>
+                    <p className="text-foreground text-sm font-semibold leading-relaxed">{lang === 'id' ? q.q : q.qEn}</p>
                   </div>
 
                   <div className="grid gap-3 mb-6">
                     {(lang === 'id' ? q.opts : q.optsEn).map((opt, idx) => {
-                      let style = 'border-border/60 bg-card/65 text-foreground hover:border-primary/45 hover:bg-primary/5 hover:translate-x-1';
+                      let style = 'border-border bg-card text-foreground hover:bg-muted/10 hover:border-primary/40';
                       if (answered) {
                         if (idx === q.correct) {
-                          style = 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-300 shadow-[0_0_12px_rgba(34,197,94,0.1)]';
+                          style = 'border-green-600/40 bg-green-500/5 text-green-700 dark:text-green-300';
                         } else if (idx === selected) {
-                          style = 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.1)]';
+                          style = 'border-red-500/40 bg-red-500/5 text-red-600 dark:text-red-400';
                         } else {
-                          style = 'border-border bg-muted/20 text-muted-foreground/60 opacity-50';
+                          style = 'border-border bg-card text-muted-foreground opacity-50';
                         }
                       }
 
@@ -1011,18 +995,18 @@ export function EdukasiSection({ lang }: Props) {
                           key={idx}
                           disabled={answered}
                           onClick={() => handleAnswer(idx)}
-                          className={`flex items-center gap-3.5 p-4 rounded-xl border-2 text-left text-xs font-semibold transition-all duration-300 ${style} ${!answered ? 'cursor-pointer' : 'cursor-default'}`}
+                          className={`flex items-center gap-4 p-4 rounded-none border text-left text-xs font-medium transition-all ${style} ${!answered ? 'cursor-pointer' : 'cursor-default'}`}
                         >
-                          <div className={`w-6.5 h-6.5 rounded-full border flex items-center justify-center flex-shrink-0 text-xs font-bold transition-all duration-300 ${
-                            answered && idx === q.correct ? 'border-green-500 bg-green-500 text-white shadow-sm' :
-                            answered && idx === selected ? 'border-red-500 bg-red-500 text-white shadow-sm' :
-                            'border-border/80 bg-background/50'
+                          <div className={`w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 text-[10px] font-bold ${
+                            answered && idx === q.correct ? 'border-green-600 bg-green-600 text-white' :
+                            answered && idx === selected ? 'border-red-500 bg-red-500 text-white' :
+                            'border-border text-muted-foreground/80'
                           }`}>
-                            {answered && idx === q.correct ? <CheckCircle className="w-3.5 h-3.5" /> :
-                             answered && idx === selected ? <XCircle className="w-3.5 h-3.5" /> :
+                            {answered && idx === q.correct ? <CheckCircle className="w-3 h-3" /> :
+                             answered && idx === selected ? <XCircle className="w-3 h-3" /> :
                              String.fromCharCode(65 + idx)}
                           </div>
-                          <span className="flex-1 leading-normal">{opt}</span>
+                          <span className="flex-1 leading-relaxed text-xs">{opt}</span>
                         </button>
                       );
                     })}
@@ -1034,11 +1018,11 @@ export function EdukasiSection({ lang }: Props) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-muted/60 border border-border/70 text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5 shadow-sm"
+                        className="mb-6 p-4 rounded-none bg-muted/30 border border-border text-[11px] text-muted-foreground leading-relaxed flex items-start gap-2.5"
                       >
                         <Info className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                         <div>
-                          <strong className="text-foreground">{tx.explain}:</strong> {lang === 'id' ? q.explanation : q.explanationEn}
+                          <strong className="text-foreground uppercase tracking-wider text-[9px] mr-1">{tx.explain}:</strong> {lang === 'id' ? q.explanation : q.explanationEn}
                         </div>
                       </motion.div>
                     )}
@@ -1047,9 +1031,9 @@ export function EdukasiSection({ lang }: Props) {
                   {answered && (
                     <button
                       onClick={handleNext}
-                      className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-95 transition-all shadow-md shadow-primary/25 active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full py-3.5 rounded-none bg-primary text-primary-foreground font-semibold text-xs tracking-wider uppercase hover:opacity-95 transition-all shadow-md shadow-primary/10 active:scale-[0.99] flex items-center justify-center gap-1.5"
                     >
-                      {currentQ < activeQuestions.length - 1 ? tx.next : (lang === 'id' ? 'Lihat Hasil' : 'See Results')} 
+                      {currentQ < activeQuestions.length - 1 ? tx.next : tx.seeResults} 
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   )}
@@ -1059,8 +1043,10 @@ export function EdukasiSection({ lang }: Props) {
               {/* State: Quiz Failed */}
               {quizState === 'failed' && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-                  <div className="text-5xl mb-4 animate-bounce">💔</div>
-                  <h3 className="text-red-500 font-extrabold text-xl mb-2">{tx.failedTitle}</h3>
+                  <div className="w-14 h-14 rounded-full bg-muted/40 border border-border flex items-center justify-center mx-auto mb-4">
+                    <XCircle className="w-7 h-7 text-muted-foreground/60" />
+                  </div>
+                  <h3 className="text-foreground font-bold text-base uppercase tracking-wider mb-2">{tx.failedTitle}</h3>
                   <p className="text-muted-foreground text-xs max-w-sm mx-auto mb-6 leading-relaxed">
                     {tx.failedDesc}
                   </p>
@@ -1068,22 +1054,22 @@ export function EdukasiSection({ lang }: Props) {
                   <div className="flex justify-center gap-3 mb-8">
                     <button 
                       onClick={() => startQuiz(quizCategory)} 
-                      className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-90 shadow-md shadow-primary/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-6 py-2.5 rounded-none bg-primary text-primary-foreground font-semibold text-xs uppercase tracking-wider hover:opacity-90 shadow-md shadow-primary/10 transition-all flex items-center gap-1.5"
                     >
-                      <RefreshCw className="w-3.5 h-3.5" /> {lang === 'id' ? 'Ulangi Kuis' : 'Retry Quiz'}
+                      <RefreshCw className="w-3.5 h-3.5" /> {tx.restart}
                     </button>
                     <button 
                       onClick={restartQuiz} 
-                      className="px-6 py-2.5 rounded-xl border border-border text-muted-foreground font-bold text-xs hover:bg-muted transition-all cursor-pointer"
+                      className="px-6 py-2.5 rounded-none border border-border text-muted-foreground font-semibold text-xs uppercase tracking-wider hover:bg-muted/30 transition-all"
                     >
-                      {lang === 'id' ? 'Kategori Lain' : 'Other Category'}
+                      {tx.otherCategory}
                     </button>
                   </div>
 
                   {/* Review Answers for failed state */}
                   {userAnswersHistory.length > 0 && (
                     <div className="border-t border-border pt-6 text-left max-w-xl mx-auto">
-                      <h4 className="text-sm font-bold text-foreground mb-4 inline-flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-foreground mb-4 uppercase tracking-wider inline-flex items-center gap-1.5">
                         <ClipboardCheck className="w-4.5 h-4.5 text-primary" /> {tx.reviewTitle}
                       </h4>
                       <div className="space-y-4 max-h-64 overflow-y-auto pr-2">
@@ -1093,14 +1079,14 @@ export function EdukasiSection({ lang }: Props) {
                           const correctOpt = lang === 'id' ? question.opts[question.correct] : question.optsEn[question.correct];
                           
                           return (
-                            <div key={i} className="p-4 rounded-2xl bg-card border border-border/80 text-xs shadow-md">
-                              <p className="font-extrabold text-foreground mb-2.5">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
-                              <div className="space-y-1.5 mb-3">
-                                <p className="text-red-500 font-semibold flex items-center gap-1.5"><span>❌ {tx.yourAnswer}:</span> <span className="font-bold">{selectedOpt}</span></p>
-                                <p className="text-green-600 dark:text-green-400 font-semibold flex items-center gap-1.5"><span>✅ {tx.correctAnswer}:</span> <span className="font-bold">{correctOpt}</span></p>
+                            <div key={i} className="p-4 rounded-none bg-muted/20 border border-border text-xs">
+                              <p className="font-bold text-foreground mb-2">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
+                              <div className="space-y-1 mb-2">
+                                <p className="text-red-600 dark:text-red-400 flex items-center gap-1"><XCircle className="w-3 h-3" /> {tx.yourAnswer}: <span className="font-semibold">{selectedOpt}</span></p>
+                                <p className="text-green-700 dark:text-green-400 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> {tx.correctAnswer}: <span className="font-semibold">{correctOpt}</span></p>
                               </div>
-                              <p className="text-muted-foreground leading-normal mt-2 border-t border-border/40 pt-2 italic">
-                                💡 <strong>{tx.explain}:</strong> {lang === 'id' ? question.explanation : question.explanationEn}
+                              <p className="text-muted-foreground leading-relaxed mt-2 border-t border-border/40 pt-2 text-[11px]">
+                                {lang === 'id' ? question.explanation : question.explanationEn}
                               </p>
                             </div>
                           );
@@ -1118,8 +1104,10 @@ export function EdukasiSection({ lang }: Props) {
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-6"
                 >
-                  <div className="text-5xl mb-4 animate-bounce">🏆</div>
-                  <h3 className="text-foreground mb-2 text-xl font-bold">{tx.result}</h3>
+                  <div className="w-14 h-14 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center mx-auto mb-4">
+                    <ClipboardCheck className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-foreground mb-2 text-base uppercase tracking-wider font-bold">{tx.result}</h3>
                   <div className="text-5xl font-extrabold text-primary mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     {score}/{activeQuestions.length}
                   </div>
@@ -1127,57 +1115,28 @@ export function EdukasiSection({ lang }: Props) {
                     {tx.score}: <strong className="text-foreground">{Math.round((score / activeQuestions.length) * 100)}%</strong>
                   </p>
 
-                  <div className="w-full h-3 rounded-full bg-muted overflow-hidden mx-auto max-w-xs mb-6 border border-border/50">
+                  <div className="w-full h-2 rounded-none bg-muted overflow-hidden mx-auto max-w-xs mb-6 border border-border/50">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(score / activeQuestions.length) * 100}%` }}
                       transition={{ duration: 1, ease: 'easeOut' }}
-                      className="h-full rounded-full bg-primary"
+                      className="h-full bg-primary"
                     />
                   </div>
 
                   <div className="flex justify-center gap-3 mb-8">
                     <button 
                       onClick={() => startQuiz(quizCategory)} 
-                      className="px-5 py-2.5 rounded-xl border border-border text-muted-foreground text-xs hover:border-primary hover:text-primary transition-all font-bold flex items-center gap-1.5 cursor-pointer"
+                      className="px-5 py-2.5 rounded-none border border-border text-muted-foreground text-xs hover:border-primary hover:text-primary transition-all font-semibold flex items-center gap-1.5"
                     >
                       <RefreshCw className="w-3.5 h-3.5" /> {tx.restart}
                     </button>
                     <button 
                       onClick={restartQuiz} 
-                      className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs hover:opacity-90 transition-all font-bold shadow-md shadow-primary/20 cursor-pointer"
+                      className="px-5 py-2.5 rounded-none bg-primary text-primary-foreground text-xs uppercase tracking-wider font-semibold hover:opacity-90 transition-all shadow-md shadow-primary/10"
                     >
-                      {lang === 'id' ? 'Pilih Kuis Lain' : 'Other Quizzes'}
+                      {tx.otherQuizzes}
                     </button>
-                  </div>
-
-                  {/* Leaderboard Submission Form */}
-                  <div className="max-w-xs mx-auto mb-8 p-4 rounded-2xl bg-muted/40 border border-border">
-                    <h4 className="text-xs font-bold text-foreground mb-2 flex items-center justify-center gap-1.5">
-                      🏆 Submit Skor ke Leaderboard
-                    </h4>
-                    {isSubmitted ? (
-                      <p className="text-[11px] text-green-600 dark:text-green-400 font-semibold">
-                        ✅ {tx.submittedSuccess}
-                      </p>
-                    ) : (
-                      <form onSubmit={handleSubmitLeaderboard} className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={userName}
-                          onChange={(e) => setUserName(e.target.value)}
-                          placeholder={tx.submitNamePlaceholder}
-                          className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                        />
-                        <button
-                          type="submit"
-                          className="px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-[11px] hover:opacity-90 transition-all shadow-sm cursor-pointer"
-                        >
-                          Submit
-                        </button>
-                      </form>
-                    )}
                   </div>
 
                   {/* Review Answers for completed state */}
@@ -1195,20 +1154,22 @@ export function EdukasiSection({ lang }: Props) {
                         const correctOpt = lang === 'id' ? question.opts[question.correct] : question.optsEn[question.correct];
                         
                         return (
-                          <div key={i} className={`p-4 rounded-2xl border text-xs bg-card shadow-md ${isCorrect ? 'border-green-500/30' : 'border-red-400/30'}`}>
-                            <p className="font-extrabold text-foreground mb-2.5">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
-                            <div className="space-y-1.5 mb-3">
-                              <p className={`${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-500'} font-semibold flex items-center gap-1.5`}>
-                                <span>{isCorrect ? '✅' : '❌'} {tx.yourAnswer}:</span> <span className="font-bold">{selectedOpt}</span>
+                          <div key={i} className={`p-4 rounded-none border text-xs bg-muted/10 ${isCorrect ? 'border-green-500/25' : 'border-red-400/20'}`}>
+                            <p className="font-bold text-foreground mb-2">{i+1}. {lang === 'id' ? question.q : question.qEn}</p>
+                            <div className="space-y-1 mb-2">
+                              <p className={`flex items-center gap-1 ${isCorrect ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                {isCorrect ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                {tx.yourAnswer}: <span className="font-semibold">{selectedOpt}</span>
                               </p>
                               {!isCorrect && (
-                                <p className="text-green-600 dark:text-green-400 font-semibold flex items-center gap-1.5">
-                                  <span>✅ {tx.correctAnswer}:</span> <span className="font-bold">{correctOpt}</span>
+                                <p className="text-green-700 dark:text-green-400 flex items-center gap-1">
+                                  <CheckCircle className="w-3 h-3" />
+                                  {tx.correctAnswer}: <span className="font-semibold">{correctOpt}</span>
                                 </p>
                               )}
                             </div>
-                            <p className="text-muted-foreground leading-normal mt-2 border-t border-border/40 pt-2 italic">
-                              💡 <strong>{tx.explain}:</strong> {lang === 'id' ? question.explanation : question.explanationEn}
+                            <p className="text-muted-foreground leading-relaxed mt-2 border-t border-border/40 pt-2 text-[11px]">
+                              {lang === 'id' ? question.explanation : question.explanationEn}
                             </p>
                           </div>
                         );
@@ -1220,150 +1181,146 @@ export function EdukasiSection({ lang }: Props) {
             </div>
           </motion.div>
 
-          {/* Badges Collection & Leaderboard Sidebar */}
+          {/* Learning Progress, Certificates & Community Stats Sidebar */}
           <div className="space-y-6">
-            {/* Badges Collection Dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-card border border-border rounded-none p-6 shadow-sm"
+            >
+              <div className="flex items-center gap-3 mb-1 border-b border-border pb-4">
+                <BarChart3 className="w-5 h-5 text-primary/80" />
+                <div>
+                  <h3 className="text-foreground text-xs font-bold uppercase tracking-wider">{tx.progressTitle}</h3>
+                  <p className="text-muted-foreground text-[10px] mt-0.5 leading-relaxed">{tx.progressSub}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3 mt-5">
+                {[
+                  { label: lang === 'id' ? 'Nilai dipelajari' : 'Values studied', value: `${learningProgress.philosophyStudied}/4` },
+                  { label: lang === 'id' ? 'Evaluasi selesai' : 'Assessments done', value: `${learningProgress.quizzesCompleted}/3` },
+                  { label: lang === 'id' ? 'Aksi program' : 'Program actions', value: `${learningProgress.challengeDays}/7` },
+                  { label: lang === 'id' ? 'Sertifikat' : 'Certificates', value: `${learningProgress.certificatesEarned}/4` },
+                ].map((item, i) => (
+                  <div key={i} className="p-3 rounded-none bg-muted/10 border border-border/60">
+                    <div className="text-base font-bold text-foreground">{item.value}</div>
+                    <div className="text-[9px] text-muted-foreground uppercase tracking-wider font-semibold mt-1">{item.label}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.15 }}
-              className="bg-card border border-border rounded-3xl p-6 shadow-sm flex flex-col justify-between"
+              className="bg-card border border-border rounded-none p-6 shadow-sm"
             >
-              <div>
-                <div className="flex items-center gap-2 mb-1 border-b border-border pb-4">
-                  <Trophy className="w-5.5 h-5.5 text-amber-500" />
-                  <div>
-                    <h3 className="text-foreground text-base font-bold">{tx.badgeTitle}</h3>
-                    <p className="text-muted-foreground text-xs leading-none mt-0.5">{tx.badgeSub}</p>
-                  </div>
+              <div className="flex items-center gap-3 mb-1 border-b border-border pb-4">
+                <GraduationCap className="w-5 h-5 text-primary/80" />
+                <div>
+                  <h3 className="text-foreground text-xs font-bold uppercase tracking-wider">{tx.badgeTitle}</h3>
+                  <p className="text-muted-foreground text-[10px] mt-0.5 leading-relaxed">{tx.badgeSub}</p>
                 </div>
-
-                <div className="space-y-3 mt-5">
-                  {dynamicBadges.map(badge => (
-                    <motion.div
-                      key={badge.id}
-                      whileHover={{ x: 4 }}
-                      className={`flex items-center gap-3.5 p-3 rounded-2xl border-2 transition-all shadow-sm ${
-                        badge.earned 
-                          ? `${badge.color} border-current/15` 
-                          : 'border-border bg-muted/20 opacity-45'
+              </div>
+              
+              <div className="space-y-4 mt-5">
+                {learningCertificates.map(cert => {
+                  const CertIcon = cert.Icon;
+                  return (
+                    <div
+                      key={cert.id}
+                      className={`flex items-start gap-4 p-4 rounded-none border transition-all ${
+                        cert.earned
+                          ? 'border-primary/30 bg-primary/[0.01]'
+                          : 'border-border/80 bg-muted/5 opacity-60'
                       }`}
                     >
-                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-2xl filter transition-transform duration-300 flex-shrink-0 ${
-                        badge.earned 
-                          ? 'bg-background/80 shadow-inner scale-110 drop-shadow-md' 
-                          : 'bg-muted/50 grayscale'
+                      {/* Stamp-like round seal representation */}
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border border-dashed transition-all ${
+                        cert.earned ? 'bg-primary/5 border-primary text-primary' : 'bg-muted border-border text-muted-foreground/40'
                       }`}>
-                        {badge.icon}
+                        <CertIcon className="w-4 h-4 stroke-[1.5]" />
                       </div>
+                      
                       <div className="flex-1 min-w-0">
-                        <div className={`text-xs font-extrabold truncate ${badge.earned ? 'text-foreground' : 'text-muted-foreground'}`}>
-                          {lang === 'id' ? badge.name : badge.nameEn}
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span className="text-[11px] font-bold text-foreground truncate">{lang === 'id' ? cert.name : cert.nameEn}</span>
+                          <span className={`text-[8px] font-mono font-semibold px-1 py-0.5 border leading-none tracking-widest ${
+                            cert.earned ? 'text-primary border-primary/20 bg-primary/5' : 'text-muted-foreground/50 border-border bg-muted/20'
+                          }`}>
+                            {cert.earned ? (lang === 'id' ? 'TERBIT' : 'ISSUED') : (lang === 'id' ? 'TERKUNCI' : 'LOCKED')}
+                          </span>
                         </div>
-                        <div className="text-[10px] text-muted-foreground truncate">{lang === 'id' ? badge.desc : badge.descEn}</div>
+                        <p className="text-[10px] text-muted-foreground mt-1.5 leading-relaxed">{lang === 'id' ? cert.desc : cert.descEn}</p>
                       </div>
-                      <div className="flex-shrink-0">
-                        {badge.earned ? (
-                          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                        ) : (
-                          <div className="w-4.5 h-4.5 rounded-full border border-border/85 flex items-center justify-center text-[10px] text-muted-foreground/50 bg-background/30">🔒</div>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
 
-            {/* Leaderboard Dashboard */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-card border border-border rounded-3xl p-6 shadow-sm flex flex-col justify-between"
+              className="bg-card border border-border rounded-none p-6 shadow-sm"
             >
-              <div>
-                <div className="flex items-center gap-2 mb-1 border-b border-border pb-4">
-                  <Award className="w-5.5 h-5.5 text-primary" />
-                  <div>
-                    <h3 className="text-foreground text-base font-bold">{tx.leaderboardTitle}</h3>
-                    <p className="text-muted-foreground text-xs leading-none mt-0.5">{tx.leaderboardSub}</p>
+              <div className="flex items-center gap-3 mb-1 border-b border-border pb-4">
+                <Users className="w-5 h-5 text-primary/80" />
+                <div>
+                  <h3 className="text-foreground text-xs font-bold uppercase tracking-wider">{tx.communityTitle}</h3>
+                  <p className="text-muted-foreground text-[10px] mt-0.5 leading-relaxed">{tx.communitySub}</p>
+                </div>
+              </div>
+              <div className="space-y-1.5 mt-5">
+                {[
+                  { label: tx.communityActive, value: communityStats.activeParticipants.toLocaleString() },
+                  { label: tx.communityPhilosophy, value: communityStats.mostStudiedPhilosophy },
+                  { label: tx.communityChallenge, value: communityStats.mostFollowedProgram },
+                  { label: tx.communityActions, value: communityStats.totalActions.toLocaleString() },
+                ].map((stat, i) => (
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-dotted border-border/60 text-xs">
+                    <span className="text-[11px] text-muted-foreground">{stat.label}</span>
+                    <span className="text-[11px] font-semibold text-foreground text-right max-w-[55%] truncate">{stat.value}</span>
                   </div>
-                </div>
-
-                <div className="space-y-2.5 mt-5">
-                  {leaderboard.map((entry, idx) => {
-                    const placeColor = 
-                      idx === 0 ? 'bg-gradient-to-br from-yellow-300 to-amber-500 text-amber-950 font-black shadow-[0_0_8px_rgba(245,158,11,0.25)] border border-yellow-200/30' :
-                      idx === 1 ? 'bg-gradient-to-br from-slate-200 to-slate-400 text-slate-950 font-black shadow-[0_0_8px_rgba(148,163,184,0.25)] border border-slate-100/30' :
-                      idx === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-amber-50 font-black shadow-[0_0_8px_rgba(180,83,9,0.25)] border border-amber-500/30' :
-                      'bg-muted text-muted-foreground font-semibold border border-border/30';
-
-                    return (
-                      <motion.div
-                        key={idx}
-                        whileHover={{ scale: 1.02 }}
-                        className={`flex items-center justify-between p-3 rounded-2xl border transition-all duration-300 ${
-                          entry.isUser 
-                            ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(16,185,129,0.08)]' 
-                            : 'border-border/60 bg-card/65'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs shadow-inner flex-shrink-0 ${placeColor}`}>
-                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
-                          </div>
-                          <div>
-                            <div className={`text-xs ${entry.isUser ? 'font-extrabold text-primary' : 'font-bold text-foreground'}`}>
-                              {entry.name} {entry.isUser && <span className="text-[9px] font-normal text-muted-foreground bg-primary/10 px-1.5 py-0.5 rounded-md ml-1">(Kamu)</span>}
-                            </div>
-                            <div className="text-[10px] text-muted-foreground">{entry.badgeCount} Lencana</div>
-                          </div>
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          <div className="text-xs font-bold text-foreground bg-background/50 border border-border/60 px-2.5 py-1 rounded-lg">{entry.score} pts</div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
+                ))}
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* Interactive 7 Day Challenge & Progress */}
+        {/* Interactive Program Aksi Pelestarian & Progress */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-xl overflow-hidden relative"
+          className="bg-card border border-border rounded-none p-6 md:p-8 shadow-sm overflow-hidden relative"
         >
-          {/* Subtle background decoration */}
-          <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-[0.03] bg-primary blur-2xl pointer-events-none" style={{ transform: 'translate(20%, -20%)' }} />
-          
           <div className="relative">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-border pb-6 mb-6">
               <div>
                 <div className="flex items-center gap-2.5 mb-1.5">
-                  <Flame className="w-5.5 h-5.5 text-accent animate-pulse" />
-                  <h3 className="text-foreground text-base font-extrabold tracking-tight">{tx.challenge}</h3>
+                  <TreePine className="w-5 h-5 text-primary/80" />
+                  <h3 className="text-foreground text-xs font-bold uppercase tracking-wider">{tx.challenge}</h3>
                 </div>
                 <p className="text-muted-foreground text-xs leading-relaxed max-w-xl">{tx.challengeDesc}</p>
               </div>
 
               <div className="flex items-center gap-4 flex-shrink-0">
-                {/* Challenge Progress Bar */}
+                {/* Program Progress Bar */}
                 {challengeJoined && (
                   <div className="text-right">
-                    <div className="text-[11px] font-extrabold text-foreground">
-                      {tx.challengeProgress}: <span className="text-primary font-black">{completedDays.length}/7</span> ({Math.round((completedDays.length / 7) * 100)}%)
+                    <div className="text-[10px] font-bold text-foreground uppercase tracking-wide">
+                      {tx.challengeProgress}: <span className="text-primary">{completedDays.length}/7</span> ({Math.round((completedDays.length / 7) * 100)}%)
                     </div>
-                    <div className="w-28 h-2 bg-muted/65 rounded-full overflow-hidden mt-1.5 border border-border/50">
+                    <div className="w-28 h-1.5 bg-muted rounded-none overflow-hidden mt-1.5 border border-border/50">
                       <div 
-                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]" 
+                        className="h-full bg-primary rounded-none transition-all duration-500" 
                         style={{ width: `${(completedDays.length / 7) * 100}%` }}
                       />
                     </div>
@@ -1371,101 +1328,61 @@ export function EdukasiSection({ lang }: Props) {
                 )}
 
                 <button
-                  type="button"
                   onClick={() => setChallengeJoined(true)}
-                  className={`flex-shrink-0 px-5 py-3 rounded-xl font-extrabold text-xs transition-all active:scale-[0.98] cursor-pointer ${
+                  className={`flex-shrink-0 px-5 py-3 rounded-none font-semibold text-xs tracking-wider uppercase transition-all active:scale-[0.98] ${
                     challengeJoined
-                      ? 'bg-green-500/10 border border-green-500/30 text-green-600 dark:text-green-400 shadow-[0_0_12px_rgba(34,197,94,0.08)]'
-                      : 'bg-accent text-accent-foreground hover:opacity-90 shadow-md shadow-accent/25'
+                      ? 'bg-primary/5 border border-primary/30 text-primary'
+                      : 'bg-primary text-primary-foreground hover:opacity-95'
                   }`}
                 >
-                  {challengeJoined ? '✅ Active' : tx.join}
+                  {challengeJoined ? tx.joinActive : tx.join}
                 </button>
               </div>
             </div>
 
-            {/* Grid Days with Connecting Timeline Track */}
-            <div className="relative">
-              {/* Timeline line behind items on larger screens */}
-              <div className="hidden lg:block absolute top-[30px] left-[5%] right-[5%] h-0.5 bg-gradient-to-r from-emerald-500/10 via-primary/30 to-emerald-500/10 -z-0" />
-              
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4.5 relative z-10">
-                {tx.days.map((day, i) => {
-                  const isCompleted = completedDays.includes(i);
-                  const [dayNum, dayTitle] = day.split(': ');
-                  const dayBadge = `D${i + 1}`;
-                  
-                  return (
-                    <motion.div 
-                      key={i}
-                      whileHover={{ y: -4, scale: 1.01 }}
-                      className={`rounded-2xl border-2 transition-all duration-300 flex flex-col justify-between overflow-hidden p-4 relative bg-card/65 backdrop-blur-sm ${
-                        isCompleted 
-                          ? 'border-emerald-500/50 bg-gradient-to-b from-emerald-950/10 to-card shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-                          : 'border-border bg-card/45 hover:border-primary/45'
+            {/* Grid Days */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              {tx.days.map((day, i) => {
+                const isCompleted = completedDays.includes(i);
+                
+                return (
+                  <div 
+                    key={i}
+                    className={`rounded-none border transition-all flex flex-col justify-between overflow-hidden p-3.5 ${
+                      isCompleted 
+                        ? 'border-primary/30 bg-primary/[0.01]' 
+                        : 'border-border bg-card hover:border-primary/30'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="text-[9px] font-bold text-primary/70 uppercase tracking-widest">
+                          {lang === 'id' ? `Hari ${i + 1}` : `Day ${i + 1}`}
+                        </span>
+                        <input
+                          type="checkbox"
+                          checked={isCompleted}
+                          onChange={() => toggleDayCompleted(i)}
+                          className="w-3.5 h-3.5 rounded-none border-border text-primary focus:ring-primary/40 focus:ring-1 accent-primary cursor-pointer"
+                        />
+                      </div>
+                      <div className="text-[11px] font-semibold text-foreground leading-normal mb-3">
+                        {day}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setExpandedDay(expandedDay === i ? null : i)}
+                      className={`w-full py-1.5 rounded-none border text-[9px] font-bold uppercase tracking-wider transition-all ${
+                        expandedDay === i
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground'
                       }`}
                     >
-                      <div>
-                        {/* Top Area: Glowing Badge and Checkbox */}
-                        <div className="flex justify-between items-center mb-4">
-                          {/* Circular Day Badge */}
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black tracking-wider transition-all duration-300 ${
-                            isCompleted
-                              ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.5)] border border-emerald-300/20'
-                              : 'bg-muted/70 text-muted-foreground border border-border/80'
-                          }`}>
-                            {dayBadge}
-                          </div>
-                          
-                          {/* Custom Styled Checkbox wrapper */}
-                          <label className="relative flex items-center cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={isCompleted}
-                              onChange={() => toggleDayCompleted(i)}
-                              className="sr-only"
-                            />
-                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
-                              isCompleted 
-                                ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_8px_rgba(16,185,129,0.3)]' 
-                                : 'border-border/80 bg-background hover:border-primary'
-                            }`}>
-                              {isCompleted && <CheckCircle className="w-3.5 h-3.5 text-white" />}
-                            </div>
-                          </label>
-                        </div>
-
-                        {/* Title and Icon */}
-                        <div className="mb-4">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <span className={`text-xl transition-transform duration-300 ${isCompleted ? 'scale-110 filter drop-shadow-md' : 'grayscale opacity-50'}`}>
-                              {dayDetails[i].icon}
-                            </span>
-                            <div className="text-[10px] font-extrabold text-primary/80 uppercase tracking-widest">
-                              {dayNum}
-                            </div>
-                          </div>
-                          <div className="text-[11px] font-extrabold text-foreground leading-snug min-h-8">
-                            {dayTitle}
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setExpandedDay(expandedDay === i ? null : i)}
-                        className={`w-full py-2 rounded-xl border text-[10px] font-bold transition-all duration-300 cursor-pointer ${
-                          expandedDay === i
-                            ? 'bg-primary text-primary-foreground border-primary shadow-md shadow-primary/15'
-                            : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-border/80'
-                        }`}
-                      >
-                        {expandedDay === i ? (lang === 'id' ? 'Tutup Info' : 'Close Info') : (lang === 'id' ? 'Detail Tips' : 'Tips Info')}
-                      </button>
-                    </motion.div>
-                  );
-                })}
-              </div>
+                      {expandedDay === i ? tx.close : tx.dayDetail}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Expanded Day Details Panel */}
@@ -1475,40 +1392,40 @@ export function EdukasiSection({ lang }: Props) {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="p-5 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 flex items-start gap-3.5 overflow-hidden"
+                  className="p-5 rounded-none bg-muted/10 border border-border/60 overflow-hidden"
                 >
-                  <div className="text-3xl flex-shrink-0 mt-0.5 filter drop-shadow-md">
-                    {dayDetails[expandedDay].icon}
+                  <div className="text-[9px] font-bold text-primary uppercase tracking-widest mb-3 border-b border-border/40 pb-1.5 inline-block">
+                    {tx.days[expandedDay]}
                   </div>
-                  <div>
-                    <div className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">
-                      {lang === 'id' ? `TIPS TANTANGAN HARI ${expandedDay + 1}` : `CHALLENGE TIPS DAY ${expandedDay + 1}`}
+                  <p className="text-xs text-foreground leading-relaxed mb-4">
+                    {lang === 'id' ? dayDetails[expandedDay].descId : dayDetails[expandedDay].descEn}
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="p-3.5 rounded-none bg-card border border-border/60">
+                      <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5">{tx.dayBenefit}</div>
+                      <p className="text-[11px] text-foreground leading-relaxed">
+                        {lang === 'id' ? dayDetails[expandedDay].benefitId : dayDetails[expandedDay].benefitEn}
+                      </p>
                     </div>
-                    <p className="text-xs text-foreground leading-relaxed font-semibold">
-                      {lang === 'id' ? dayDetails[expandedDay].tipsId : dayDetails[expandedDay].tipsEn}
-                    </p>
+                    <div className="p-3.5 rounded-none bg-card border border-border/60">
+                      <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5">{tx.dayImpact}</div>
+                      <p className="text-[11px] text-foreground leading-relaxed font-semibold">
+                        {lang === 'id' ? dayDetails[expandedDay].impactId : dayDetails[expandedDay].impactEn}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* AI Eco-Coach Panel */}
+            {/* Asisten Analisis Dampak Panel */}
             <div className="mt-8 border-t border-border pt-6">
-              <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <Sparkles className="w-5.5 h-5.5 text-primary animate-pulse" />
-                  <div>
-                    <h4 className="text-foreground text-sm font-extrabold leading-tight">{tx.aiCoachTitle}</h4>
-                    <p className="text-muted-foreground text-xs">{tx.aiCoachSub}</p>
-                  </div>
+              <div className="flex items-center gap-2.5 mb-4">
+                <BarChart3 className="w-5 h-5 text-primary/80" />
+                <div>
+                  <h4 className="text-foreground text-xs font-bold uppercase tracking-wider leading-tight">{tx.aiCoachTitle}</h4>
+                  <p className="text-muted-foreground text-[10px] leading-relaxed mt-0.5">{tx.aiCoachSub}</p>
                 </div>
-                
-                {completedDays.length > 0 && (
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.05)] animate-pulse">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    AI Coach Active
-                  </div>
-                )}
               </div>
 
               {completedDays.length === 0 ? (
@@ -1520,20 +1437,20 @@ export function EdukasiSection({ lang }: Props) {
                   {/* Left Impact Statistics (Neon Progress Meters) */}
                   <div className="md:col-span-1 p-5 rounded-2xl bg-card border border-border/80 flex flex-col justify-between gap-4 text-xs shadow-md">
                     <div className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">
-                      {lang === 'id' ? 'Estimasi Dampak Lingkungan' : 'Estimated Environmental Impact'}
+                      {tx.impactLabel}
                     </div>
                     
                     {/* CO2 Metric */}
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
-                        <span className="flex items-center gap-1"><Wind className="w-3.5 h-3.5 text-purple-400" /> {lang === 'id' ? 'Emisi CO₂ Dikurangi' : 'CO₂ Reduced'}</span>
-                        <span>{ecoCoachImpact.co2Saved} / 0.8 kg</span>
+                        <span className="flex items-center gap-1"><Wind className="w-3.5 h-3.5 text-purple-400" /> {tx.co2Label}</span>
+                        <span>{ecoCoachImpact.co2Saved} / 2.1 kg</span>
                       </div>
                       <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
                         <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"
                           initial={{ width: 0 }}
-                          animate={{ width: `${Math.min((ecoCoachImpact.co2Saved / 0.8) * 100, 100)}%` }}
+                          animate={{ width: `${Math.min((ecoCoachImpact.co2Saved / 2.1) * 100, 100)}%` }}
                           transition={{ duration: 0.5 }}
                         />
                       </div>
@@ -1542,7 +1459,7 @@ export function EdukasiSection({ lang }: Props) {
                     {/* Water Metric */}
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
-                        <span className="flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-400" /> {lang === 'id' ? 'Air Bersih Dihemat' : 'Water Conserved'}</span>
+                        <span className="flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-400" /> {tx.waterLabel}</span>
                         <span>{ecoCoachImpact.waterSaved} / 50 L</span>
                       </div>
                       <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
@@ -1558,14 +1475,14 @@ export function EdukasiSection({ lang }: Props) {
                     {/* Plastic Metric */}
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center text-[11px] font-bold text-foreground">
-                        <span className="flex items-center gap-1"><Leaf className="w-3.5 h-3.5 text-emerald-400" /> {lang === 'id' ? 'Plastik Dikurangi' : 'Plastic Reduced'}</span>
-                        <span>{ecoCoachImpact.plasticSaved} / 0.7 kg</span>
+                        <span className="flex items-center gap-1"><Leaf className="w-3.5 h-3.5 text-emerald-400" /> {tx.plasticLabel}</span>
+                        <span>{ecoCoachImpact.plasticSaved} / 1.5 kg</span>
                       </div>
                       <div className="h-2 rounded-full bg-muted/60 overflow-hidden border border-border/40 relative">
                         <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                           initial={{ width: 0 }}
-                          animate={{ width: `${Math.min((ecoCoachImpact.plasticSaved / 0.7) * 100, 100)}%` }}
+                          animate={{ width: `${Math.min((ecoCoachImpact.plasticSaved / 1.5) * 100, 100)}%` }}
                           transition={{ duration: 0.5 }}
                         />
                       </div>
@@ -1590,11 +1507,11 @@ export function EdukasiSection({ lang }: Props) {
                         {completedDays.length === 7 ? (
                           lang === 'id' 
                             ? 'Luar biasa! Kamu telah menyelesaikan seluruh rangkaian tantangan 7 hari. Kamu tidak hanya mempelajari teori kearifan lokal, melainkan mempraktikkannya langsung. Aksi nyata ini menunjukkan pemahaman mendalam tentang Pikukuh (hukum adat pelestarian) di era modern. Kamu layak menyandang gelar Duta Pelestari!'
-                            : 'Incredible! You have completed the entire 7-day challenge. You did not just study local wisdom, you practiced it in the real world. This direct action demonstrates a deep understanding of Pikukuh (preservation customary law) in the modern era. You truly deserve the Eco Ambassador title!'
+                            : 'Incredible! You have completed the entire 7-day challenge sequence. You did not just study the theory of indigenous wisdom, but practiced it directly. This real action shows a deep understanding of Pikukuh (customary law of preservation) in the modern era. You deserve to bear the title of Preservation Ambassador!'
                         ) : (
                           lang === 'id'
-                            ? `Eco-Coach menilai kamu sudah memulai langkah pelestarian yang baik dengan menyelesaikan ${completedDays.length} tantangan. Kombinasi perkiraan reduksi plastik, air, dan emisi karbon berdampak langsung pada kelangsungan ekosistem. Teruskan untuk membuka status Duta Pelestari!`
-                            : `Eco-Coach evaluates that you have made a great start towards preservation by completing ${completedDays.length} challenges. Combining estimated reductions in plastic, water, and carbon footprint directly impacts local ecosystems. Keep going to unlock the Eco Ambassador title!`
+                            ? `Hebat! Kamu sudah menyelesaikan ${completedDays.length} misi aksi hijau. Aksi nyata ini langsung berkontribusi mengurangi beban ekologis bumi. Lanjutkan tantangan ini untuk memaksimalkan dampak penyelamatan lingkunganmu!`
+                            : `Great! You have completed ${completedDays.length} green action missions. This real action directly contributes to reducing the earth's ecological burden. Continue the challenge to maximize your environmental rescue impact!`
                         )}
                       </p>
                     </div>
@@ -1609,7 +1526,7 @@ export function EdukasiSection({ lang }: Props) {
       {/* --- Deep Dive Philosophy Modal Dialog --- */}
       <AnimatePresence>
         {activePhilosophy !== null && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             {/* Modal Backdrop click to close */}
             <motion.div 
               initial={{ opacity: 0 }}
@@ -1625,10 +1542,10 @@ export function EdukasiSection({ lang }: Props) {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 20, opacity: 0 }}
               transition={{ type: 'spring', duration: 0.5 }}
-              className="w-full max-w-xl bg-card border border-border rounded-3xl overflow-hidden shadow-2xl relative z-10 flex flex-col"
+              className="w-full max-w-xl bg-card border border-border rounded-none overflow-hidden shadow-2xl relative z-10 flex flex-col"
             >
               {/* Top Banner decoration */}
-              <div className="h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-600" />
+              <HeritageBorder />
               
               {/* Close Button */}
               <button 
@@ -1640,29 +1557,32 @@ export function EdukasiSection({ lang }: Props) {
 
               <div className="p-6 md:p-8">
                 {/* Header */}
-                <div className="flex items-center gap-3.5 mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                <div className="flex items-center gap-4 mb-5 border-b border-border/40 pb-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center text-primary">
                     {(() => {
                       const Icon = philosophies[activePhilosophy].icon;
-                      return <Icon className="w-6 h-6" />;
+                      return <Icon className="w-6 h-6 stroke-[1.5]" />;
                     })()}
                   </div>
                   <div>
-                    <h3 className="text-foreground text-lg font-bold leading-tight">
+                    <h3 className="text-foreground text-base font-bold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                       {lang === 'id' ? philosophies[activePhilosophy].title : philosophies[activePhilosophy].titleEn}
                     </h3>
-                    <p className="text-muted-foreground text-xs italic mt-0.5">
+                    <p className="text-muted-foreground text-xs font-serif italic mt-1 leading-relaxed">
                       {lang === 'id' ? philosophies[activePhilosophy].quote : philosophies[activePhilosophy].quoteEn}
+                    </p>
+                    <p className="text-[9px] text-muted-foreground mt-1.5 uppercase tracking-widest font-semibold">
+                      {tx.origin}: {lang === 'id' ? philosophies[activePhilosophy].origin : philosophies[activePhilosophy].originEn}
                     </p>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground text-xs leading-relaxed mb-6 border-b border-border pb-4">
+                <p className="text-muted-foreground text-[11px] leading-relaxed mb-6">
                   {lang === 'id' ? philosophies[activePhilosophy].desc : philosophies[activePhilosophy].descEn}
                 </p>
 
                 {/* Exploration Tabs Navigation */}
-                <div className="flex border-b border-border/80 gap-1.5 mb-5 bg-muted/40 p-1 rounded-xl">
+                <div className="flex border border-border bg-muted/10 p-0.5 rounded-none mb-5">
                   {(['history', 'modern', 'action'] as const).map((tab) => {
                     let label = '';
                     if (tab === 'history') label = tx.philoTabHistory;
@@ -1673,9 +1593,9 @@ export function EdukasiSection({ lang }: Props) {
                       <button
                         key={tab}
                         onClick={() => setPhilosophyTab(tab)}
-                        className={`flex-1 py-2 text-center rounded-lg text-xs font-bold transition-all ${
+                        className={`flex-1 py-2 text-center rounded-none text-[10px] font-bold uppercase tracking-wider transition-all ${
                           philosophyTab === tab
-                            ? 'bg-card text-foreground shadow-sm'
+                            ? 'bg-primary text-primary-foreground shadow-sm'
                             : 'text-muted-foreground hover:text-foreground'
                         }`}
                       >
@@ -1690,28 +1610,31 @@ export function EdukasiSection({ lang }: Props) {
                   <div>
                     {philosophyTab === 'history' && (
                       <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-foreground leading-relaxed">
-                        <h4 className="font-bold text-primary mb-2 flex items-center gap-1.5">
-                          📜 {lang === 'id' ? 'Latar Belakang & Akar Budaya' : 'Cultural Roots & History'}
+                        <h4 className="font-bold text-foreground text-[10px] uppercase tracking-wider mb-3 flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                          <ScrollText className="w-3.5 h-3.5" />
+                          {lang === 'id' ? 'Latar Belakang & Akar Budaya' : 'Cultural Roots & History'}
                         </h4>
-                        <p>{lang === 'id' ? philosophiesDetail[activePhilosophy].historyId : philosophiesDetail[activePhilosophy].historyEn}</p>
+                        <p className="leading-relaxed text-[11px] text-muted-foreground">{lang === 'id' ? philosophiesDetail[activePhilosophy].historyId : philosophiesDetail[activePhilosophy].historyEn}</p>
                       </motion.div>
                     )}
 
                     {philosophyTab === 'modern' && (
                       <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-foreground leading-relaxed">
-                        <h4 className="font-bold text-primary mb-2 flex items-center gap-1.5">
-                          🌍 {lang === 'id' ? 'Relevansi Isu Iklim Modern' : 'Relevance to Modern Climate Issues'}
+                        <h4 className="font-bold text-foreground text-[10px] uppercase tracking-wider mb-3 flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                          <Leaf className="w-3.5 h-3.5" />
+                          {lang === 'id' ? 'Relevansi dalam Konteks Modern' : 'Relevance in Modern Context'}
                         </h4>
-                        <p>{lang === 'id' ? philosophiesDetail[activePhilosophy].modernId : philosophiesDetail[activePhilosophy].modernEn}</p>
+                        <p className="leading-relaxed text-[11px] text-muted-foreground">{lang === 'id' ? philosophiesDetail[activePhilosophy].modernId : philosophiesDetail[activePhilosophy].modernEn}</p>
                       </motion.div>
                     )}
 
                     {philosophyTab === 'action' && (
                       <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-foreground leading-relaxed">
-                        <h4 className="font-bold text-primary mb-2 flex items-center gap-1.5">
-                          ⚡ {lang === 'id' ? 'Langkah Tindakan Riil' : 'Real Step of Action'}
+                        <h4 className="font-bold text-foreground text-[10px] uppercase tracking-wider mb-3 flex items-center gap-1.5 border-b border-border/40 pb-1.5">
+                          <Target className="w-3.5 h-3.5" />
+                          {lang === 'id' ? 'Aplikasi dalam Kehidupan Sehari-hari' : 'Application in Daily Life'}
                         </h4>
-                        <p className="bg-primary/5 border border-primary/20 p-4 rounded-xl font-medium">
+                        <p className="bg-muted/10 border border-border/60 p-4 rounded-none leading-relaxed text-[11px] text-muted-foreground">
                           {lang === 'id' ? philosophiesDetail[activePhilosophy].actionId : philosophiesDetail[activePhilosophy].actionEn}
                         </p>
                       </motion.div>
@@ -1721,7 +1644,7 @@ export function EdukasiSection({ lang }: Props) {
                   <div className="mt-8 border-t border-border pt-4 flex justify-end">
                     <button 
                       onClick={() => setActivePhilosophy(null)}
-                      className="px-5 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:opacity-90 shadow-md shadow-primary/10 transition-all active:scale-[0.98]"
+                      className="px-5 py-2.5 rounded-none bg-primary text-primary-foreground font-semibold text-xs tracking-wider uppercase hover:opacity-90 shadow-md shadow-primary/10 transition-all active:scale-[0.98]"
                     >
                       {tx.close}
                     </button>

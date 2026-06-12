@@ -119,9 +119,9 @@ export function Navbar({ isDark, setIsDark, lang, setLang }: NavbarProps) {
           >
             <Logo 
               variant={isDark ? 'alternative-white' : 'main'} 
-              size="sm" 
+              size="md" 
               showTypeface={true}
-              className="group-hover:scale-105 transition-transform h-8"
+              className="group-hover:scale-105 transition-transform"
             />
           </button>
 
